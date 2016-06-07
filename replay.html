@@ -2,10 +2,158 @@
 <html lang="zh-CN">
 <head>
 	<meta charset="UTF-8">
-	<meta name="viewport" content="width=600, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
 	<title>精彩回顾</title>
+	<link rel="icon" type="image/png" href="lib/amazeui/i/favicon.png">
+	<link rel="stylesheet" href="lib/amazeui/css/amazeui.min.css">
+	<link rel="stylesheet" href="lib/amazeui/css/app.css">
+	<script src="lib/amazeui/js/jquery.min.js"></script>
+	<script src="lib/amazeui/js/amazeui.min.js"></script>
+	<script src="lib/avalon1.5/avalon.js"></script>
 </head>
 <body>
-	123123123
+<!--顶部Header-->
+<style>
+	header.am-header {
+		box-shadow: 0 1px 3px #C2C2C2;
+	}
+
+	.am-header > .am-header-left > a {
+		color: #4EC585;
+	}
+
+	.am-header > .am-header-title > a {
+		color: #000;
+	}
+
+	.am-header-default {
+		background-color: #FFF;
+	}
+</style>
+<header data-am-widget="header"
+		class="am-header am-header-default">
+	<div class="am-header-left am-header-nav">
+		<a href="#left-link" class="">
+			<i class="am-header-icon am-icon-angle-left"></i>
+		</a>
+	</div>
+
+	<h1 class="am-header-title">
+		<a href="#title-link" class="">
+			精彩回顾
+		</a>
+	</h1>
+
+	<!--<div class="am-header-right am-header-nav">-->
+	<!--<a href="#right-link" class="">-->
+	<!--<i class="am-header-icon am-icon-bars"></i>-->
+	<!--</a>-->
+	<!--</div>-->
+</header>
+<!--/顶部Header-->
+
+<!--主要内容区-->
+<style>
+	#main-section {
+		background-color: #FFF;
+	}
+
+
+	.tour-unit-default {
+		width:100%;
+		margin-bottom:1em;
+		color:#3c3c3c;
+	}
+	.tour-unit-default>img {
+		width:100%;
+	}
+	.tour-unit-default>.title {
+		box-sizing: border-box;
+		padding: 0 .5em;
+		line-height: 2.4em;
+		height: 2.4em;
+		font-size: 1.2em;
+	}
+	.tour-unit-default>.notiy-panel {
+		box-sizing: border-box;
+		padding:0 .5em;
+		color:#fc7e65;
+	}
+	.tour-unit-default>.notiy-panel>i {
+		margin-right: 0.2em;
+	}
+	.tour-unit-default>.notiy-panel>.notiy {
+		border:1px solid #fc7e65;
+		line-height:120%;
+		border-radius:2px;
+		margin-right:0.5em;
+		padding:0 0.2em;
+	}
+</style>
+
+<div id="main-section">
+	<!--线路单元-->
+	<div class="tour-unit-default">
+		<img src="http://www.htyou.com/pic/photo/af940846df4a017dda9fc0cfc1cdadf1-1.jpg" alt="">
+		<div class="title">卖淘小记者，探索迪士尼大不同！</div>
+		<div class="notiy-panel">
+			<i class="am-icon-map-marker am-icon-sm"></i>
+			<span class="notiy">上海市浦东新区</span>
+			<span class="notiy">5-14岁</span>
+			<span class="notiy">2016.10.14</span>
+		</div>
+	</div>
+	<!--/线路单元-->
+	<!--线路单元-->
+	<div class="tour-unit-default">
+		<img src="http://www.htyou.com/pic/photo/af940846df4a017dda9fc0cfc1cdadf1-2.jpg" alt="">
+		<div class="title">卖淘小记者，探索迪士尼大不同！</div>
+		<div class="notiy-panel">
+			<i class="am-icon-map-marker am-icon-sm"></i>
+			<span class="notiy">上海市浦东新区</span>
+			<span class="notiy">5-14岁</span>
+			<span class="notiy">2016.10.14</span>
+		</div>
+	</div>
+	<!--/线路单元-->
+	<!--线路单元-->
+	<div class="tour-unit-default">
+		<img src="http://www.htyou.com/pic/photo/29eeb04d53afd13c6b7e3e41dbbfe1f1-7.jpg" alt="">
+		<div class="title">卖淘小记者，探索迪士尼大不同！</div>
+		<div class="notiy-panel">
+			<i class="am-icon-map-marker am-icon-sm"></i>
+			<span class="notiy">上海市浦东新区</span>
+			<span class="notiy">5-14岁</span>
+			<span class="notiy">2016.10.14</span>
+		</div>
+	</div>
+	<!--/线路单元-->
+	<!--线路单元-->
+	<div class="tour-unit-default">
+		<img src="http://www.htyou.com/pic/photo/045243fc85b79939859b2497b3326305-1.jpg" alt="">
+		<div class="title">卖淘小记者，探索迪士尼大不同！</div>
+		<div class="notiy-panel">
+			<i class="am-icon-map-marker am-icon-sm"></i>
+			<span class="notiy">上海市浦东新区</span>
+			<span class="notiy">5-14岁</span>
+			<span class="notiy">2016.10.14</span>
+		</div>
+	</div>
+	<!--/线路单元-->
+	<!--线路单元-->
+	<div class="tour-unit-default">
+		<img src="http://www.htyou.com/pic/photo/930d9157ba400d60e096033b83367080-1.jpg" alt="">
+		<div class="title">卖淘小记者，探索迪士尼大不同！</div>
+		<div class="notiy-panel">
+			<i class="am-icon-map-marker am-icon-sm"></i>
+			<span class="notiy">上海市浦东新区</span>
+			<span class="notiy">5-14岁</span>
+			<span class="notiy">2016.10.14</span>
+		</div>
+	</div>
+	<!--/线路单元-->
+
+</div>
+<!--/主要内容区-->
 </body>
 </html>

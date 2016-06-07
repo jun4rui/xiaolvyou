@@ -1,0 +1,21 @@
+body {
+	font:12px/100% 'Microsoft YaHei', '微软雅黑', Verdana, Helvetica, Arial, 'WenQuanYi Micro Hei',  '新宋体', sans-serif;
+	padding:0;
+	margin:0;
+}
+
+img {
+	display:block;
+	border:0;
+}
+
+a {
+	text-decoration:none;
+}
+
+ul,li {
+	list-style: none;
+}
+.clear {
+	clear: both;
+}

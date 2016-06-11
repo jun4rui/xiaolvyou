@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
+	<title>活动详情</title>
+	<link rel="icon" type="image/png" href="jslib/amazeui/i/favicon.png">
+	<link rel="stylesheet" href="jslib/amazeui/css/amazeui.min.css">
+	<link rel="stylesheet" href="jslib/amazeui/css/app.css">
+	<script src="jslib/amazeui/js/jquery.min.js"></script>
+	<script src="jslib/amazeui/js/amazeui.min.js"></script>
+	<script src="jslib/avalon1.5/avalon.js"></script>
+
+
+</head>
+<body>
+<!--产品大图-->
+<style>
+	#big-image {
+		width:100%;
+		overflow: hidden;
+		visibility: hidden;
+		position: relative;
+	}
+	#big-image .swipe-wrap {
+		overflow: hidden;
+		position: relative;
+	}
+	#big-image .swipe-wrap div {
+		float:left;
+		width:100%;
+		position: relative;
+	}
+	#big-image img {
+		width:100%;
+	}
+</style>
+<div id="big-image" class="swipe">
+	<div class="swipe-wrap">
+		<div><img src="http://www.htyou.com:80//pic/photo/d39a613d01a25ee8600f2487bd436c6d-1.jpg" alt=""/></div>
+		<div><img src="http://www.htyou.com:80//pic/photo/d39a613d01a25ee8600f2487bd436c6d-1.jpg" alt=""/></div>
+		<div><img src="http://www.htyou.com:80//pic/photo/d39a613d01a25ee8600f2487bd436c6d-1.jpg" alt=""/></div>
+		<div><img src="http://www.htyou.com:80//pic/photo/d39a613d01a25ee8600f2487bd436c6d-1.jpg" alt=""/></div>
+		<div><img src="http://www.htyou.com:80//pic/photo/d39a613d01a25ee8600f2487bd436c6d-1.jpg" alt=""/></div>
+		<div><img src="http://www.htyou.com:80//pic/photo/d39a613d01a25ee8600f2487bd436c6d-1.jpg" alt=""/></div>
+	</div>
+</div>
+<script>
+	$(document).ready(function(){
+		window.mySwipe = new Swipe(document.getElementById('big-image'),{
+			auto: 5000
+		});
+	});
+</script>
+<!--/产品大图-->
+
+
+<!--底部工具栏-->
+<style>
+	#footer {
+		/*background-color: #fe8568;*/
+	}
+
+	#footer .am-navbar-nav,
+	#footer .am-navbar-nav>div {
+		padding:0;
+	}
+
+	#footer .am-navbar-nav button {
+		background-color: #fe8568;
+		line-height:33px;
+		border:0;
+	}
+</style>
+<div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default" id="footer">
+	<div class="am-navbar-nav am-cf am-g doc-am-g">
+		<div class="am-u-sm-2 am-u-md-2 am-u-lg-2" style="background-color: #FFF;">
+			<a href="http://amazeui.org/getting-started" class="" style="color: #fe8568;">
+				<span class="am-icon-phone"></span>
+				<span class="am-navbar-label">电话</span>
+			</a>
+		</div>
+		<div class="am-u-sm-2 am-u-md-2 am-u-lg-2" style="background-color: #FFF;">
+			<a href="http://amazeui.org/getting-started" class="" style="color: #fe8568;">
+				<span class="am-icon-share-alt"></span>
+				<span class="am-navbar-label">分享</span>
+			</a>
+		</div>
+		<div class="am-u-sm-8 am-u-md-8 am-u-lg-8">
+			<button type="button" class="am-btn am-btn-primary am-btn-block">立即报名</button>
+		</div>
+	</div>
+</div>
+<!--/底部工具栏-->
+</body>
+</html>

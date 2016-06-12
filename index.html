@@ -30,6 +30,8 @@
 		left: 0;
 		top: 0;
 		background-color: #fff;
+
+		z-index: 999999999;
 	}
 	#viewport .flipsnap {
 		width:1920px;
@@ -128,6 +130,7 @@
 		width:100%;
 		margin-bottom:1em;
 		color:#3c3c3c;
+		position: relative;
 	}
 	.tour-unit-default>img {
 		width:100%;
@@ -159,12 +162,36 @@
 		/* line-height: 200%; */
 		padding: 0 .5em 0.5em;
 	}
+
+	.price {
+		background-color: #F65934;
+		color: #FFF;
+		position: absolute;
+		top: 150px;
+		padding: 0 .5em;
+		/* line-height: 200%; */
+		font-size: 1.5em;
+		font-weight: bold;
+	}
+	.price span.qi {
+		font-size: 0.7em;
+		font-weight: normal;
+		margin-left: 5px;
+	}
+	.price span.yen {
+		font-size: 0.7em;
+		line-height: 220%;
+		vertical-align: top;
+		font-weight: normal;
+		margin-right: 5px;
+	}
 </style>
 
 <div id="main-section">
 	<!--线路单元-->
 	<div class="tour-unit-default">
 		<img src="http://www.htyou.com/pic/photo/af940846df4a017dda9fc0cfc1cdadf1-1.jpg" alt="">
+		<div class="price"><span class="yen">&yen;</span>99999<span class="qi">起</span></div>
 		<div class="title">卖淘小记者，探索迪士尼大不同！</div>
 		<div class="desc">带来最前端、最新鲜、最FUN的开园活动、游园攻略</div>
 		<div class="notiy-panel">
@@ -178,6 +205,7 @@
 	<!--线路单元-->
 	<div class="tour-unit-default">
 		<img src="http://www.htyou.com/pic/photo/af940846df4a017dda9fc0cfc1cdadf1-2.jpg" alt="">
+		<div class="price"><span class="yen">&yen;</span>99999<span class="qi">起</span></div>
 		<div class="title">卖淘小记者，探索迪士尼大不同！</div>
 		<div class="desc">带来最前端、最新鲜、最FUN的开园活动、游园攻略</div>
 		<div class="notiy-panel">
@@ -191,6 +219,7 @@
 	<!--线路单元-->
 	<div class="tour-unit-default">
 		<img src="http://www.htyou.com/pic/photo/29eeb04d53afd13c6b7e3e41dbbfe1f1-7.jpg" alt="">
+		<div class="price"><span class="yen">&yen;</span>99999<span class="qi">起</span></div>
 		<div class="title">卖淘小记者，探索迪士尼大不同！</div>
 		<div class="desc">带来最前端、最新鲜、最FUN的开园活动、游园攻略</div>
 		<div class="notiy-panel">
@@ -204,6 +233,7 @@
 	<!--线路单元-->
 	<div class="tour-unit-default">
 		<img src="http://www.htyou.com/pic/photo/045243fc85b79939859b2497b3326305-1.jpg" alt="">
+		<div class="price"><span class="yen">&yen;</span>99999<span class="qi">起</span></div>
 		<div class="title">卖淘小记者，探索迪士尼大不同！</div>
 		<div class="desc">带来最前端、最新鲜、最FUN的开园活动、游园攻略</div>
 		<div class="notiy-panel">
@@ -217,6 +247,7 @@
 	<!--线路单元-->
 	<div class="tour-unit-default">
 		<img src="http://www.htyou.com/pic/photo/930d9157ba400d60e096033b83367080-1.jpg" alt="">
+		<div class="price"><span class="yen">&yen;</span>99999<span class="qi">起</span></div>
 		<div class="title">卖淘小记者，探索迪士尼大不同！</div>
 		<div class="desc">带来最前端、最新鲜、最FUN的开园活动、游园攻略</div>
 		<div class="notiy-panel">

@@ -1,108 +1,272 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
 	<meta charset="UTF-8">
-	<title>Title</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
+	<title>活动详情</title>
+	<!--<link rel="icon" type="image/png" href="jslib/amazeui/i/favicon.png">-->
+	<link rel="stylesheet" href="jslib/amazeui/css/amazeui.min.css">
+	<link rel="stylesheet" href="jslib/amazeui/css/app.css">
 	<script src="jslib/amazeui/js/jquery.min.js"></script>
-	<script src="jslib/flipsnap.min.js"></script>
+	<script src="jslib/amazeui/js/amazeui.min.js"></script>
+	<script src="jslib/avalon1.5/avalon.js"></script>
+	<style>
+		body {
+			background-color: #ebebeb;
+		}
+	</style>
 </head>
-<body>
+<body class="am-with-fixed-navbar">
 
+<!--顶部画廊-->
 <style>
-	body {
-		padding:0;
-		margin:0;
-	}
-	#viewport {
-		padding-top: .5em;
-		width: 100%;
-		overflow: hidden;
-		height: 3em;
-		box-shadow: 0 2px 5px #cccccc;
-	}
-	#viewport .flipsnap {
-		width:1920px;
+	#galleryAD {
+		position: relative;
 	}
 
-	#viewport .cal-unit {
-		width:3em;
-		height:3.5em;
-		/*line-height: 3em;*/
-		float:left;
-		text-align: center;
-		color:#3B3B3B;
-		font-size:0.8em;
-	}
-
-
-	#viewport .cal-unit span {
-		color:#3B3B3B;
-		display: block;
-		border: 1px solid #3B3B3B;
-		border-radius: 50%;
-		text-align: center;
-		margin: 0 auto;
-		width: 2em;
-		height: 2em;
-		line-height: 2em;
-	}
-	#viewport .cal-unit.have {
-		color: #00ff00;
-	}
-	#viewport .cal-unit.have span {
-		background-color: #0f0;
-		color:#FFF;
-		border:1px solid #0f0;
-	}
-	#viewport .cal-unit.active span{
-		background-color: #0f0;
-		color:#FFF;
-		border:1px solid #0f0;
-	}
-
-	#viewport .cal-unit.hot {
-		color: #f00;
-	}
-	#viewport .cal-unit.hot span {
-		background-color: #f00;
-		color:#FFF;
-		border:1px solid #f00;
+	#galleryAD .float-btn {
+		position: absolute;
+		top: .5em;
+		z-index: 9999999999;
+		opacity: 0.5;
+		width: 1.5em;
+		height: 1.5em;
+		line-height: 1.5em;
 	}
 </style>
-<div id="viewport">
-	<div class="flipsnap">
-		<div class="cal-unit hot active"><span>11</span>本周六</div>
-		<div class="cal-unit"><span>12</span>周日</div>
-		<div class="cal-unit have"><span>13</span>周一</div>
-		<div class="cal-unit"><span>14</span>周二</div>
-		<div class="cal-unit hot"><span>15</span>周三</div>
-		<div class="cal-unit"><span>16</span>周四</div>
-		<div class="cal-unit"><span>17</span>周五</div>
-		<div class="cal-unit"><span>18</span>周六</div>
-		<div class="cal-unit"><span>19</span>周日</div>
-		<div class="cal-unit"><span>20</span>周一</div>
-		<div class="cal-unit hot"><span>21</span>周二</div>
-		<div class="cal-unit"><span>22</span>周三</div>
-		<div class="cal-unit"><span>23</span>周四</div>
-		<div class="cal-unit"><span>24</span>周五</div>
-		<div class="cal-unit hot"><span>25</span>周六</div>
-		<div class="cal-unit"><span>26</span>周日</div>
-		<div class="cal-unit"><span>27</span>周一</div>
-		<div class="cal-unit"><span>28</span>周二</div>
-		<div class="cal-unit"><span>29</span>周三</div>
-		<div class="cal-unit"><span>30</span>周四</div>
-		<div class="cal-unit"><span>31</span>周五</div>
-		<div style="clear:both;"></div>
+<div data-am-widget="slider" id="galleryAD" class="ms-controller am-slider-manual am-slider am-slider-a5">
+	<ul class="am-slides">
+		<!--渲染完毕后执行galleryRendered-->
+		<li>
+			<a href="#">
+				<img src="http://www.htyou.com/pic/photo/f8bc07eaad6deea3e20edba76d0d2d7e-9.jpg" style="object-fit:fill;">
+			</a>
+		</li>
+		<li>
+			<a href="#">
+				<img src="http://www.htyou.com/pic/photo/eb66e6964e1242babb2a3d9d40d44a4b-1.jpg" style="object-fit:fill;">
+			</a>
+		</li>
+		<li>
+			<a href="#">
+				<img src="http://www.htyou.com/pic/photo/eb66e6964e1242babb2a3d9d40d44a4b-2.jpg" style="object-fit:fill;">
+			</a>
+		</li>
+		<li>
+			<a href="#">
+				<img src="http://www.htyou.com/pic/photo/eb66e6964e1242babb2a3d9d40d44a4b-3.jpg" style="object-fit:fill;">
+			</a>
+		</li>
+		<li>
+			<a href="#">
+				<img src="http://www.htyou.com/pic/photo/eb66e6964e1242babb2a3d9d40d44a4b-4.jpg" style="object-fit:fill;">
+			</a>
+		</li>
+	</ul>
+	<!--返回图标-->
+	<a href="#" class="float-btn am-icon-btn am-icon-reply" style="left:.2em;"></a>
+	<!--电话咨询图标-->
+	<a href="#" class="float-btn am-icon-btn am-icon-phone" style="right:.2em;"></a>
+</div>
+<script>
+	$('.am-slider-manual').flexslider({"directionNav": false});
+</script>
+<!--/顶部画廊-->
+
+<!--主要内容区-->
+<style>
+	#main-section {
+		background-color: #FDFDFE;
+		box-sizing: border-box;
+		padding: 0 .5em;
+		width: 100%;
+	}
+
+	#main-section > .title {
+		box-sizing: border-box;
+		line-height: 1.5em;
+		/*height: 2.4em;*/
+		font-size: 1.2em;
+		font-weight: bold;
+	}
+
+	#main-section > .desc {
+		color: #999;
+		/* line-height: 200%; */
+		font-size: 1em;
+	}
+
+	#main-section .price {
+		/* background-color: #F65934; */
+		color: #F65934;
+		/* line-height: 200%; */
+		font-size: 1.2em;
+		font-weight: bold;
+		display: inline;
+	}
+
+	#main-section .price span.yen {
+		font-size: 0.5em;
+		font-weight: normal;
+		/* margin-left: 5px; */
+		color: #999;
+		line-height: 2em;
+		vertical-align: top;
+	}
+
+	#main-section .price span.qi {
+		font-size: 0.5em;
+		line-height: 200%;
+		vertical-align: bottom;
+		font-weight: normal;
+		/* margin-right: 5px; */
+		color: #333;
+	}
+
+	#main-section [class*=am-u-] {
+		padding:0;
+	}
+
+	#main-section #date-select {
+		line-height: 1.5em;
+		border-color: #f37b1d;
+		padding: 0 .5em;
+	}
+</style>
+<form class="am-form am-form-horizontal">
+	<div id="main-section">
+		<div class="title">生态农场体验+皮划艇|风吹麦浪，让我们荡起双桨</div>
+		<div class="desc">上海著名生态村xx寸，全村环境优良</div>
+		<div class="am-g doc-am-g" style="margin-top: .5em;">
+			<div class="am-u-sm-4 am-u-md-4 am-u-lg-4">
+				<div class="price">
+					<span class="yen">&yen;</span>
+					9999
+					<span class="qi">起</span>
+				</div>
+			</div>
+			<div class="am-u-sm-4 am-u-md-4 am-u-lg-4" style="font-size:.5em;line-height: 30px;">
+				<!--可选日期: 06-05 07-10-->
+			</div>
+			<div class="am-u-sm-4 am-u-md-4 am-u-lg-4">
+				<!--<button class="am-align-right am-btn am-btn-warning am-btn-xs am-round">选择日期</button>-->
+			</div>
+		</div>
+	</div>
+</form>
+<!--/主要内容区-->
+<!--信息列表-->
+<style>
+	#info-list {
+		background-color: #FFF;
+		color: #373737;
+		margin-top: 0;
+	}
+	#info-list [class*=am-icon-] {
+		color:#BDBDBD;
+	}
+</style>
+<ul id="info-list" class="am-list am-list-static am-list-border">
+	<li>
+		<i class="am-icon-fw am-icon-thumbs-o-up"></i>
+		3岁以上均可参加
+	</li>
+	<li>
+		<i class="am-icon-fw am-icon-clock-o"></i>
+		7月1日/7月13日/7月25日
+	</li>
+	<li>
+		<i class="am-icon-fw am-icon-map-marker"></i>
+		上海市青浦区金泽镇XX村
+	</li>
+	<li>
+		<i class="am-icon-fw am-icon-weixin"></i>
+		客服小驴友微信号：xxxxxxxx
+	</li>
+	<li>
+		想给孩子和小伙伴们组织包场吗？
+		<i class="am-icon-chevron-right am-align-right"></i>
+	</li>
+</ul>
+<!--/信息列表-->
+<!--主要内容区-->
+<style>
+	#info-section {
+		background-color: #FFF;
+		box-sizing: border-box;
+		padding:0 1em;
+		width:100%;
+		padding-top: 3em;
+	}
+
+	.detail-line {
+		color: #7f7f7f;
+		line-height: 200%;
+	}
+	.detail-line img {
+		width:100%;
+		display:block;
+	}
+	.detail-line img.line-pic {
+		padding-bottom:2em;
+	}
+</style>
+
+<div id="info-section">
+	<div class="detail-line">
+		<img src="./images/detail-line1.png" class="line-pic" alt="">
+		<img src="http://www.htyou.com//pic/photo/29eeb04d53afd13c6b7e3e41dbbfe1f1-10.jpg" alt="">
+		长沙/岘港 BL150（当地时间 21:00起飞-22:30抵达）航班号及航班时刻以最终民航局批复为准
+		团队于指定时间(22:30分左右)集合于长沙黄花机场国际出发厅，搭乘越南航空公司航班飞往越南有“东方夏威夷”之称的海滨城市岘港！抵达后乘坐观光巴士前往酒店入住，抵达酒店。
+	</div>
+	<div class="detail-line">
+		<img src="./images/detail-line2.png" class="line-pic" alt="">
+		<img src="http://www.htyou.com/pic/photo/2aafb616c5183c0acd6782a0e9467592-3.jpg" alt="">
+		早餐后于指定时间在酒店大厅集合前往前住【海云岭】（不少于60分钟），一路欣赏如画美景，海云岭是越南中部南北交通要冲，终年白云缭绕，与蓝天沧海浑然一体，壮观的景色让游人震撼！到达后先在平台处观景，这里被越南人称为“人间天堂”，然后行车至海云岭北侧沿海公路，游览【灵姑湾】，继续行车至灵姑内湾，一览湖光美景；，享受午餐后前往【越南乳胶店】（不超过60分钟），后前往联合国世界文化遗产——【会安古城】。参观会安古城（不少于2小时），然后客人可以自由闲逛及购物。会安是一个世界历史文化遗产，古城古韵吸引大量的西方游客，在这里满街都是来休闲度假的西方人。会安还是越南华人的聚居地,有中国的丽江之称。这里中国元素随处可见。在这里你还可以量身定做越南的国服“奥岱”，既便宜又交货快捷，远近闻名，是游客最爱消费之一。结束后返回酒店
+	</div>
+	<div class="detail-line">
+		<img src="./images/detail-line3.png" class="line-pic" alt="">
+		<img src="http://www.htyou.com/pic/photo/af940846df4a017dda9fc0cfc1cdadf1-2.jpg" alt="">
+		早餐后退房，于指定时间在酒店大厅集合前住游览【山茶半岛】（不少于45分钟）。让自己融入当地生活了解越南中部独一无二文化的不二选择--山茶半岛是最合适的地方，参观68米高的东南亚最高立式观音像，也是观赏整个岘港市区及海湾景色的绝佳地点。之后前往【美溪沙滩】（不少于30分钟），美溪海滩被福布斯杂志评为世界六大最美丽的海滩之一，沙质细腻，更难得的是这么美的沙滩完全没有嘈杂和喧闹，安静而祥和，让人流连往返!【越南土特产店】（不超过60分钟），尽情选购越南鼎鼎大名的腰果，咖啡，沉香等手信，晚餐后，集合前往机场，结束愉快的旅程！
 	</div>
 </div>
+<!--/主要内容区-->
+<!--底部工具栏-->
+<style>
+	#footer {
+		/*background-color: #fe8568;*/
+	}
 
-<script>
-	$('#viewport .flipsnap').css({'width':''+$('.cal-unit').length*3+'em'});
+	#footer>.am-g,
+	#footer>.am-g > div {
+		padding: 0;
+	}
 
-	Flipsnap('.flipsnap', {
-		maxPoint: 7    // move able 3 times
-	});
-</script>
+	#footer>.am-g button {
+		background-color: #FE8568;
+		line-height: 33px;
+		border: 0;
+	}
+</style>
+<div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default" id="footer">
+	<div class="am-g">
+		<div class="am-u-sm-2 am-u-md-2 am-u-lg-2" style="background-color: #FFF;">
+			<a href="http://amazeui.org/getting-started" class="" style="color: #FE8568;">
+				<span class="am-icon-phone"></span>
+				<span class="am-navbar-label">电话</span>
+			</a>
+		</div>
+		<div class="am-u-sm-2 am-u-md-2 am-u-lg-2" style="background-color: #FFF;">
+			<a href="http://amazeui.org/getting-started" class="" style="color: #FE8568;">
+				<span class="am-icon-share-alt"></span>
+				<span class="am-navbar-label">分享</span>
+			</a>
+		</div>
+		<div class="am-u-sm-8 am-u-md-8 am-u-lg-8">
+			<button type="button" class="am-btn am-btn-primary am-btn-block">立即报名</button>
+		</div>
+	</div>
+</div>
+<!--/底部工具栏-->
 </body>
 </html>

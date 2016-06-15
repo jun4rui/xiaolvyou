@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
+	<title>选择出行时间</title>
+	<!--<link rel="icon" type="image/png" href="jslib/amazeui/i/favicon.png">-->
+	<link rel="stylesheet" href="jslib/amazeui/css/amazeui.min.css">
+	<link rel="stylesheet" href="jslib/amazeui/css/app.css">
+	<script src="jslib/amazeui/js/jquery.min.js"></script>
+	<script src="jslib/amazeui/js/amazeui.min.js"></script>
+	<!--<script src="jslib/avalon1.5/avalon.js"></script>-->
+
+	<script src="jslib/moment-with-locales.js" charset="utf-8"></script>
+	<script src="jslib/underscore.js" charset="utf-8"></script>
+	<script src="jslib/clndr.js" charset="utf-8"></script>
+</head>
+<body>
+<!--顶部Header-->
+<style>
+	header.am-header {
+		box-shadow: 0 1px 3px #C2C2C2;
+	}
+
+	.am-header > .am-header-left > a {
+		color: #4EC585;
+	}
+
+	.am-header >.am-header-right>a {
+		color:#ff9179;
+	}
+	.am-header > .am-header-title > a {
+		color: #000;
+	}
+
+	.am-header-default {
+		background-color: #FFF;
+	}
+</style>
+<header data-am-widget="header"
+		class="am-header am-header-default">
+	<div class="am-header-left am-header-nav">
+		<a href="#left-link" class="">
+			<i class="am-header-icon am-icon-angle-left"></i>
+		</a>
+	</div>
+
+	<h1 class="am-header-title">
+		<a href="#title-link" class="">
+			选择出行时间
+		</a>
+	</h1>
+
+</header>
+<!--/顶部Header-->
+
+<!--主要内容区-->
+<style>
+	#main-section {
+		background-color: #FFF;
+		box-sizing: border-box;
+		padding:0;
+		width:100%;
+	}
+	.header-day {
+		width: 14.2857%;
+		float: left;
+		text-align: center;
+		box-sizing: border-box;
+	}
+	.day {
+		width: 14.2857%;
+		height: 4em;
+		line-height: 100%;
+		box-sizing: border-box;
+		float: left;
+		border: 1px solid #eeeeee;
+		border-bottom: 0;
+		border-right: 0;
+		background-color: #fff;
+		font-size: 0.5em;
+		position:relative;
+		padding: 2px;
+	}
+	.day .day-info {
+		position:absolute;
+		right:2px;
+		bottom: 2px;
+		color:#eb6561;
+		text-align: right;
+
+	}
+	.day .day-info span {
+		color:#30a866;
+		display:block;
+	}
+	.month {
+		text-align:center;
+		background-color: #93d7b2;
+		color:#FFF;
+		font-size: 1.2em;
+		line-height:200%;
+	}
+
+	#calendar2 {
+		margin-top:2em;
+	}
+	#calendar1,
+	#calendar2 {
+		border-bottom: 1px solid #eee;
+		border-right: 1px solid #eee;
+	}
+	.clearfix {
+		clear:both;
+	}
+</style>
+
+<div id="main-section">
+	<script type="text/template" id="full-clndr-template">
+		<div class="clndr-controls">
+			<!--<div class="clndr-previous-button">‹</div>-->
+			<div class="month"><%= month %></div>
+			<!--<div class="clndr-next-button">›</div>-->
+		</div>
+		<div class="clndr-grid">
+			<div class="days-of-the-week clearfix">
+				<% _.each(daysOfTheWeek, function(day) { %>
+				<div class="header-day"><%= day %></div>
+				<% }); %>
+			</div>
+			<div class="days clearfix">
+				<% _.each(days, function(day) { %>
+				<div class="<%= day.classes %>" id="<%= day.id %>"><span class="day-number"><%= day.day %></span></div>
+				<% }); %>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+		<div class="clearfix"></div>
+	</script>
+	<div id="calendar1"></div>
+	<div id="calendar2"></div>
+	<script>
+		var dateList = [
+			{date:'2016-06-01', status: '剩999', price:'999元'},
+			{date:'2016-06-03', status: '剩999', price:'999元'},
+			{date:'2016-06-04', status: '剩9', price:'999元'},
+			{date:'2016-06-05', status: '剩9', price:'999元'},
+			{date:'2016-06-08', status: '剩9', price:'999元'},
+			{date:'2016-07-09', status: '剩9', price:'999元'},
+			{date:'2016-07-19', status: '剩9', price:'999元'},
+			{date:'2016-07-29', status: '剩9', price:'999元'},
+			{date:'2016-07-30', status: '剩9', price:'999元'}
+		];
+		moment.locale('zh-CN');
+		$('#calendar1').clndr({
+			startWithMonth: moment(),
+			events: dateList,
+			template: $('#full-clndr-template').html(),
+			//daysOfTheWeek:['日', '一', '二', '三', '四', '五', '六'],
+			doneRendering: function(){
+				console.log('render!');
+				//循环日程列表
+				for (var i in dateList){
+					$('#calendar1 [class*='+dateList[i].date+']').find('span.day-number').append('<div class="day-info"><span>'+dateList[i].status+'</span>'+dateList[i].price+'</div>');
+				}
+			},
+			clickEvents: {
+				click: function(targetDOM){
+					console.log(targetDOM.events[0].date,targetDOM.events[0].status,targetDOM.events[0].price);
+				}
+			}
+		});
+		$('#calendar2').clndr({
+			startWithMonth: moment().add(1,'M'),
+			events: dateList,
+			template: $('#full-clndr-template').html(),
+			doneRendering: function(){
+				console.log('render!');
+				//循环日程列表
+				for (var i in dateList){
+					$('#calendar2 [class*='+dateList[i].date+']').find('span.day-number').append('<div class="day-info"><span>'+dateList[i].status+'</span>'+dateList[i].price+'</div>');
+				}
+			},
+			clickEvents: {
+				click: function(targetDOM){
+					console.log(targetDOM.events[0].date,targetDOM.events[0].status,targetDOM.events[0].price);
+				}
+			}
+		});
+	</script>
+</div>
+<!--/主要内容区-->
+
+</body>
+</html>

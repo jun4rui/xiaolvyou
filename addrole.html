@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
+	<title>增加出行人</title>
+	<!--<link rel="icon" type="image/png" href="jslib/amazeui/i/favicon.png">-->
+	<link rel="stylesheet" href="jslib/amazeui/css/amazeui.min.css">
+	<link rel="stylesheet" href="jslib/amazeui/css/app.css">
+	<script src="jslib/amazeui/js/jquery.min.js"></script>
+	<script src="jslib/amazeui/js/amazeui.min.js"></script>
+	<!--<script src="jslib/avalon1.5/avalon.js"></script>-->
+
+	<script src="jslib/moment-with-locales.js" charset="utf-8"></script>
+	<script src="jslib/underscore.js" charset="utf-8"></script>
+	<script src="jslib/clndr.js" charset="utf-8"></script>
+</head>
+<body>
+<!--顶部Header-->
+<style>
+	header.am-header {
+		box-shadow: 0 1px 3px #C2C2C2;
+	}
+
+	/*.am-header > .am-header-left > a {*/
+		/*color: #4EC585;*/
+	/*}*/
+
+	/*.am-header >.am-header-right>a {*/
+		/*color:#ff9179;*/
+	/*}*/
+	/*.am-header > .am-header-title > a {*/
+		/*color: #000;*/
+	/*}*/
+
+	/*.am-header-default {*/
+		/*background-color: #FFF;*/
+	/*}*/
+</style>
+<header data-am-widget="header"
+		class="am-header am-header-default">
+	<div class="am-header-left am-header-nav">
+		<a href="#left-link" class="">
+			<i class="am-header-icon am-icon-angle-left"></i>
+		</a>
+	</div>
+
+	<h1 class="am-header-title">
+		<a href="#title-link" class="">
+			增加出行人
+		</a>
+	</h1>
+
+</header>
+<!--/顶部Header-->
+
+<!--主要内容区-->
+<style>
+	#main-section {
+		background-color: #FFF;
+		box-sizing: border-box;
+		padding:0;
+		width:100%;
+	}
+</style>
+
+<div id="main-section">
+	<form class="am-form">
+		<fieldset>
+			<legend>请在下面输入出行人信息</legend>
+
+			<div class="am-form-group">
+				<label for="rolename">姓名</label>
+				<input type="text" class="" id="rolename" placeholder="请输入出行人真实姓名">
+			</div>
+
+			<div class="am-form-group">
+				<label class="am-radio-inline">
+					<input type="radio" name="rolesex">男
+				</label>
+				<label class="am-radio-inline">
+					<input type="radio" name="rolesex">女
+				</label>
+			</div>
+
+			<div class="am-form-group">
+				<label for="rolebirthday">生日</label>
+				<input type="date" class="" id="rolebirthday" placeholder="请输入出行人出生日期">
+			</div>
+
+			<div class="am-form-group">
+				<label for="idcard">身份证</label>
+				<input type="text" class="" id="idcard" placeholder="请输入身份证号码">
+			</div>
+
+			<p><button type="submit" class="am-btn am-btn-success am-btn-block">提交</button></p>
+		</fieldset>
+	</form>
+</div>
+<!--/主要内容区-->
+
+</body>
+</html>

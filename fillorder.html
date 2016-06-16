@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
+	<title>填写出行信息</title>
+	<!--<link rel="icon" type="image/png" href="jslib/amazeui/i/favicon.png">-->
+	<link rel="stylesheet" href="jslib/amazeui/css/amazeui.min.css">
+	<link rel="stylesheet" href="jslib/amazeui/css/app.css">
+	<script src="jslib/amazeui/js/jquery.min.js"></script>
+	<script src="jslib/amazeui/js/amazeui.min.js"></script>
+	<script src="jslib/avalon1.5/avalon.js"></script>
+</head>
+<body>
+<!--顶部Header-->
+<style>
+	header.am-header {
+		box-shadow: 0 1px 3px #C2C2C2;
+	}
+
+	.am-header > .am-header-left > a {
+		color: #4EC585;
+	}
+
+	.am-header > .am-header-right > a {
+		color: #FF9179;
+	}
+
+	.am-header > .am-header-title > a {
+		color: #000;
+	}
+
+	.am-header-default {
+		background-color: #FFF;
+	}
+</style>
+<header data-am-widget="header"
+		class="am-header am-header-default">
+	<div class="am-header-left am-header-nav">
+		<a href="#left-link" class="">
+			<i class="am-header-icon am-icon-angle-left"></i>
+		</a>
+	</div>
+
+	<h1 class="am-header-title">
+		<a href="#title-link" class="">
+			填写出行信息
+		</a>
+	</h1>
+
+</header>
+<!--/顶部Header-->
+
+<!--主要内容区-->
+<style>
+	#main-section {
+		background-color: #FFF;
+		box-sizing: border-box;
+		padding: 0;
+		width: 100%;
+	}
+
+	#main-section > .title {
+		background-color: #4BBD7F;
+		font-size: 1.1em;
+		line-height: 120%;
+		color: #FFF;
+		box-sizing: border-box;
+		padding: 1em .5em;
+		text-align: left;
+	}
+	#main-section > .title > span {
+		font-size:0.9em;
+		display:block;
+		margin-top: .5em;
+	}
+	.am-form .am-form-group {
+		margin-bottom:0;
+	}
+	.am-form li {
+		padding:.5em;
+	}
+	.am-form li.title-line {
+		color: #666;
+		background-color: #f8f8f8;
+	}
+	.am-form .am-g label {
+		line-height: 19.2px;
+		padding: 8px 0;
+	}
+</style>
+<div id="main-section">
+	<!--绿色背景显示白色线路标题 -->
+	<div class="title">
+		生态农场体验+皮划艇 | 风吹麦浪，让我们荡起双桨
+		<span>2016-06-07至2016-09-21</span>
+	</div>
+	<!--/绿色背景显示白色线路标题-->
+
+	<form action="" class="am-form">
+		<ul class="am-list am-list-static">
+			<li class="title-line">选择出行人</li>
+			<li>
+				请选择 1 名成和 2 名儿童
+				<button class="am-btn am-btn-danger am-align-right am-btn-xs" href="#">
+					<i class="am-icon-plus"></i>
+					选择
+				</button>
+			</li>
+			<li class="title-line">联系人信息</li>
+			<li>
+				<div class="am-form-group am-g">
+					<label for="linkname" class="am-u-sm-3 am-form-label">姓名</label>
+					<div class="am-u-sm-9">
+						<input type="text" id="linkname" placeholder="请输入联系人姓名">
+					</div>
+				</div>
+			</li>
+			<li>
+				<div class="am-form-group am-g">
+					<label for="linkphone" class="am-u-sm-3 am-form-label">手机</label>
+					<div class="am-u-sm-9">
+						<input type="text" id="linkphone" placeholder="请输入联系人手机号码">
+					</div>
+				</div>
+			</li>
+			<li>
+				<div class="am-form-group am-g">
+					<label for="linkmemo">备注</label>
+					<textarea class="" rows="5" id="linkmemo" placeholder="请告诉我们您的特殊需求"></textarea>
+				</div>
+			</li>
+			<li>
+				我已阅读并同意 <a href="#" style="display:inline">《用户须知》</a>
+			</li>
+		</ul>
+	</form>
+</div>
+<!--/主要内容区-->
+<!--底部工具栏-->
+<style>
+	#footer {
+		/*background-color: #fe8568;*/
+	}
+
+	#footer .am-navbar-nav,
+	#footer .am-navbar-nav > div {
+		padding: 0;
+	}
+
+	#footer .am-navbar-nav button {
+		background-color: #FE8568;
+		line-height: 33px;
+		border: 0;
+	}
+</style>
+<div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default" id="footer">
+	<div class="am-navbar-nav am-cf am-g doc-am-g">
+		<button type="button" class="am-btn am-btn-primary am-btn-block">前往支付</button>
+	</div>
+</div>
+<!--/底部工具栏-->
+</body>
+</html>

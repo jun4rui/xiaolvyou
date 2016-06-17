@@ -1,0 +1,49 @@
+1、微信渠道统计
+     WeiXinManager createQrcode 创建2微码 关注信息存放到对应的新闻id。新闻对象  url 存放2微码链接。 showgrade存放关注次数
+     在 sys_biz_log  operateLogCode = 5555  存放了关注的对应日志记录
+     
+2、订单流程
+				页面要判断 5 个字段是否 不为0
+					根据产品类型判断价格 || 旅游---> ydyxprice 一大一小   edyxprice 二大一小    childprice 儿童价  adultprice 成人价  ||  门票-——> 门票价格
+				1. 计算价格 计算单价 计算成人 儿童数量
+							MobileTourOrderAction tourOrderStep3  
+							tourOrderVO.setOrder_amount(String.valueOf(order_amount));  // 订单价格
+							tourOrderVO.setDetailpre(JSONUtil.getJSONStr(priceAndNum)); // 用户订购的 单价及其数量
+							tourOrderVO.setAdult_num(adult_num);  // 成人数
+							tourOrderVO.setChild_num(child_num);  // 儿童数
+							返回：  status ： 1  成功    101  产品数量不能为零   102 产品数量不足
+				2. 订单添加  
+	
+		//页面 传递参数 tourOrderVO.jzl_cteamcode 产品团号 
+		// tourOrderVO.detailpre 单价及数量 tourOrderVO.adult_num 成人数 tourOrderVO.child_num 儿童数  tourOrderVO.order_amount 订单金额 
+		//tourOrderVO.contact_name 联系人 tourOrderVO.contact_phone 联系电话   
+		passenger[] 数组  出行人 userid 用户id   tourOrderVO.order_source 来源   tourOrderVO。pay_type 支付方式
+		
+							MobileTourOrderAction addTourOrder  
+							1.判断联系人是否填写    status 101  未填写
+							2. 用户出行人的id 存放在 passenger[]  判断出行人 年龄 数量 是否正确  status 102 不正确  
+							3.添加订单
+							4.跳转到支付页面q
+							
+							
+		tourOrderVO 支付时间存放 start_date   支付状态 is_paystr  订单状态is_cancelstr 0 有效 1 取消
+		
+		
+		3 产品数量 
+					现在产品数量 根据 大数量计算 比如 1大一小 算一个。  比如 门票也算一个 即便买了多张门票。   旅游和门票有2个类型
+					
+3、用户流程
+		1  微信一点登陆   用户点击预定   -->  页面判断是否存在userid  -- >  不存在 访问 -- > 
+		访问 Weixin.htyou.com/weixin/thirdWebPageLogin.action?page_url=mainpage.html_lineid=730  
+					page_url 是判断后续流程的参数字段。mainpage.html 是返回页面  lineid = 730 是对应参数 已下划线分割
+				1.如果用户是已存在用户 回跳转到对应页面 带参数  比如 跳转到 域名/指定目录/mainpage.html?lineid=730
+				
+				2.如果用户是不存在用户  保存用户信息。 跳转到 手机填写页面。 详情参考2
+		
+		2  用户手机 验证码 确认 
+				发送确认码 ：htuser_endSmsConfirm.action  参数有 number 手机号码 
+				确认确认码 ：htuser_getSmsConfirm.action   参数  vaildcode 确认码  phone 手机号码
+				--完成后提交信息
+			  更新用户手机信息  HTuseraction updateGuestInfo    参数 column=mobilephone    guestVO.mobilePhone , guestVO.guestId
+			  --完成后 页面跳转到 根据 page_url 后面参数 跳转页面
+		  

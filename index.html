@@ -189,7 +189,7 @@
 		position: absolute;
 		bottom: 7em;
 		padding: 0 .5em;
-		/* line-height: 200%; */
+		 line-height: 200%;
 		font-size: 1.5em;
 		font-weight: bold;
 	}
@@ -212,15 +212,14 @@
 	<a ms-attr-href="info.html?lineid={{unit.lineid}}" ms-repeat-unit="list">
 	<div class="tour-unit-default">
 		<!--TODO: 测试数据图片地址还是华天的，正式版要改回来-->
-		<img ms-attr-src="http://www.htyou.com/{{unit.spotviewpic}}" alt="">
+		<img ms-attr-src="http://www.96hn.com/{{unit.spotviewpic}}" alt="">
 		<div class="price"><span class="yen">&yen;</span>{{unit.leastprice}}<span class="qi">起</span></div>
 		<div class="title">{{unit.tourproname}}</div>
-		<div class="desc">xxxxxxxxxxxxxx</div>
+		<div class="desc">{{unit.adtitle}}</div>
 		<div class="notiy-panel">
 			<i class="am-icon-map-marker am-icon-sm"></i>
-			<span class="notiy">xxxxx</span>
-			<span class="notiy">xxxxxxxxxx</span>
-			<span class="notiy">xxxx-xx-xx</span>
+			<span class="notiy">{{unit.adcontent}}</span>
+			<span class="notiy">{{unit.destination}}</span>
 		</div>
 	</div>
 	</a>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
+	<title>登陆/注册</title>
+	<link rel="stylesheet" href="jslib/amazeui/css/amazeui.min.css">
+	<link rel="stylesheet" href="jslib/amazeui/css/app.css">
+	<script src="jslib/amazeui/js/jquery.min.js"></script>
+	<script src="jslib/amazeui/js/amazeui.min.js"></script>
+	<script src="jslib/avalon1.5/avalon.js"></script>
+	<style>
+		body {
+			background-color: #f7f7f7;
+		}
+	</style>
+</head>
+<body>
+<!--顶部Header-->
+<style>
+	header.am-header {
+		box-shadow: 0 1px 3px #C2C2C2;
+	}
+
+	.am-header > .am-header-left > a {
+		color: #4EC585;
+	}
+
+	.am-header > .am-header-title > a {
+		color: #000;
+	}
+
+	.am-header-default {
+		background-color: #FFF;
+	}
+</style>
+<header data-am-widget="header"
+		class="am-header am-header-default">
+	<div class="am-header-left am-header-nav">
+		<a href="#left-link" class="">
+			<i class="am-header-icon am-icon-angle-left"></i>
+		</a>
+	</div>
+
+	<h1 class="am-header-title">
+		<a href="#title-link" class="">
+			登陆/注册
+		</a>
+	</h1>
+
+	<!--<div class="am-header-right am-header-nav">-->
+	<!--<a href="#right-link" class="">-->
+	<!--<i class="am-header-icon am-icon-bars"></i>-->
+	<!--</a>-->
+	<!--</div>-->
+</header>
+<!--/顶部Header-->
+
+<!--主要内容区-->
+<style>
+	#main-section {
+		padding: 1.5em 1em 1em 1em;
+	}
+	#main-section>img {
+		margin-bottom:1em;
+	}
+</style>
+
+<div id="main-section" class="am-g">
+	<!--居中LOGO图片-->
+	<img src="./images/login_title.png" alt="小驴友 登陆" class="am-img-responsive">
+	<!--按钮-->
+	<button type="button" class="am-btn am-btn-primary am-round am-btn-block">
+		<i class="am-icon-weixin"></i>
+		微信一键登录
+	</button>
+</div>
+<!--/主要内容区-->
+</body>
+</html>

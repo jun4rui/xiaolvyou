@@ -10,6 +10,10 @@
 	<script src="jslib/amazeui/js/jquery.min.js"></script>
 	<script src="jslib/amazeui/js/amazeui.min.js"></script>
 	<script src="jslib/avalon1.5/avalon.js"></script>
+
+	<link rel="stylesheet" href="common.css">
+	<script src="common.js"></script>
+
 	<style>
 		body {
 			background-color: #ebebeb;
@@ -157,12 +161,14 @@
 <!--/主要内容区-->
 <!--信息列表-->
 <style>
-	#info-list {
+	#info-list,
+	#expand-detail {
 		background-color: #FFF;
 		color: #373737;
 		margin-top: 0;
 	}
-	#info-list [class*=am-icon-] {
+	#info-list [class*=am-icon-],
+	#expand-detail [class*=am-icon-] {
 		color:#BDBDBD;
 	}
 </style>
@@ -189,6 +195,13 @@
 	</li>
 </ul>
 <!--/信息列表-->
+
+<ul id="expand-detail" class="am-list am-list-static am-list-border">
+	<li onclick="$('#info-section').show(); $('#expand-detail').hide();">
+		点击查看详情
+		<i class="am-icon-chevron-right am-align-right"></i>
+	</li>
+</ul>
 <!--主要内容区-->
 <style>
 	#info-section {
@@ -197,6 +210,8 @@
 		padding:0 1em;
 		width:100%;
 		padding-top: 3em;
+
+		display:none;
 	}
 
 	.detail-line {

@@ -17,6 +17,10 @@
 
 	<link rel="stylesheet" href="common.css">
 	<script src="common.js"></script>
+
+	<script>
+		//http://www.96hn.com/mobile/ipad_getTourTeam.action?jsoncallback=?&lineid=12429
+	</script>
 </head>
 <body>
 <!--顶部Header-->
@@ -29,9 +33,10 @@
 		color: #4EC585;
 	}
 
-	.am-header >.am-header-right>a {
-		color:#ff9179;
+	.am-header > .am-header-right > a {
+		color: #FF9179;
 	}
+
 	.am-header > .am-header-title > a {
 		color: #000;
 	}
@@ -62,59 +67,66 @@
 	#main-section {
 		background-color: #FFF;
 		box-sizing: border-box;
-		padding:0;
-		width:100%;
+		padding: 0;
+		width: 100%;
 	}
+
 	.header-day {
 		width: 14.2857%;
 		float: left;
 		text-align: center;
 		box-sizing: border-box;
 	}
+
 	.day {
 		width: 14.2857%;
 		height: 4em;
 		line-height: 100%;
 		box-sizing: border-box;
 		float: left;
-		border: 1px solid #eeeeee;
+		border: 1px solid #EEE;
 		border-bottom: 0;
 		border-right: 0;
-		background-color: #fff;
+		background-color: #FFF;
 		font-size: 0.5em;
-		position:relative;
+		position: relative;
 		padding: 2px;
 	}
+
 	.day .day-info {
-		position:absolute;
-		right:2px;
+		position: absolute;
+		right: 2px;
 		bottom: 2px;
-		color:#eb6561;
+		color: #EB6561;
 		text-align: right;
 
 	}
+
 	.day .day-info span {
-		color:#30a866;
-		display:block;
+		color: #30A866;
+		display: block;
 	}
+
 	.month {
-		text-align:center;
-		background-color: #93d7b2;
-		color:#FFF;
+		text-align: center;
+		background-color: #93D7B2;
+		color: #FFF;
 		font-size: 1.2em;
-		line-height:200%;
+		line-height: 200%;
 	}
 
 	#calendar2 {
-		margin-top:2em;
+		margin-top: 2em;
 	}
+
 	#calendar1,
 	#calendar2 {
-		border-bottom: 1px solid #eee;
-		border-right: 1px solid #eee;
+		border-bottom: 1px solid #EEE;
+		border-right: 1px solid #EEE;
 	}
+
 	.clearfix {
-		clear:both;
+		clear: both;
 	}
 </style>
 
@@ -143,53 +155,80 @@
 	<div id="calendar1"></div>
 	<div id="calendar2"></div>
 	<script>
-		var dateList = [
-			{date:'2016-06-01', status: '剩999', price:'999元'},
-			{date:'2016-06-03', status: '剩999', price:'999元'},
-			{date:'2016-06-04', status: '剩9', price:'999元'},
-			{date:'2016-06-05', status: '剩9', price:'999元'},
-			{date:'2016-06-08', status: '剩9', price:'999元'},
-			{date:'2016-07-09', status: '剩9', price:'999元'},
-			{date:'2016-07-19', status: '剩9', price:'999元'},
-			{date:'2016-07-29', status: '剩9', price:'999元'},
-			{date:'2016-07-30', status: '剩9', price:'999元'}
-		];
-		moment.locale('zh-CN');
-		$('#calendar1').clndr({
-			startWithMonth: moment(),
-			events: dateList,
-			template: $('#full-clndr-template').html(),
-			//daysOfTheWeek:['日', '一', '二', '三', '四', '五', '六'],
-			doneRendering: function(){
-				console.log('render!');
-				//循环日程列表
-				for (var i in dateList){
-					$('#calendar1 [class*='+dateList[i].date+']').find('span.day-number').append('<div class="day-info"><span>'+dateList[i].status+'</span>'+dateList[i].price+'</div>');
+		var lineid = getParameterValue(window.location.href, 'lineid');
+		$.getJSON('http://www.96hn.com/mobile/ipad_queryTourTeam.action?jsoncallback=?&lineid=' + lineid, function (result) {
+			if (result.status == 1) {
+				var dateList = [];
+				for (var i in result.value) {
+					dateList.push({
+						date:   result.value[i].tourdate,
+						status: '余' + result.value[i].haveqty,
+						price:  result.value[i].leastprice + '元',
+						tourproid: result.value[i].tourproid
+					});
 				}
-			},
-			clickEvents: {
-				click: function(targetDOM){
-					console.log(targetDOM.events[0].date,targetDOM.events[0].status,targetDOM.events[0].price);
-				}
+				moment.locale('zh-CN');
+				$('#calendar1').clndr({
+					startWithMonth: moment(),
+					classes: {
+						past: "my-past",
+						today: "my-today",
+						event: "my-event",
+						inactive: "my-inactive",
+						lastMonth: "my-last-month",
+						nextMonth: "my-next-month",
+						adjacentMonth: "my-adjacent-month"
+					},
+					events:         dateList,
+					template:       $('#full-clndr-template').html(),
+					//daysOfTheWeek:['日', '一', '二', '三', '四', '五', '六'],
+					doneRendering:  function () {
+						console.log('render!');
+						//循环日程列表
+						for (var i in dateList) {
+							$('#calendar1 [class*=' + dateList[i].date + ']').find('span.day-number').append('<div class="day-info"><span>' + dateList[i].status + '</span>' + dateList[i].price + '</div>');
+						}
+					},
+					clickEvents:    {
+						click: function (targetDOM) {
+							console.log(targetDOM.events[0].date, targetDOM.events[0].status, targetDOM.events[0].price, targetDOM.events[0].tourproid);
+						}
+					}
+				});
+				$('#calendar2').clndr({
+					classes: {
+						past: "my-past",
+						today: "my-today",
+						event: "my-event",
+						inactive: "my-inactive",
+						lastMonth: "my-last-month",
+						nextMonth: "my-next-month",
+						adjacentMonth: "my-adjacent-month"
+					},
+					startWithMonth: moment().add(1, 'M'),
+					events:         dateList,
+					template:       $('#full-clndr-template').html(),
+					doneRendering:  function () {
+						console.log('render!');
+						//循环日程列表
+						for (var i in dateList) {
+							$('#calendar2 [class*=' + dateList[i].date + ']').find('span.day-number').append('<div class="day-info"><span>' + dateList[i].status + '</span>' + dateList[i].price + '</div>');
+						}
+					},
+					clickEvents:    {
+						click: function (targetDOM) {
+							console.log(targetDOM.events[0].date, targetDOM.events[0].status, targetDOM.events[0].price, targetDOM.events[0].tourproid);
+						}
+					}
+				});
+			}else{
+				var errMsg = '';
+				if (result.status==103)
+					errMsg = '无效的线路ID';
+				alert(errMsg);
 			}
 		});
-		$('#calendar2').clndr({
-			startWithMonth: moment().add(1,'M'),
-			events: dateList,
-			template: $('#full-clndr-template').html(),
-			doneRendering: function(){
-				console.log('render!');
-				//循环日程列表
-				for (var i in dateList){
-					$('#calendar2 [class*='+dateList[i].date+']').find('span.day-number').append('<div class="day-info"><span>'+dateList[i].status+'</span>'+dateList[i].price+'</div>');
-				}
-			},
-			clickEvents: {
-				click: function(targetDOM){
-					console.log(targetDOM.events[0].date,targetDOM.events[0].status,targetDOM.events[0].price);
-				}
-			}
-		});
+
 	</script>
 </div>
 <!--/主要内容区-->

@@ -297,13 +297,15 @@ function whereami(){
 
 
 // 配置jquery,requirejs语法
-avalon.config({
-	paths: {
-		/*jquery: '../jquery/dist/jquery.min.js',*/
-		/*config: '../../config.js',*/
-		wx: 'http://res.wx.qq.com/open/js/jweixin-1.0.0.js'
-	}
-});
+if (typeof(avalone)=='function') {
+	avalon.config({
+		paths: {
+			/*jquery: '../jquery/dist/jquery.min.js',*/
+			/*config: '../../config.js',*/
+			wx: 'http://res.wx.qq.com/open/js/jweixin-1.0.0.js'
+		}
+	});
+}
 
 
 // 判断用户设备类型

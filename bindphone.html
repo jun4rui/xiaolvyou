@@ -17,6 +17,82 @@
 			background-color: #F7F7F7;
 		}
 	</style>
+
+	<script>
+		//点击发送按钮的处理
+		(function ($) {
+			var status = false;
+			$(document).delegate('#sendSms', 'click', function (result) {
+				//如果电话号码栏目不合规范则不发送
+				if ($('#phone').val() != $('#phone').val().match(/^1[0-9]{10}$/)) {
+					alert('手机号码错误，请修改后重新发送');
+					return false;
+				}
+				var intervalid = null;
+				if ($('#sendSms a').text() != '获取') {
+					return false;
+				}
+				$('#sendSms a').text('120');//设置60秒间隔
+				intervalid = setInterval(function () {
+					if (parseInt($('#sendSms a').text()) > 0) {
+						$('#sendSms a').text(parseInt($('#sendSms').text()) - 1);
+					} else {
+						$('#sendSms a').text('获取');
+						clearInterval(intervalid);
+					}
+				}, 1000);
+				$.getJSON('http://www.96hn.com/user/htuser_sendSmsConfirm.action?jsoncallback=?&phone='+$('#phone').val(),function(result){
+					if (result.status=='false'){
+						alert('验证码发送失败，请稍后尝试');
+					}
+				});
+
+			});
+		})($);
+
+		//点击注册按钮执行的操作
+		(function ($) {
+			$(document).delegate('#submit-button', 'click', function () {
+				var errMsg = '';
+				var userid = getParameterValue(window.location.href,'userid');
+				//先检查手机号码是否填写
+				if ($('#phone').val().length<11){
+					alert('您的手机号码填写错误，请重新填写');
+					return false;
+				}
+				if ($('#checkcode').val().length<6){
+					alert('请填写验证码');
+					return false;
+				}
+				//验证用户验证码并提交接口
+				//console.log('/user/htuser_confirmGuestPhone.action?jsoncallback=?&userid='+userid+'&phone=' + $('#phone').val() + '&vaildcode=' + $('#checkcode').val());
+				$.getJSON('http://www.96hn.com/user/htuser_confirmGuestPhone.action?jsoncallback=?&userid='+userid+'&phone=' + $('#phone').val() + '&vaildcode=' + $('#checkcode').val(), function (result) {
+					//console.log(result);
+					//正确则跳转到state参数指定的地址
+					if (result.status == 1) {
+						var gotoUrl = getParameterValue(window.location.href,'state').replace('_','?');
+						window.location.href = gotoUrl;
+						return true;
+					}
+
+					//错误的处理
+					if (result.status == 101){
+						errMsg = '确认码错误！';
+					}
+					if (result.status == 103) {
+						errMsg = '更新时发生异常！';
+					}
+					if (errMsg!=''){
+						alert('发生错误：'+errMsg+'\n请稍后重新获取验证码再次尝试！');
+						return false;
+					}
+				});
+				//验证码正确后在提交注册
+				//验证码不正确则
+				return false;
+			});
+		})($);
+	</script>
 </head>
 <body>
 <!--顶部Header-->
@@ -68,17 +144,28 @@
 	#main-section > img {
 		margin-bottom: 1em;
 	}
+	#main-section .am-input-group {
+		margin-bottom:1.5em;
+	}
 </style>
 
 <div id="main-section" class="am-g">
 	<!--居中LOGO图片-->
 	<img src="./images/login_title.png" alt="小驴友 登陆" class="am-img-responsive">
 	<form class="am-form">
-		<fieldset class="am-form-set">
-			<input type="text" placeholder="请输入需要您的手机号码">
-		</fieldset>
+		<!--手机号码*-->
+		<div class="am-input-group">
+			<span class="am-input-group-label"><i class="am-icon-mobile-phone am-icon-fw am-icon-sm"></i></span>
+			<input type="text" id="phone" class="am-form-field" placeholder="请输入您的手机号码即帐号" required>
+		</div>
+		<!--验证码*-->
+		<div class="am-input-group">
+			<span class="am-input-group-label"><i class="am-icon-check-circle am-icon-fw am-icon-sm"></i></span>
+			<input type="text" id="checkcode" class="am-form-field" placeholder="请输入验证码" required>
+			<span class="am-input-group-label" id="sendSms"><a href="javascript:void(0);">获取</a></span>
+		</div>
 		<!--按钮-->
-		<button type="button" class="am-btn am-btn-success am-round am-btn-block">
+		<button type="button" id="submit-button" class="am-btn am-btn-success am-btn-block">
 			<i class="am-icon-mobile-phone"></i>
 			绑定手机
 		</button>

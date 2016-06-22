@@ -639,3 +639,15 @@ $(document).ready(function(){
 		};
 	}
 })(window);
+
+
+/**
+ * 2016-06-22
+ * 小驴友项目用js代码起始段
+ */
+
+// 将userid更新保存到localStorage中去
+var userid = getParameterValue(window.location.href,'userid');
+if (userid!=''){
+	window.localStorage.setItem('XLY_USERID',userid);
+}

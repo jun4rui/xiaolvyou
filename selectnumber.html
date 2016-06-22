@@ -330,7 +330,7 @@
 			*/
 			//成功提交，前往下一个流程
 			if (result.status==1){
-				window.location.href = 'fillorder.html?jzluid='+cteamcode;
+				window.location.href = 'fillorder.html?cteamcode='+cteamcode+'&order_amount='+result.tourOrderVO.order_amount+'&adult_num='+result.tourOrderVO.adult_num+'&child_num='+result.tourOrderVO.child_num+'&detailpre='+result.tourOrderVO.detailpre;
 			}else{
 				var errMsg = '';
 				if (result.status==101){

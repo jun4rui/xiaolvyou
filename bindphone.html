@@ -70,7 +70,7 @@
 					//console.log(result);
 					//正确则跳转到state参数指定的地址
 					if (result.status == 1) {
-						var gotoUrl = getParameterValue(window.location.href,'state').replace('_','?');
+						var gotoUrl = decodeURIComponent(getParameterValue(window.location.href,'state').replace(/!/g,'%'));
 						window.location.href = gotoUrl;
 						return true;
 					}
@@ -101,16 +101,19 @@
 		box-shadow: 0 1px 3px #C2C2C2;
 	}
 
-	.am-header > .am-header-left > a {
+	.am-header > .am-header-nav > a {
 		color: #4EC585;
 	}
 
-	.am-header > .am-header-title > a {
+	.am-header > .am-header-nav > a {
 		color: #000;
 	}
 
 	.am-header-default {
 		background-color: #FFF;
+	}
+	.am-header-title a {
+		color:#7e7e7e !important;
 	}
 </style>
 <header data-am-widget="header"
@@ -128,7 +131,7 @@
 	</h1>
 
 	<div class="am-header-right am-header-nav">
-		<a href="#right-link" class="">
+		<a href="#right-link" class="right-link" onload="$('.right-link').attr('href','http://wx.96hn.com/'+getParameterValue(window.location.href,'state').replace('_','?'))">
 			<i class="am-header-icon am-icon-angle-right"></i>
 		</a>
 	</div>

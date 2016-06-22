@@ -164,19 +164,19 @@
 						date:   result.value[i].tourdate,
 						status: '余' + result.value[i].haveqty,
 						price:  result.value[i].leastprice + '元',
-						tourproid: result.value[i].tourproid
+						jzluid: result.value[i].jzluid
 					});
 				}
 				moment.locale('zh-CN');
 				$('#calendar1').clndr({
 					startWithMonth: moment(),
-					classes: {
-						past: "my-past",
-						today: "my-today",
-						event: "my-event",
-						inactive: "my-inactive",
-						lastMonth: "my-last-month",
-						nextMonth: "my-next-month",
+					classes:        {
+						past:          "my-past",
+						today:         "my-today",
+						event:         "my-event",
+						inactive:      "my-inactive",
+						lastMonth:     "my-last-month",
+						nextMonth:     "my-next-month",
 						adjacentMonth: "my-adjacent-month"
 					},
 					events:         dateList,
@@ -191,18 +191,19 @@
 					},
 					clickEvents:    {
 						click: function (targetDOM) {
-							console.log(targetDOM.events[0].date, targetDOM.events[0].status, targetDOM.events[0].price, targetDOM.events[0].tourproid);
+							console.log(targetDOM.events[0].date, targetDOM.events[0].status, targetDOM.events[0].price, targetDOM.events[0].jzluid);
+							window.location.href = 'selectnumber.html?jzluid='+targetDOM.events[0].jzluid;
 						}
 					}
 				});
 				$('#calendar2').clndr({
-					classes: {
-						past: "my-past",
-						today: "my-today",
-						event: "my-event",
-						inactive: "my-inactive",
-						lastMonth: "my-last-month",
-						nextMonth: "my-next-month",
+					classes:        {
+						past:          "my-past",
+						today:         "my-today",
+						event:         "my-event",
+						inactive:      "my-inactive",
+						lastMonth:     "my-last-month",
+						nextMonth:     "my-next-month",
 						adjacentMonth: "my-adjacent-month"
 					},
 					startWithMonth: moment().add(1, 'M'),
@@ -217,13 +218,14 @@
 					},
 					clickEvents:    {
 						click: function (targetDOM) {
-							console.log(targetDOM.events[0].date, targetDOM.events[0].status, targetDOM.events[0].price, targetDOM.events[0].tourproid);
+							console.log(targetDOM.events[0].date, targetDOM.events[0].status, targetDOM.events[0].price, targetDOM.events[0].jzluid);
+							window.location.href = 'selectnumber.html?jzluid='+targetDOM.events[0].jzluid;
 						}
 					}
 				});
-			}else{
+			} else {
 				var errMsg = '';
-				if (result.status==103)
+				if (result.status == 103)
 					errMsg = '无效的线路ID';
 				alert(errMsg);
 			}

@@ -50,7 +50,7 @@
 			});
 		})($);
 
-		//点击注册按钮执行的操作
+		//点击“绑定手机”按钮执行的操作
 		(function ($) {
 			$(document).delegate('#submit-button', 'click', function () {
 				var errMsg = '';
@@ -131,7 +131,7 @@
 	</h1>
 
 	<div class="am-header-right am-header-nav">
-		<a href="#right-link" class="right-link" onload="$('.right-link').attr('href','http://wx.96hn.com/'+getParameterValue(window.location.href,'state').replace('_','?'))">
+		<a href="#right-link" class="right-link" onClick="window.location.href=decodeURIComponent(getParameterValue(window.location.href,'state').replace(/!/g,'%'));">
 			<i class="am-header-icon am-icon-angle-right"></i>
 		</a>
 	</div>

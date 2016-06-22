@@ -17,6 +17,37 @@
 
 	<link rel="stylesheet" href="common.css">
 	<script src="common.js"></script>
+
+	<script>
+		var userid = window.localStorage.getItem('XLY_USERID');
+		function addRole(){
+			/*
+			 参数
+			 passengerVO.passengerIdentify 身份证
+			 passengerVO.passengerName 姓名
+			 passengerVO.userid 用户id
+			 返回
+			 1 成功
+			 101 身份证错误
+			 http://www.96hn.com/user/htuser_addPassengerInfo.action
+			*/
+			$.getJSON('http://www.96hn.com/user/htuser_addPassengerInfo.action?passengerVO.userid='+userid+'&passengerVO.passengerName='+$('#rolename').val()+'&passengerVO.passengerIdentify='+$('#idcard').val(), function(result){
+				if (result.status==1){
+					alert('提交成功！您可以继续填写');
+					return true;
+				}else{
+					var errMsg = '';
+					if (result.status==101){
+						errMsg = '身份证错误';
+					}
+					if (errMsg!=''){
+						alert('发生错误：'+errMsg+'\n请重新填写后提交');
+					}
+					return false;
+				}
+			});
+		}
+	</script>
 </head>
 <body>
 <!--顶部Header-->
@@ -77,26 +108,26 @@
 				<input type="text" class="" id="rolename" placeholder="请输入出行人真实姓名">
 			</div>
 
-			<div class="am-form-group">
-				<label class="am-radio-inline">
-					<input type="radio" name="rolesex">男
-				</label>
-				<label class="am-radio-inline">
-					<input type="radio" name="rolesex">女
-				</label>
-			</div>
+			<!--<div class="am-form-group">-->
+				<!--<label class="am-radio-inline">-->
+					<!--<input type="radio" name="rolesex">男-->
+				<!--</label>-->
+				<!--<label class="am-radio-inline">-->
+					<!--<input type="radio" name="rolesex">女-->
+				<!--</label>-->
+			<!--</div>-->
 
-			<div class="am-form-group">
-				<label for="rolebirthday">生日</label>
-				<input type="date" class="" id="rolebirthday" placeholder="请输入出行人出生日期">
-			</div>
+			<!--<div class="am-form-group">-->
+				<!--<label for="rolebirthday">生日</label>-->
+				<!--<input type="date" class="" id="rolebirthday" placeholder="请输入出行人出生日期">-->
+			<!--</div>-->
 
 			<div class="am-form-group">
 				<label for="idcard">身份证</label>
 				<input type="text" class="" id="idcard" placeholder="请输入身份证号码">
 			</div>
 
-			<p><button type="submit" class="am-btn am-btn-success am-btn-block">提交</button></p>
+			<p><button type="submit" onclick="addRole()" class="am-btn am-btn-success am-btn-block">提交</button></p>
 		</fieldset>
 	</form>
 </div>

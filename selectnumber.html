@@ -13,8 +13,32 @@
 
 	<link rel="stylesheet" href="common.css">
 	<script src="common.js"></script>
+
+	<script>
+		//jzluid
+		//http://www.96hn.com/mobile/ipad_getTourTeamDetail.action?teamcode=HT-CITP-10503561050-980017
+		avalon.ready(function () {
+			var BodyVM = avalon.define({
+				$id:  'body',
+				info: {}
+			});
+
+			avalon.scan();
+
+			var jzluid = getParameterValue(window.location.href, 'jzluid');
+			//参数错误则退出
+			if (jzluid == '') {
+				alert('数据异常，系统终止');
+				return false;
+			}
+			console.log('http://www.96hn.com/mobile/ipad_getTourTeamDetail.action?jsoncallback=?&teamcode=' + jzluid);
+			$.getJSON('http://www.96hn.com/mobile/ipad_getTourTeamDetail.action?jsoncallback=?&teamcode=' + jzluid, function (result) {
+				BodyVM.info = result;
+			});
+		});
+	</script>
 </head>
-<body>
+<body ms-controller="body">
 <!--顶部Header-->
 <style>
 	header.am-header {
@@ -86,27 +110,40 @@
 		margin: 0 auto;
 		line-height: 220%;
 	}
+
+	label.am-u-sm-4.am-form-label {
+		line-height: 2em;
+	}
+
+	label.am-u-sm-4.am-form-label.price {
+		color: #F37B1D;
+	}
 </style>
 <div id="main-section">
 	<!--绿色背景显示白色线路标题 -->
 	<div class="title">
-		生态农场体验+皮划艇|风吹麦浪，让我们荡起双桨
+		{{info.htTourProVO.tourproname}}
 	</div>
 	<!--/绿色背景显示白色线路标题-->
 	<!--显示选择的时间-->
 	<div class="subtitle">已选择出行时间</div>
 	<div id="selecteddate">
-		2016-06-18
+		{{info.htTourProVO.tourdate}}
 	</div>
 	<!--/显示选择的时间-->
 	<!--选择人数-->
 	<div class="subtitle">选择数量</div>
-	<form class="am-form am-form-horizontal">
-		<div class="am-form-group">
-			<label for="chengren" class="am-u-sm-6 am-form-label">选择成人数</label>
-			<div class="am-u-sm-6">
-				<select id="chengren">
-					<option value="1" selected>1人</option>
+	<!--普通票的显示-->
+	<form class="am-form am-form-horizontal" ms-if="info.htTourProVO.tourtype==1">
+		<!--一大一小 ydyxprice-->
+		<div class="am-form-group" ms-if="info.htTourProVO.ydyxprice>0">
+			<label class="am-u-sm-4 am-form-label">一大一小</label>
+			<label class="am-u-sm-4 am-form-label price">&yen;{{info.htTourProVO.ydyxprice}}元</label>
+			<input type="hidden" name="unitprice" ms-attr-value="{{info.htTourProVO.ydyxprice}}">
+			<div class="am-u-sm-4">
+				<select name="unitnumber">
+					<option value="0" selected>0人</option>
+					<option value="1">1人</option>
 					<option value="2">2人</option>
 					<option value="3">3人</option>
 					<option value="4">4人</option>
@@ -119,12 +156,16 @@
 				</select>
 			</div>
 		</div>
-
-		<div class="am-form-group">
-			<label for="ertong" class="am-u-sm-6 am-form-label">选择儿童数</label>
-			<div class="am-u-sm-6">
-				<select id="ertong">
-					<option value="1" selected>1人</option>
+		<!--/一大一小-->
+		<!--成人 adultprice-->
+		<div class="am-form-group" ms-if="info.htTourProVO.adultprice>0">
+			<label class="am-u-sm-4 am-form-label">成人</label>
+			<label class="am-u-sm-4 am-form-label price">&yen;{{info.htTourProVO.adultprice}}元</label>
+			<input type="hidden" name="unitprice" ms-attr-value="{{info.htTourProVO.adultprice}}">
+			<div class="am-u-sm-4">
+				<select name="unitnumber">
+					<option value="0" selected>0人</option>
+					<option value="1">1人</option>
 					<option value="2">2人</option>
 					<option value="3">3人</option>
 					<option value="4">4人</option>
@@ -137,9 +178,79 @@
 				</select>
 			</div>
 		</div>
+		<!--/成人-->
+		<!--二大一小 edyxprice-->
+		<div class="am-form-group" ms-if="info.htTourProVO.edyxprice>0">
+			<label class="am-u-sm-4 am-form-label">二大一小</label>
+			<label class="am-u-sm-4 am-form-label price">&yen;{{info.htTourProVO.edyxprice}}元</label>
+			<input type="hidden" name="unitprice" ms-attr-value="{{info.htTourProVO.edyxprice}}">
+			<div class="am-u-sm-4">
+				<select name="unitnumber">
+					<option value="0" selected>0人</option>
+					<option value="1">1人</option>
+					<option value="2">2人</option>
+					<option value="3">3人</option>
+					<option value="4">4人</option>
+					<option value="5">5人</option>
+					<option value="6">6人</option>
+					<option value="7">7人</option>
+					<option value="8">8人</option>
+					<option value="9">9人</option>
+					<option value="10">10人</option>
+				</select>
+			</div>
+		</div>
+		<!--/二大一小-->
+		<!--儿童 childprice-->
+		<div class="am-form-group" ms-if="info.htTourProVO.childprice>0">
+			<label class="am-u-sm-4 am-form-label">儿童</label>
+			<label class="am-u-sm-4 am-form-label price">&yen;{{info.htTourProVO.childprice}}元</label>
+			<input type="hidden" name="unitprice" ms-attr-value="{{info.htTourProVO.childprice}}">
+			<div class="am-u-sm-4">
+				<select name="unitnumber">
+					<option value="0" selected>0人</option>
+					<option value="1">1人</option>
+					<option value="2">2人</option>
+					<option value="3">3人</option>
+					<option value="4">4人</option>
+					<option value="5">5人</option>
+					<option value="6">6人</option>
+					<option value="7">7人</option>
+					<option value="8">8人</option>
+					<option value="9">9人</option>
+					<option value="10">10人</option>
+				</select>
+			</div>
+		</div>
+		<!--/儿童-->
 	</form>
-	<!--成人-->
-	<!--儿童-->
+	<!--/普通票的显示-->
+	<!--门票的显示 ticketprice-->
+	<form class="am-form am-form-horizontal" ms-if="info.htTourProVO.tourtype==2">
+		<!--门票 childprice-->
+		<div class="am-form-group" ms-if="info.htTourProVO.childprice>0">
+			<label class="am-u-sm-4 am-form-label">门票</label>
+			<label class="am-u-sm-4 am-form-label price">&yen;{{info.htTourProVO.childprice}}元</label>
+			<input type="hidden" name="unitprice" ms-attr-value="{{info.htTourProVO.childprice}}">
+			<div class="am-u-sm-4">
+				<select name="unitnumber">
+					<option value="0" selected>0人</option>
+					<option value="1">1人</option>
+					<option value="2">2人</option>
+					<option value="3">3人</option>
+					<option value="4">4人</option>
+					<option value="5">5人</option>
+					<option value="6">6人</option>
+					<option value="7">7人</option>
+					<option value="8">8人</option>
+					<option value="9">9人</option>
+					<option value="10">10人</option>
+				</select>
+			</div>
+		</div>
+		<!--/门票-->
+	</form>
+	<!--/门票的显示-->
 	<!--/选择人数-->
 </div>
 <!--/主要内容区-->
@@ -162,9 +273,80 @@
 </style>
 <div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default" id="footer">
 	<div class="am-navbar-nav am-cf am-g doc-am-g">
-		<button type="button" class="am-btn am-btn-primary am-btn-block">确定</button>
+		<button type="button" onClick="doSubmit()" class="am-btn am-btn-primary am-btn-block">确定</button>
 	</div>
 </div>
 <!--/底部工具栏-->
+
+<script>
+	function doSubmit() {
+		/*
+		 /mobile/tourorder_tourOrderStep3.action
+		 cteamcode=teamcode
+		 pronum=[5,2,1]
+		 proprice=[150,200,300]
+		 */
+		var t_pronum   = [];
+		var t_proprice = [];
+
+		var pronum   = [];
+		var proprice = [];
+
+		var cteamcode = getParameterValue(window.location.href, 'jzluid');
+
+		//保存人数和单价到数组中
+		$('input[name=unitprice]').each(function () {
+			t_proprice.push($(this).val());
+		});
+		$('select[name=unitnumber]').each(function () {
+			t_pronum.push($(this).val());
+		});
+		//console.log(t_proprice);
+		//console.log(t_pronum);
+
+		//剔除掉数组中无效的数据
+		for (var i in t_proprice){
+			if (t_proprice[i].replace(/ /g,'').length>0 && t_pronum[i]!=0){
+				proprice.push(t_proprice[i]);
+				pronum.push(t_pronum[i]);
+			}
+		}
+		//console.log('final:'+proprice.toString());
+		//console.log('final:'+pronum.toString());
+
+		if (proprice.length==0 || pronum.length==0){
+			alert('请至少选择一个出行人数');
+			return false;
+		}
+
+		//构造接口参数
+		//TEST: http://www.96hn.com/mobile/tourorder_tourOrderStep3.action?proprice=20,10&pronum=1,2&cteamcode=HT-GLOO-10848561056-189329
+		$.getJSON('http://www.96hn.com/mobile/tourorder_tourOrderStep3.action?jsoncallback=?&proprice='+proprice.toString()+'&pronum='+pronum.toString()+'&cteamcode='+cteamcode, function(result){
+			/*
+			status：
+			1 成功
+			101 产品数量不能为零
+			102 产品数量不足
+			*/
+			//成功提交，前往下一个流程
+			if (result.status==1){
+				window.location.href = 'fillorder.html?jzluid='+cteamcode;
+			}else{
+				var errMsg = '';
+				if (result.status==101){
+					errMsg = '产品数量不能为零';
+				}
+				if (result.status==102){
+					errMsg = '产品数量不足';
+				}
+				if (errMsg!=''){
+					alert('错误:'+errMsg+'\n请修改后重新提交');
+					return false;
+				}
+
+			}
+		});
+	}
+</script>
 </body>
 </html>

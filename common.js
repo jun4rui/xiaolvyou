@@ -462,7 +462,7 @@ $(document).ready(function(){
 			}
 			require(['wx'], function (wx) {
 				//alert('4');
-				$.getJSON('http://www.htyou.com/weixin/getJsConfig.action?jsoncallback=?&page_url=' + window.location.href, function (result) {
+				$.getJSON('http://www.96hn.com/weixin/getJsConfig.action?jsoncallback=?&page_url=' + window.location.href, function (result) {
 					//alert(result.timestamp+'\n'+result.appId+'\n'+result.noncestr+'\n'+result.url+'\n'+result.signature);
 					wx.config({
 						debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
@@ -510,46 +510,16 @@ $(document).ready(function(){
 						] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
 					});
 					wx.ready(function () {
-						var title = $('title').text();
+						var title = result.guestVO.guestName+'分享给你'+$('title').text();
 						var desc = $('title').text();
 						var link = window.location.href;
 						var imgUrl = $('body img').eq(0).attr('src');
 						if (link.indexOf('?')){
-							link = link+'&infoid='+shareID;
+							link = link+'&sellerid='+(window.localStorage.getItem('XLY_USERID')||0);
 						}else{
-							link = link+'?infoid='+shareID;
+							link = link+'?sellerid='+(window.localStorage.getItem('XLY_USERID')||0);
 						}
-						//线路详情使用的分享模式
-						if (window.location.href.indexOf('tour-detail.html') > -1) {
-							imgUrl = $('#galleryAD img').eq(0).attr('src');
-							title = $('.info-section h3').text();
-							desc = '';
-						}
-						//机票查询页面
-						if (window.location.href.indexOf('ticket-index.html') > -1) {
-							imgUrl = $('#galleryAD img').eq(0).attr('src');
-							title = '机票查询';
-						}
-						//机票查询结果页面
-						if (window.location.href.indexOf('ticket-index.html') > -1) {
-							imgUrl = 'http://www.htyou.com/weixin_h5/images/ticket_index_title_bg.jpg';
-							title = '机票查询'
-							desc = '从' + decodeURI(getParameterValue(window.location.href, 'fromCity')) + '到' + decodeURI(getParameterValue(window.location.href, 'toCity'));
-						}
-						//线路列表页面
-						if (window.location.href.indexOf('tour-list.html') > -1) {
-							imgUrl = $('#tourlist-section-list img').eq(0).attr('src');
-							title = '景点列表';
-							desc = decodeURI(getParameterValue(window.location.href, 'q'));
-						}
-						//区域列表页面
-						if (window.location.href.indexOf('tour-area.html') > -1) {
-							imgUrl = $('.am-gallery-item img').eq(0).attr('src');
-							title = $('.am-header-title').text();
-							desc = $('.am-header-title').text();
-						}
-						//alert(title + '\n' + desc + '\n' + link + '\n' + imgUrl);
-						//alert(link);
+						console.log(title+','+desc+','+link+','+imgUrl);
 						//分享到朋友圈
 						wx.onMenuShareTimeline({
 							title: title,
@@ -620,7 +590,7 @@ $(document).ready(function(){
 				});
 			});
 		}
-	},3000);
+	},0);
 });
 // $.getJSON('/user/htuser_getGuestsInfoById.action?userid=626685', function (result) {
 // 	//从接口获得的用户数据保存到localStorage中

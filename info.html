@@ -12,9 +12,10 @@
 	<script src="jslib/avalon1.5/avalon.js"></script>
 
 	<link rel="stylesheet" href="common.css">
-	<script src="common.js"></script>
+	<script src="common.js?20160624b"></script>
 
 	<script>
+		alert(window.location.href);
 		avalon.ready(function(){
 			var BodyVM = avalon.define({
 				$id: 'body',
@@ -71,9 +72,9 @@
 		</li>
 	</ul>
 	<!--返回图标-->
-	<a href="#" class="float-btn am-icon-btn am-icon-reply" style="left:.2em;"></a>
+	<a href="index.html" class="float-btn am-icon-btn am-icon-reply" style="left:.2em;"></a>
 	<!--电话咨询图标-->
-	<a href="#" class="float-btn am-icon-btn am-icon-phone" style="right:.2em;"></a>
+	<a href="tel:400 777 0731" class="float-btn am-icon-btn am-icon-phone" style="right:.2em;"></a>
 </div>
 <script>
 	$('.am-slider-manual').flexslider({"directionNav": false});
@@ -281,14 +282,14 @@
 				<span class="am-navbar-label">电话</span>
 			</a>
 		</div>
-		<div class="am-u-sm-2 am-u-md-2 am-u-lg-2" style="background-color: #FFF;">
-			<a href="http://amazeui.org/getting-started" class="" style="color: #FE8568;">
-				<span class="am-icon-share-alt"></span>
-				<span class="am-navbar-label">分享</span>
-			</a>
-		</div>
-		<div class="am-u-sm-8 am-u-md-8 am-u-lg-8">
-			<a id="submitbtn" ms-attr-href="http://www.96hn.com/weixin/thirdWebPageLogin.action?sellerid={{sellerid}}&page_url={{(encodeURIComponent('selectdate.html?lineid='+info.lineid)).replace(/%/g,'!')}}" class="am-btn am-btn-primary am-btn-block">立即报名</a>
+		<!--<div class="am-u-sm-2 am-u-md-2 am-u-lg-2" style="background-color: #FFF;">-->
+			<!--<a href="http://amazeui.org/getting-started" class="" style="color: #FE8568;">-->
+				<!--<span class="am-icon-share-alt"></span>-->
+				<!--<span class="am-navbar-label">分享</span>-->
+			<!--</a>-->
+		<!--</div>-->
+		<div class="am-u-sm-10 am-u-md-10 am-u-lg-10">
+			<a id="submitbtn" ms-attr-href="http://www.96hn.com/weixin/thirdWebPageLogin.action?page_url={{(encodeURIComponent('selectdate.html?lineid='+info.lineid+'&sellerid='+sellerid)).replace(/%/g,'!')}}" class="am-btn am-btn-primary am-btn-block">立即报名</a>
 		</div>
 	</div>
 </div>

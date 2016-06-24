@@ -348,7 +348,7 @@
 
 		//构造接口参数
 		//TEST: http://www.96hn.com/mobile/tourorder_tourOrderStep3.action?proprice=20,10&pronum=1,2&cteamcode=HT-GLOO-10848561056-189329
-		$.getJSON('http://www.96hn.com/mobile/tourorder_tourOrderStep3.action?jsoncallback=?&proprice='+proprice.toString()+'&pronum='+pronum.toString()+'&cteamcode='+cteamcode+'&userid='+window.localStorage.getItem('XLY_USERID'), function(result){
+		$.getJSON('http://www.96hn.com/mobile/tourorder_tourOrderStep3.action?jsoncallback=?&proprice='+proprice.toString()+'&pronum='+pronum.toString()+'&cteamcode='+cteamcode+'&userid='+window.localStorage.getItem('XLY_USERID')+'&sellerid='+(getParameterValue(window.location.href, 'sellerid')||0), function(result){
 			/*
 			status：
 			1 成功

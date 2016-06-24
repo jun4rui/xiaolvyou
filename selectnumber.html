@@ -20,7 +20,8 @@
 		avalon.ready(function () {
 			var BodyVM = avalon.define({
 				$id:  'body',
-				info: {}
+				info: {},
+				ticketprice:[]
 			});
 
 			avalon.scan();
@@ -34,11 +35,17 @@
 			console.log('http://www.96hn.com/mobile/ipad_getTourTeamDetail.action?jsoncallback=?&teamcode=' + jzluid);
 			$.getJSON('http://www.96hn.com/mobile/ipad_getTourTeamDetail.action?jsoncallback=?&teamcode=' + jzluid, function (result) {
 				BodyVM.info = result;
+				//如果类型是门票
+				if (result.htTourProVO.tourtype=='2'){
+					//将string格式的数据转换成JSON格式
+					BodyVM.ticketprice = JSON.parse(BodyVM.info.htTourProVO.ticketprice);
+					//console.log(BodyVM.ticketprice);
+				}
 			});
 		});
 	</script>
 </head>
-<body ms-controller="body">
+<body ms-controller="body" style="padding-bottom: 3em;">
 <!--顶部Header-->
 <style>
 	header.am-header {
@@ -228,23 +235,43 @@
 	<!--门票的显示 ticketprice-->
 	<form class="am-form am-form-horizontal" ms-if="info.htTourProVO.tourtype==2">
 		<!--门票 childprice-->
-		<div class="am-form-group" ms-if="info.htTourProVO.childprice>0">
-			<label class="am-u-sm-4 am-form-label">门票</label>
-			<label class="am-u-sm-4 am-form-label price">&yen;{{info.htTourProVO.childprice}}元</label>
-			<input type="hidden" name="unitprice" ms-attr-value="{{info.htTourProVO.childprice}}">
+		<!--<div class="am-form-group" ms-if="info.htTourProVO.ticketprice>0">-->
+			<!--<label class="am-u-sm-4 am-form-label">门票</label>-->
+			<!--<label class="am-u-sm-4 am-form-label price">&yen;{{info.htTourProVO.ticketprice}}元</label>-->
+			<!--<input type="hidden" name="unitprice" ms-attr-value="{{info.htTourProVO.ticketprice}}">-->
+			<!--<div class="am-u-sm-4">-->
+				<!--<select name="unitnumber">-->
+					<!--<option value="0" selected>0人</option>-->
+					<!--<option value="1">1人</option>-->
+					<!--<option value="2">2人</option>-->
+					<!--<option value="3">3人</option>-->
+					<!--<option value="4">4人</option>-->
+					<!--<option value="5">5人</option>-->
+					<!--<option value="6">6人</option>-->
+					<!--<option value="7">7人</option>-->
+					<!--<option value="8">8人</option>-->
+					<!--<option value="9">9人</option>-->
+					<!--<option value="10">10人</option>-->
+				<!--</select>-->
+			<!--</div>-->
+		<!--</div>-->
+		<div class="am-form-group" ms-repeat-unit="ticketprice">
+			<label class="am-u-sm-4 am-form-label">{{unit.position}}</label>
+			<label class="am-u-sm-4 am-form-label price">&yen;{{unit.price}}元</label>
+			<input type="hidden" name="unitprice" ms-attr-value="{{unit.price}}">
 			<div class="am-u-sm-4">
 				<select name="unitnumber">
-					<option value="0" selected>0人</option>
-					<option value="1">1人</option>
-					<option value="2">2人</option>
-					<option value="3">3人</option>
-					<option value="4">4人</option>
-					<option value="5">5人</option>
-					<option value="6">6人</option>
-					<option value="7">7人</option>
-					<option value="8">8人</option>
-					<option value="9">9人</option>
-					<option value="10">10人</option>
+					<option value="0" selected>0张</option>
+					<option value="1">1张</option>
+					<option value="2">2张</option>
+					<option value="3">3张</option>
+					<option value="4">4张</option>
+					<option value="5">5张</option>
+					<option value="6">6张</option>
+					<option value="7">7张</option>
+					<option value="8">8张</option>
+					<option value="9">9张</option>
+					<option value="10">10张</option>
 				</select>
 			</div>
 		</div>
@@ -321,7 +348,7 @@
 
 		//构造接口参数
 		//TEST: http://www.96hn.com/mobile/tourorder_tourOrderStep3.action?proprice=20,10&pronum=1,2&cteamcode=HT-GLOO-10848561056-189329
-		$.getJSON('http://www.96hn.com/mobile/tourorder_tourOrderStep3.action?jsoncallback=?&proprice='+proprice.toString()+'&pronum='+pronum.toString()+'&cteamcode='+cteamcode, function(result){
+		$.getJSON('http://www.96hn.com/mobile/tourorder_tourOrderStep3.action?jsoncallback=?&proprice='+proprice.toString()+'&pronum='+pronum.toString()+'&cteamcode='+cteamcode+'&userid='+window.localStorage.getItem('XLY_USERID'), function(result){
 			/*
 			status：
 			1 成功
@@ -330,7 +357,8 @@
 			*/
 			//成功提交，前往下一个流程
 			if (result.status==1){
-				window.location.href = 'fillorder.html?cteamcode='+cteamcode+'&order_amount='+result.tourOrderVO.order_amount+'&adult_num='+result.tourOrderVO.adult_num+'&child_num='+result.tourOrderVO.child_num+'&detailpre='+result.tourOrderVO.detailpre;
+				//window.location.href = 'fillorder.html?cteamcode='+cteamcode+'&order_amount='+result.tourOrderVO.order_amount+'&adult_num='+result.tourOrderVO.adult_num+'&child_num='+result.tourOrderVO.child_num+'&detailpre='+result.tourOrderVO.detailpre;http://www.96hn.com/mobile/tourorder_tourOrderStep3.action?proprice=20,10&pronum=1,2&cteamcode=HT-GLOO-10848561056-189329
+				window.location.href = 'fillorder.html';
 			}else{
 				var errMsg = '';
 				if (result.status==101){

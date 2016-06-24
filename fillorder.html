@@ -13,8 +13,85 @@
 
 	<link rel="stylesheet" href="common.css">
 	<script src="common.js"></script>
+
+	<script>
+		$('#addrole-link').ready(function () {
+			$('#addrole-link').attr({'href': 'addrole.html' + window.location.href.substring(window.location.href.indexOf('?'))});
+		});
+
+		avalon.ready(function () {
+			var userid = window.localStorage.getItem('XLY_USERID');
+
+			var BodyVM = avalon.define({
+				$id:    'body',
+				info:   {},
+				params: {},
+				// 处理提交表单
+				submit: function () {
+					var contact_name  = $('#contact_name').val();
+					var contact_phone = $('#contact_phone').val();
+					var contact_note  = $('#contact_note').val();
+					var order_source  = 12;
+					var pay_type      = 121603;
+					if (contact_name=='' || contact_phone=='' || contact_phone.length<7 || userid==''){
+						alert('请填写好 联系人名称、联系人电话后再提交');
+						return false;
+					}
+					console.log('http://www.96hn.com/mobile/tourorder_addTourOrder.action?jsoncallback=?&tourOrderVO.contact_name='+contact_name+'&tourOrderVO.contact_phone='+contact_phone+'&tourOrderVO.contact_note='+contact_note+'&tourOrderVO.order_source='+order_source+'&tourOrderVO.pay_type='+pay_type+'&userid='+userid);
+					$.getJSON('http://www.96hn.com/mobile/tourorder_addTourOrder.action?jsoncallback=?&tourOrderVO.contact_name='+contact_name+'&tourOrderVO.contact_phone='+contact_phone+'&tourOrderVO.contact_note='+contact_note+'&tourOrderVO.order_source='+order_source+'&tourOrderVO.pay_type='+pay_type+'&userid='+userid, function(result){
+						/*
+						1、成功
+						101、未填写联系人
+						102、出行人信息不正确
+						*/
+						if (result.status==1){
+							//成功的后续处理
+							console.log('success!');
+							var payUrl = 'http://www.96hn.com/tour/tourorder_payForShowSysOrder.action?sys_show_order_id='+result.orderParam.sys_show_order_id;
+							window.location.href = payUrl;
+						}else{
+							//失败的后续处理
+							var errMsg = '';
+							if (result.status==101){
+								errMsg = '未填写联系人或联系电话';
+							}
+							if (result.status==102){
+								errMsg = '出行人信息不正确';
+							}
+							if (result.status==103){
+								errMsg = '用户信息错误';
+							}
+							if (errMsg!=''){
+								alert('错误：'+errMsg+'\n请返回后重新检查');
+							}
+							return false;
+						}
+					});
+				}
+			});
+
+			avalon.scan();
+
+			// 载入参数信息
+			$.getJSON('http://www.96hn.com/mobile/tourorder_getOrderParams.action?jsoncallback=?&userid=' + userid, function (result) {
+				// 数据错误的处理
+				if (!result.hasOwnProperty('jzl_cteamcode')){
+					alert('数据错误，系统将自动跳转回首页，请尝试再次重新提交订单');
+					window.location.href = 'index.html';
+				}
+
+				BodyVM.params = result;
+				// 载入线路详情
+				$.getJSON('http://www.96hn.com/mobile/ipad_getTourTeamDetail.action?jsoncallback=?&teamcode=' + result.jzl_cteamcode, function (result) {
+					BodyVM.info = result;
+				});
+			});
+
+
+		});
+	</script>
 </head>
-<body>
+<body ms-controller="body" style="padding-bottom: 3em;">
 <!--顶部Header-->
 <style>
 	header.am-header {
@@ -72,70 +149,87 @@
 		padding: 1em .5em;
 		text-align: left;
 	}
+
 	#main-section > .title > span {
-		font-size:0.9em;
-		display:block;
+		font-size: 0.9em;
+		display: block;
 		margin-top: .5em;
 	}
+
 	.am-form .am-form-group {
-		margin-bottom:0;
+		margin-bottom: 0;
 	}
+
 	.am-form li {
-		padding:.5em;
+		padding: .5em;
 	}
+
 	.am-form li.title-line {
 		color: #666;
-		background-color: #f8f8f8;
+		background-color: #F8F8F8;
 	}
+
 	.am-form .am-g label {
 		line-height: 19.2px;
 		padding: 8px 0;
+	}
+
+	.highlight {
+		color: #DD514C;
+		font-size: 1.2em;
 	}
 </style>
 <div id="main-section">
 	<!--绿色背景显示白色线路标题 -->
 	<div class="title">
-		生态农场体验+皮划艇 | 风吹麦浪，让我们荡起双桨
-		<span>2016-06-07至2016-09-21</span>
+		{{info.htTourProVO.tourproname}}
+		<span>出行日期：{{info.htTourProVO.tourdate}}</span>
 	</div>
 	<!--/绿色背景显示白色线路标题-->
 
-	<form action="" class="am-form">
+	<form actio="" class="am-form" id="contact_form">
 		<ul class="am-list am-list-static">
-			<li class="title-line">选择出行人</li>
-			<li>
-				请选择 1 名成和 2 名儿童
-				<button class="am-btn am-btn-danger am-align-right am-btn-xs" href="#">
-					<i class="am-icon-plus"></i>
-					选择
+			<li class="title-line">总计价格：&yen;<span class="highlight">{{params.order_amount}}</span>元</li>
+			<li class="title-line" ms-if="info.htTourProVO.featured!='出行人不填'">选择出行人：<span style="font-size:0.8em;">请选择 {{params.adult_num}} 名成人和 {{params.child_num}} 名儿童</span>
+			</li>
+			<li ms-if="info.htTourProVO.featured!='出行人不填'">
+				<div>
+					已选择：{{params.passengerNameStr}}
+				</div>
+				<button class="am-btn am-btn-success am-align-right" id="selectrole">
+					<a href="selectrole.html" style="color:#FFF;">
+						<i class="am-icon-group"></i>
+						选择出行人
+					</a>
 				</button>
+				<div class="clear"></div>
 			</li>
 			<li class="title-line">联系人信息</li>
 			<li>
 				<div class="am-form-group am-g">
-					<label for="linkname" class="am-u-sm-3 am-form-label">姓名</label>
+					<label for="contact_name" class="am-u-sm-3 am-form-label">姓名</label>
 					<div class="am-u-sm-9">
-						<input type="text" id="linkname" placeholder="请输入联系人姓名">
+						<input type="text" id="contact_name" placeholder="请输入联系人姓名">
 					</div>
 				</div>
 			</li>
 			<li>
 				<div class="am-form-group am-g">
-					<label for="linkphone" class="am-u-sm-3 am-form-label">手机</label>
+					<label for="contact_phone" class="am-u-sm-3 am-form-label">手机</label>
 					<div class="am-u-sm-9">
-						<input type="text" id="linkphone" placeholder="请输入联系人手机号码">
+						<input type="text" id="contact_phone" placeholder="请输入联系人手机号码">
 					</div>
 				</div>
 			</li>
 			<li>
 				<div class="am-form-group am-g">
-					<label for="linkmemo">备注</label>
-					<textarea class="" rows="5" id="linkmemo" placeholder="请告诉我们您的特殊需求"></textarea>
+					<label for="contact_note">备注</label>
+					<textarea class="" rows="5" id="contact_note" placeholder="请告诉我们您的特殊需求"></textarea>
 				</div>
 			</li>
-			<li>
-				我已阅读并同意 <a href="#" style="display:inline">《用户须知》</a>
-			</li>
+			<!--<li>-->
+			<!--我已阅读并同意 <a href="#" style="display:inline">《用户须知》</a>-->
+			<!--</li>-->
 		</ul>
 	</form>
 </div>
@@ -159,9 +253,9 @@
 </style>
 <div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default" id="footer">
 	<div class="am-navbar-nav am-cf am-g doc-am-g">
-		<button type="button" class="am-btn am-btn-primary am-btn-block">前往支付</button>
+		<button type="button" ms-click="submit" class="am-btn am-btn-primary am-btn-block">前往支付</button>
 	</div>
 </div>
-<!--/底部工具栏-->
+
 </body>
 </html>

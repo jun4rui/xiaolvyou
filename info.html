@@ -18,12 +18,14 @@
 		avalon.ready(function(){
 			var BodyVM = avalon.define({
 				$id: 'body',
-				info:{}
+				info:{},
+				sellerid:'',
 			});
 
 			avalon.scan();
 
 			var lineid = getParameterValue(window.location.href, 'lineid');
+			BodyVM.sellerid = getParameterValue(window.location.href, 'sellerid');
 			if (lineid=='' || lineid==null){
 				return false;
 			}
@@ -32,9 +34,6 @@
 				BodyVM.info = result.lineVO;
 				console.log(BodyVM.info);
 				$('#info-section').append(BodyVM.info.productdescribe.replace(/&nbsp;/g,' '))
-						.done(function(){
-							$('#info-section').find('iframe').css({'width':'100%'});
-						});
 			});
 		});
 	</script>
@@ -267,7 +266,11 @@
 	#footer .am-navbar-nav #submitbtn {
 		background-color: #FE8568;
 		line-height: 33px;
+		height:55px;
 		border: 0;
+	}
+	.am-navbar-default .am-navbar-nav {
+		background-color: #fe8568 !important;
 	}
 </style>
 <div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default" id="footer">
@@ -285,10 +288,15 @@
 			</a>
 		</div>
 		<div class="am-u-sm-8 am-u-md-8 am-u-lg-8">
-			<a id="submitbtn" ms-attr-href="http://www.96hn.com/weixin/thirdWebPageLogin.action?page_url={{(encodeURIComponent('selectdate.html?lineid='+info.lineid)).replace(/%/g,'!')}}" class="am-btn am-btn-primary am-btn-block">立即报名</a>
+			<a id="submitbtn" ms-attr-href="http://www.96hn.com/weixin/thirdWebPageLogin.action?sellerid={{sellerid}}&page_url={{(encodeURIComponent('selectdate.html?lineid='+info.lineid)).replace(/%/g,'!')}}" class="am-btn am-btn-primary am-btn-block">立即报名</a>
 		</div>
 	</div>
 </div>
+<script>
+	$('document').ready(function(){
+		$('#submitbtn').height($('#footer .doc-am-g').height());
+	});
+</script>
 <!--/底部工具栏-->
 </body>
 </html>

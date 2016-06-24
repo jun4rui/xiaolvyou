@@ -31,7 +31,9 @@
 			 101 身份证错误
 			 http://www.96hn.com/user/htuser_addPassengerInfo.action
 			*/
-			$.getJSON('http://www.96hn.com/user/htuser_addPassengerInfo.action?passengerVO.userid='+userid+'&passengerVO.passengerName='+$('#rolename').val()+'&passengerVO.passengerIdentify='+$('#idcard').val(), function(result){
+			console.log('http://www.96hn.com/user/htuser_addPassengerInfo.action?jsoncallback=?&passengerVO.userid='+userid+'&passengerVO.passengerName='+$('#rolename').val()+'&passengerVO.passengerIdentify='+$('#idcard').val());
+			$.getJSON('http://www.96hn.com/user/htuser_addPassengerInfo.action?jsoncallback=?&passengerVO.userid='+userid+'&passengerVO.passengerName='+$('#rolename').val()+'&passengerVO.passengerIdentify='+$('#idcard').val(), function(result){
+				console.log(result);
 				if (result.status==1){
 					alert('提交成功！您可以继续填写');
 					return true;
@@ -99,7 +101,7 @@
 </style>
 
 <div id="main-section">
-	<form class="am-form">
+	<div class="am-form">
 		<fieldset>
 			<legend>请在下面输入出行人信息</legend>
 
@@ -129,7 +131,7 @@
 
 			<p><button type="submit" onclick="addRole()" class="am-btn am-btn-success am-btn-block">提交</button></p>
 		</fieldset>
-	</form>
+	</div>
 </div>
 <!--/主要内容区-->
 

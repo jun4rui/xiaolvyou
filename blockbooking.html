@@ -36,7 +36,7 @@
 <header data-am-widget="header"
 		class="am-header am-header-default">
 	<div class="am-header-left am-header-nav">
-		<a href="#left-link" class="">
+		<a href="#left-link" class="left-link">
 			<i class="am-header-icon am-icon-angle-left"></i>
 		</a>
 	</div>
@@ -60,33 +60,36 @@
 	#main-section {
 		background-color: #f7f7f7;
 	}
+
 	.am-form {
 
 	}
 
 	.am-form i.am-icon-fw {
-		width:3em;
+		width: 3em;
 	}
 
 	.am-form input.am-form-field {
-		text-indent:3em;
+		text-indent: 3em;
 	}
+
 	.am-form .am-form-group:first-child {
 		margin-bottom: 0;
 	}
+
 	.am-form .am-form-group:first-child input.am-form-field {
 		border-bottom: 0;
 	}
 
 	.am-form .am-btn-primary {
 		background-color: #22c7f7;
-		border:1px solid #22c7f7;
+		border: 1px solid #22c7f7;
 	}
 
 	#desc-text {
-		padding:1em;
-		line-height:150%;
-		color:#8a8a8a;
+		padding: 1em;
+		line-height: 150%;
+		color: #8a8a8a;
 	}
 </style>
 
@@ -97,25 +100,72 @@
 		现在提交您的手机号，我们会在1-2天内联系您:)
 	</div>
 
-	<form action="" class="am-form">
+	<div action="" class="am-form">
 		<div class="am-form-group am-form-icon">
 			<i class="am-icon-fw">
 				&nbsp;姓&nbsp;名
 			</i>
-			<input type="text" class="am-form-field" placeholder="您希望我们怎么称呼您">
+			<input type="text" id="contactman" class="am-form-field" placeholder="您希望我们怎么称呼您">
 		</div>
 
 		<div class="am-form-group am-form-icon">
 			<i class="am-icon-fw">
 				&nbsp;手&nbsp;机
 			</i>
-			<input type="text" class="am-form-field" placeholder="请输入您的手机号">
+			<input type="text" id="contactphone" class="am-form-field" placeholder="请输入您的手机号">
 		</div>
 
-		<button type="button" class="am-btn am-btn-primary am-btn-block">提&nbsp;交</button>
-	</form>
+		<button type="button" id="btn-submit" class="am-btn am-btn-primary am-btn-block">提&nbsp;交</button>
+	</div>
 
 </div>
 <!--/主要内容区-->
+
+<script>
+	$(document).ready(function () {
+		var lineid       = getParameterValue(window.location.href, 'lineid');
+		//修改跳转链接
+		$('.left-link').attr('href', 'info.html?lineid=' + lineid);
+
+		//执行操作
+		$('#btn-submit').click(function () {
+			var contactman   = $('#contactman').val();
+			var contactphone = $('#contactphone').val();
+
+			//错误处理
+			var errMsg = '';
+			if (lineid == '') {
+				errMsg = '参数错误，请返回重新提交。';
+			}
+			if (contactman == '') {
+				errMsg = '请输入您的称呼。';
+			}
+			if (contactphone == '') {
+				errMsg = '请填写联系电话。';
+			}
+			if (errMsg != '') {
+				alert('错误：' + errMsg);
+				return false;
+			}
+
+			console.log('http://www.96hn.com/tour/individual_addIndividual.action?lineid=' + lineid + '&individual.contactman=' + contactman + '&individual.contactphone=' + contactphone);
+			$.getJSON('http://www.96hn.com/tour/individual_addIndividual.action?lineid=' + lineid + '&individual.contactman=' + contactman + '&individual.contactphone=' + contactphone, function (result) {
+				if (result.status==1){
+					alert('提交成功，我们会尽快联系您，请保持通讯畅通。');
+					return true;
+				}else{
+					var errMsg = '';
+					if (result.status==101){
+						errMsg = '联系人或者联系电话不正确';
+					}
+					if (errMsg!=''){
+						alert(errMsg+'，系统无法处理您的申请。');
+					}
+					return false;
+				}
+			});
+		});
+	});
+</script>
 </body>
 </html>

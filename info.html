@@ -175,6 +175,14 @@
 	#expand-detail [class*=am-icon-] {
 		color:#BDBDBD;
 	}
+
+	#info-list li a {
+		display: inline !important;
+	}
+
+	#blockbooking {
+		padding:0 !important;
+	}
 </style>
 <ul id="info-list" class="am-list am-list-static am-list-border">
 	<li>
@@ -194,7 +202,7 @@
 		{{info.salermemo}}
 	</li>
 	<li>
-		<a href="blockbooking.html">
+		<a href="#" id="blockbooking">
 			想给孩子和小伙伴们组织包场吗？
 			<i class="am-icon-chevron-right am-align-right"></i>
 		</a>
@@ -205,7 +213,7 @@
 <ul id="expand-detail" class="am-list am-list-static am-list-border">
 	<li onclick="$('#info-section').show(); $('#expand-detail').hide();">
 		点击查看详情
-		<i class="am-icon-chevron-right am-align-right"></i>
+		<i class="am-icon-chevron-down am-align-right"></i>
 	</li>
 </ul>
 <!--主要内容区-->
@@ -294,6 +302,7 @@
 	</div>
 </div>
 <script>
+	$('#blockbooking').attr('href','blockbooking.html?lineid='+getParameterValue(window.location.href, 'lineid'));
 	$('document').ready(function(){
 		$('#submitbtn').height($('#footer .doc-am-g').height());
 	});

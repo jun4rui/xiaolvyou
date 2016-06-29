@@ -19,6 +19,11 @@
 	</style>
 
 	<script>
+		
+		
+		$(document).ready(function(){
+  				$('#alink').click();
+		});
 		//点击发送按钮的处理
 		(function ($) {
 			var status = false;
@@ -131,7 +136,7 @@
 	</h1>
 
 	<div class="am-header-right am-header-nav">
-		<a href="#right-link" class="right-link" onClick="window.location.href=decodeURIComponent(getParameterValue(window.location.href,'state').replace(/!/g,'%'));">
+		<a id="alink" href="#right-link" class="right-link" onClick="window.location.href=decodeURIComponent(getParameterValue(window.location.href,'state').replace(/!/g,'%'));">
 			<!--<i class="am-header-icon am-icon-angle-right"></i>-->
 			跳过
 		</a>

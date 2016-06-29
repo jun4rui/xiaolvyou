@@ -162,6 +162,9 @@
 		var _tempStr = '<div class="'+dayClass+'"><span>'+dayNum+'</span>'+getDayName(dayNo)+'</div>';
 		$('#viewport .flipsnap').append(_tempStr);
 	}
+	//将今日标记成绿色
+	$('#viewport .flipsnap .cal-unit').eq(0).addClass('active');
+	//清理浮动层
 	$('#viewport .flipsnap').append('<div style="clear:both;"></div>');
 	//设定宽度
 	$('#viewport .flipsnap').css({'width':''+$('.cal-unit').length*3+'em'});

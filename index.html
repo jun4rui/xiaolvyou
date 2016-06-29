@@ -11,6 +11,8 @@
 	<script src="jslib/amazeui/js/jquery.min.js"></script>
 	<script src="jslib/amazeui/js/amazeui.min.js"></script>
 	<script src="jslib/avalon1.5/avalon.js"></script>
+	<script src="jslib/moment.js"></script>
+	<script src="jslib/moment-with-locales.js"></script>
 
 	<link rel="stylesheet" href="common.css">
 	<script src="common.js"></script>
@@ -37,7 +39,7 @@
 <style>
 	body {
 		margin:0;
-		/*padding: 3.5em 0 0;*/
+		padding: 3.5em 0 0;
 	}
 	#viewport {
 		padding-top: .5em;
@@ -51,7 +53,6 @@
 		background-color: #fff;
 
 		z-index: 999999999;
-		display:none;
 	}
 	#viewport .flipsnap {
 		width:1920px;
@@ -105,34 +106,66 @@
 </style>
 <div id="viewport">
 	<div class="flipsnap">
-		<div class="cal-unit hot active"><span>28</span>本周二</div>
-		<div class="cal-unit"><span>29</span>周三</div>
-		<div class="cal-unit have"><span>30</span>周四</div>
-		<div class="cal-unit"><span>1</span>周五</div>
-		<div class="cal-unit hot"><span>2</span>周六</div>
-		<div class="cal-unit"><span>3</span>周日</div>
-		<div class="cal-unit"><span>4</span>周一</div>
-		<div class="cal-unit"><span>5</span>周二</div>
-		<div class="cal-unit"><span>6</span>周三</div>
-		<div class="cal-unit"><span>7</span>周四</div>
-		<div class="cal-unit hot"><span>8</span>周五</div>
-		<div class="cal-unit"><span>9</span>周六</div>
-		<div class="cal-unit"><span>10</span>周日</div>
-		<div class="cal-unit"><span>11</span>周一</div>
-		<div class="cal-unit hot"><span>12</span>周二</div>
-		<div class="cal-unit"><span>13</span>周三</div>
-		<div class="cal-unit"><span>14</span>周四</div>
-		<div class="cal-unit"><span>15</span>周五</div>
-		<div class="cal-unit"><span>16</span>周六</div>
-		<div class="cal-unit"><span>17</span>周日</div>
-		<div class="cal-unit"><span>18</span>周一</div>
-		<div style="clear:both;"></div>
+		<!--<div class="cal-unit hot active"><span>28</span>本周二</div>-->
+		<!--<div class="cal-unit"><span>29</span>周三</div>-->
+		<!--<div class="cal-unit have"><span>30</span>周四</div>-->
+		<!--<div class="cal-unit"><span>1</span>周五</div>-->
+		<!--<div class="cal-unit hot"><span>2</span>周六</div>-->
+		<!--<div class="cal-unit"><span>3</span>周日</div>-->
+		<!--<div class="cal-unit"><span>4</span>周一</div>-->
+		<!--<div class="cal-unit"><span>5</span>周二</div>-->
+		<!--<div class="cal-unit"><span>6</span>周三</div>-->
+		<!--<div class="cal-unit"><span>7</span>周四</div>-->
+		<!--<div class="cal-unit hot"><span>8</span>周五</div>-->
+		<!--<div class="cal-unit"><span>9</span>周六</div>-->
+		<!--<div class="cal-unit"><span>10</span>周日</div>-->
+		<!--<div class="cal-unit"><span>11</span>周一</div>-->
+		<!--<div class="cal-unit hot"><span>12</span>周二</div>-->
+		<!--<div class="cal-unit"><span>13</span>周三</div>-->
+		<!--<div class="cal-unit"><span>14</span>周四</div>-->
+		<!--<div class="cal-unit"><span>15</span>周五</div>-->
+		<!--<div class="cal-unit"><span>16</span>周六</div>-->
+		<!--<div class="cal-unit"><span>17</span>周日</div>-->
+		<!--<div class="cal-unit"><span>18</span>周一</div>-->
+		<!--<div style="clear:both;"></div>-->
 	</div>
 </div>
 
 <script>
-	$('#viewport .flipsnap').css({'width':''+$('.cal-unit').length*3+'em'});
+	//返回星期的函数
+	function getDayName(inNum){
+		if (inNum<0 || inNum>6){
+			return '';
+		}
+		if (inNum==0)
+			return '周日';
+		if (inNum==1)
+			return '周一';
+		if (inNum==2)
+			return '周二';
+		if (inNum==3)
+			return '周三';
+		if (inNum==4)
+			return '周四';
+		if (inNum==5)
+			return '周五';
+		if (inNum==6)
+			return '周六';
+	}
+	//绘制60天的日期
+	for (var i=0;i<60;i++){
+		var dayNo = moment().add(i, 'day').format('d');
+		var dayNum = moment().add(i, 'day').format('D');
+		var dayClass = 'cal-unit';
 
+		if (dayNo==0 || dayNo==6) dayClass = 'cal-unit hot';
+		var _tempStr = '<div class="'+dayClass+'"><span>'+dayNum+'</span>'+getDayName(dayNo)+'</div>';
+		$('#viewport .flipsnap').append(_tempStr);
+	}
+	$('#viewport .flipsnap').append('<div style="clear:both;"></div>');
+	//设定宽度
+	$('#viewport .flipsnap').css({'width':''+$('.cal-unit').length*3+'em'});
+	//设置为可卷动
 	Flipsnap('.flipsnap', {
 		maxPoint: 7    // move able 3 times
 	});

@@ -47,7 +47,7 @@
 						if (result.status==1){
 							//成功的后续处理
 							console.log('success!');
-							var payUrl = server_addr++'/tour/tourorder_payForShowSysOrder.action?sys_show_order_id='+result.orderParam.sys_show_order_id;
+							var payUrl = server_addr+'/tour/tourorder_payForShowSysOrder.action?sys_show_order_id='+result.orderParam.sys_show_order_id;
 							window.location.href = payUrl;
 						}else{
 							//失败的后续处理

@@ -26,7 +26,7 @@
 			avalon.scan();
 
 			var lineid = getParameterValue(window.location.href, 'lineid');
-			BodyVM.sellerid = getParameterValue(window.location.href, 'sellerid');
+			BodyVM.sellerid = getParameterValue(window.location.href, 'sellerid')||0;
 			if (lineid=='' || lineid==null){
 				return false;
 			}

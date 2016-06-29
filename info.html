@@ -31,7 +31,7 @@
 				return false;
 			}
 			//console.log('/mobile/ipad_getTourTeam.action?jsoncallback=?&lineid='+lineid);
-			$.getJSON('http://www.96hn.com/mobile/ipad_getTourLine.action?jsoncallback=?&lineid='+lineid,function(result){
+			$.getJSON(server_addr+'/mobile/ipad_getTourLine.action?jsoncallback=?&lineid='+lineid,function(result){
 				BodyVM.info = result.lineVO;
 				console.log(BodyVM.info);
 				$('#info-section').append(BodyVM.info.productdescribe.replace(/&nbsp;/g,' '))
@@ -68,7 +68,7 @@
 		<!--渲染完毕后执行galleryRendered-->
 		<li>
 			<a href="#">
-				<img ms-attr-src="http://www.96hn.com/{{info.spotviewpic}}" style="object-fit:fill;">
+				<img ms-attr-src="http://www.xiaolvyou.com.cn/{{info.spotviewpic}}" style="object-fit:fill;">
 			</a>
 		</li>
 	</ul>
@@ -298,7 +298,7 @@
 			<!--</a>-->
 		<!--</div>-->
 		<div class="am-u-sm-10 am-u-md-10 am-u-lg-10">
-			<a id="submitbtn" ms-attr-href="http://www.96hn.com/weixin/thirdWebPageLogin.action?page_url={{(encodeURIComponent('selectdate.html?lineid='+info.lineid+'&sellerid='+sellerid)).replace(/%/g,'!')}}" class="am-btn am-btn-primary am-btn-block">立即报名</a>
+			<a id="submitbtn" ms-attr-href="http://www.xiaolvyou.com.cn/weixin/thirdWebPageLogin.action?page_url={{(encodeURIComponent('selectdate.html?lineid='+info.lineid+'&sellerid='+sellerid)).replace(/%/g,'!')}}" class="am-btn am-btn-primary am-btn-block">立即报名</a>
 		</div>
 	</div>
 </div>

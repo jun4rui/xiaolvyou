@@ -148,8 +148,8 @@
 				return false;
 			}
 
-			console.log('http://www.96hn.com/tour/individual_addIndividual.action?lineid=' + lineid + '&individual.contactman=' + contactman + '&individual.contactphone=' + contactphone);
-			$.getJSON('http://www.96hn.com/tour/individual_addIndividual.action?lineid=' + lineid + '&individual.contactman=' + contactman + '&individual.contactphone=' + contactphone, function (result) {
+			console.log(server_addr+'/tour/individual_addIndividual.action?lineid=' + lineid + '&individual.contactman=' + contactman + '&individual.contactphone=' + contactphone);
+			$.getJSON(server_addr+'/tour/individual_addIndividual.action?lineid=' + lineid + '&individual.contactman=' + contactman + '&individual.contactphone=' + contactphone, function (result) {
 				if (result.status==1){
 					alert('提交成功，我们会尽快联系您，请保持通讯畅通。');
 					return true;

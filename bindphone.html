@@ -46,7 +46,7 @@
 						clearInterval(intervalid);
 					}
 				}, 1000);
-				$.getJSON('http://www.96hn.com/user/htuser_sendSmsConfirm.action?jsoncallback=?&phone='+$('#phone').val(),function(result){
+				$.getJSON(server_addr+'/user/htuser_sendSmsConfirm.action?jsoncallback=?&phone='+$('#phone').val(),function(result){
 					if (result.status=='false'){
 						alert('验证码发送失败，请稍后尝试');
 					}
@@ -71,7 +71,7 @@
 				}
 				//验证用户验证码并提交接口
 				//console.log('/user/htuser_confirmGuestPhone.action?jsoncallback=?&userid='+userid+'&phone=' + $('#phone').val() + '&vaildcode=' + $('#checkcode').val());
-				$.getJSON('http://www.96hn.com/user/htuser_confirmGuestPhone.action?jsoncallback=?&userid='+userid+'&phone=' + $('#phone').val() + '&vaildcode=' + $('#checkcode').val(), function (result) {
+				$.getJSON(server_addr+'/user/htuser_confirmGuestPhone.action?jsoncallback=?&userid='+userid+'&phone=' + $('#phone').val() + '&vaildcode=' + $('#checkcode').val(), function (result) {
 					//console.log(result);
 					//正确则跳转到state参数指定的地址
 					if (result.status == 1) {

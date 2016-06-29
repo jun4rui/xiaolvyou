@@ -31,8 +31,8 @@
 			 101 身份证错误
 			 http://www.96hn.com/user/htuser_addPassengerInfo.action
 			*/
-			console.log('http://www.96hn.com/user/htuser_addPassengerInfo.action?jsoncallback=?&passengerVO.userid='+userid+'&passengerVO.passengerName='+$('#rolename').val()+'&passengerVO.passengerIdentify='+$('#idcard').val());
-			$.getJSON('http://www.96hn.com/user/htuser_addPassengerInfo.action?jsoncallback=?&passengerVO.userid='+userid+'&passengerVO.passengerName='+$('#rolename').val()+'&passengerVO.passengerIdentify='+$('#idcard').val(), function(result){
+			console.log(server_addr+'/user/htuser_addPassengerInfo.action?jsoncallback=?&passengerVO.userid='+userid+'&passengerVO.passengerName='+$('#rolename').val()+'&passengerVO.passengerIdentify='+$('#idcard').val());
+			$.getJSON(server_addr+'/user/htuser_addPassengerInfo.action?jsoncallback=?&passengerVO.userid='+userid+'&passengerVO.passengerName='+$('#rolename').val()+'&passengerVO.passengerIdentify='+$('#idcard').val(), function(result){
 				console.log(result);
 				if (result.status==1){
 					alert('提交成功！您可以继续填写');

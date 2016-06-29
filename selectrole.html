@@ -41,12 +41,12 @@
 
 			// 更新出行人列表的函数
 			function loadRoleList(){
-				$.getJSON('http://www.96hn.com/user/htuser_queryPassengerInfo.action?jsoncallback=?&userid='+userid, function(result){
+				$.getJSON(server_addr+'/user/htuser_queryPassengerInfo.action?jsoncallback=?&userid='+userid, function(result){
 					BodyVM.list = result;
 				});
 			}
 			// 更新订单信息
-			$.getJSON('http://www.96hn.com/mobile/tourorder_getOrderParams.action?jsoncallback=?&userid='+userid, function(result){
+			$.getJSON(server_addr+'/mobile/tourorder_getOrderParams.action?jsoncallback=?&userid='+userid, function(result){
 				BodyVM.info = result;
 			});
 
@@ -81,8 +81,8 @@
 					relatedTarget: this,
 					onConfirm: function(e) {
 						var userid = window.localStorage.getItem('XLY_USERID');
-						console.log('http://www.96hn.com/user/savePassengerInfo.action?jsoncallback=?&passengerVO.passengerId='+e.data[2]+'&passengerVO.passengerIdentify='+e.data[1]+'&passengerVO.passengerName='+e.data[0]);
-						$.getJSON('http://www.96hn.com/user/htuser_savePassengerInfo.action?jsoncallback=?&passengerVO.passengerId='+e.data[2]+'&passengerVO.passengerIdentify='+e.data[1]+'&passengerVO.passengerName='+e.data[0], function(result){
+						console.log(server_addr+'/user/savePassengerInfo.action?jsoncallback=?&passengerVO.passengerId='+e.data[2]+'&passengerVO.passengerIdentify='+e.data[1]+'&passengerVO.passengerName='+e.data[0]);
+						$.getJSON(server_addr+'/user/htuser_savePassengerInfo.action?jsoncallback=?&passengerVO.passengerId='+e.data[2]+'&passengerVO.passengerIdentify='+e.data[1]+'&passengerVO.passengerName='+e.data[0], function(result){
 							http://www.96hn.com/user/htuser_savePassengerInfo.action?passengerVO.passengerId=4&passengerVO.passengerIdentify=430202197802254017&passengerVO.passengerName=%E9%92%B1%E9%98%BF%E9%A1%B61
 							console.log(result);
 							if (result.status==1){
@@ -119,8 +119,8 @@
 					relatedTarget: this,
 					onConfirm: function(e) {
 						var userid = window.localStorage.getItem('XLY_USERID');
-						console.log('http://www.96hn.com/user/htuser_addPassengerInfo.action?jsoncallback=?&passengerVO.guestId='+userid+'&passengerVO.passengerName='+e.data[0]+'&passengerVO.passengerIdentify='+e.data[1]);
-						$.getJSON('http://www.96hn.com/user/htuser_addPassengerInfo.action?jsoncallback=?&passengerVO.guestId='+userid+'&passengerVO.passengerName='+e.data[0]+'&passengerVO.passengerIdentify='+e.data[1], function(result){
+						console.log(server_addr+'/user/htuser_addPassengerInfo.action?jsoncallback=?&passengerVO.guestId='+userid+'&passengerVO.passengerName='+e.data[0]+'&passengerVO.passengerIdentify='+e.data[1]);
+						$.getJSON(server_addr+'/user/htuser_addPassengerInfo.action?jsoncallback=?&passengerVO.guestId='+userid+'&passengerVO.passengerName='+e.data[0]+'&passengerVO.passengerIdentify='+e.data[1], function(result){
 							console.log(result);
 							if (result.status==1){
 								alert('添加成功！');
@@ -157,8 +157,8 @@
 						rolelist.push($(this).attr('value'));
 					}
 				})
-				console.log('http://www.96hn.com/user/htuser_isVaildPassenger.action?jsoncallback=?&userid='+userid+'&passengerIDStr='+rolelist.toString());
-				$.getJSON('http://www.96hn.com/user/htuser_isVaildPassenger.action?jsoncallback=?&userid='+userid+'&passengerIDStr='+rolelist.toString(),function(result){
+				console.log(server_addr+'/user/htuser_isVaildPassenger.action?jsoncallback=?&userid='+userid+'&passengerIDStr='+rolelist.toString());
+				$.getJSON(server_addr+'/user/htuser_isVaildPassenger.action?jsoncallback=?&userid='+userid+'&passengerIDStr='+rolelist.toString(),function(result){
 					//判断返回状态
 					if (result.status==1){
 						//成功后跳转到填写订单页面

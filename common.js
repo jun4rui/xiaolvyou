@@ -9,7 +9,8 @@
  * 销售1->普通客户1->普通客户2   普通客户2只能联系销售1
  * 曹熙：普通用户再下次进去首页立刻清空销售人员信息
  */
-var server_addr = 'http://ipad.htyou.com';						//JSON接口服务器地址，调用接口时用，方便更换
+//var server_addr = 'http://www.xiaolvyou.com.cn';						//JSON接口服务器地址，调用接口时用，方便更换
+var server_addr = 'http://www.96hn.com';						//JSON接口服务器地址，调用接口时用，方便更换
 
 
 //20160419 旧的销售人员逻辑用数据，即将取消
@@ -462,7 +463,7 @@ $(document).ready(function(){
 			}
 			require(['wx'], function (wx) {
 				//alert('4');
-				$.getJSON('http://www.96hn.com/weixin/getJsConfig.action?jsoncallback=?&page_url=' + window.location.href, function (result) {
+				$.getJSON(server_addr+'/weixin/getJsConfig.action?jsoncallback=?&page_url=' + window.location.href, function (result) {
 					//alert(result.timestamp+'\n'+result.appId+'\n'+result.noncestr+'\n'+result.url+'\n'+result.signature);
 					wx.config({
 						debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。

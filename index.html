@@ -28,7 +28,7 @@
 
 			avalon.scan();
 
-			$.getJSON('http://www.96hn.com/mobile/ipad_queryTourLine.action?pagesize=999&jsoncallback=?', function(result){
+			$.getJSON(server_addr+'/mobile/ipad_queryTourLine.action?pagesize=999&jsoncallback=?', function(result){
 				TourVM.list = result.value;
 			});
 		});
@@ -36,7 +36,7 @@
 </head>
 <body>
 <!--滚动日历区域-->
-<style>
+<style scoped>
 	body {
 		margin:0;
 		padding: 3.5em 0 0;
@@ -237,7 +237,7 @@
 	<a ms-attr-href="info.html?lineid={{unit.lineid}}" ms-repeat-unit="list">
 	<div class="tour-unit-default">
 		<!--TODO: 测试数据图片地址还是华天的，正式版要改回来-->
-		<img ms-attr-src="http://www.96hn.com/{{unit.spotviewpic}}" alt="">
+		<img ms-attr-src="http://wx.xiaolvyou.com.cn/{{unit.spotviewpic}}" alt="">
 		<div class="price"><span class="yen">&yen;</span>{{unit.leastprice}}<span class="qi">起</span></div>
 		<div class="title">{{unit.tourproname}}</div>
 		<div class="desc">{{unit.adtitle}}</div>

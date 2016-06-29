@@ -156,7 +156,7 @@
 	<div id="calendar2"></div>
 	<script>
 		var lineid = getParameterValue(window.location.href, 'lineid');
-		$.getJSON('http://www.96hn.com/mobile/ipad_queryTourTeam.action?jsoncallback=?&lineid=' + lineid, function (result) {
+		$.getJSON(server_addr+'/mobile/ipad_queryTourTeam.action?jsoncallback=?&lineid=' + lineid, function (result) {
 			if (result.status == 1) {
 				var dateList = [];
 				for (var i in result.value) {

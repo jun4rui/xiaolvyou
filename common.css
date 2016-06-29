@@ -19,3 +19,7 @@ ul,li {
 .clear {
 	clear: both;
 }
+/*avalon框架用*/
+[ms-controller]{
+	display:none
+}

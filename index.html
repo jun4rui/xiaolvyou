@@ -137,20 +137,8 @@
 		if (inNum<0 || inNum>6){
 			return '';
 		}
-		if (inNum==0)
-			return '周日';
-		if (inNum==1)
-			return '周一';
-		if (inNum==2)
-			return '周二';
-		if (inNum==3)
-			return '周三';
-		if (inNum==4)
-			return '周四';
-		if (inNum==5)
-			return '周五';
-		if (inNum==6)
-			return '周六';
+		var weekStr = ['周日','周一', '周二', '周三', '周四', '周五', '周六'];
+		return weekStr[inNum];
 	}
 	//绘制60天的日期
 	for (var i=0;i<60;i++){

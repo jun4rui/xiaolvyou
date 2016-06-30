@@ -37,7 +37,6 @@
 				}
 			});
 
-			avalon.scan();
 
 			// 更新出行人列表的函数
 			function loadRoleList(){
@@ -52,6 +51,8 @@
 
 			//好了后立刻执行载入出行人一次
 			loadRoleList();
+
+			avalon.scan();
 
 			// 点击编辑出行人按钮的处理
 			$('table.am-table').delegate('.btn-edit', 'click', function(){

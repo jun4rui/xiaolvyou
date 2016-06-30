@@ -24,8 +24,6 @@
 				ticketprice:[]
 			});
 
-			avalon.scan();
-
 			var jzluid = getParameterValue(window.location.href, 'jzluid');
 			//参数错误则退出
 			if (jzluid == '') {
@@ -41,6 +39,8 @@
 					BodyVM.ticketprice = JSON.parse(BodyVM.info.htTourProVO.ticketprice);
 					//console.log(BodyVM.ticketprice);
 				}
+			}).done(function(){
+				avalon.scan();
 			});
 		});
 	</script>

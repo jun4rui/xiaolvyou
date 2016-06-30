@@ -45,6 +45,7 @@
 					//console.log(BodyVM.ticketprice);
 				}
 			});
+
 		});
 	</script>
 	<style>
@@ -214,19 +215,19 @@
 	<!--如果是普通价格模式-->
 	<li ms-if="info.tourtype==1 && info.ydyxprice>0">
 		<i class="am-icon-fw am-icon-slideshare"></i>
-		一大一小：&yen;{{info.ydyxprice}}元
+		一大一小价：&yen;{{info.ydyxprice}}元
 	</li>
 	<li ms-if="info.tourtype==1 && info.edyxprice>0">
 		<i class="am-icon-fw am-icon-users"></i>
-		二大一小：&yen;{{info.edyxprice}}元
+		二大一小价：&yen;{{info.edyxprice}}元
 	</li>
 	<li ms-if="info.tourtype==1 && info.adultprice>0">
 		<i class="am-icon-fw am-icon-user"></i>
-		成人：&yen;{{info.adultprice}}元
+		成人价：&yen;{{info.adultprice}}元
 	</li>
 	<li ms-if="info.tourtype==1 && info.childprice>0">
 		<i class="am-icon-fw am-icon-child"></i>
-		儿童：&yen;{{info.childprice}}元
+		儿童价：&yen;{{info.childprice}}元
 	</li>
 	<!--如果是门票价格模式 TODO:暂时没数据显示-->
 	<li ms-if="info.tourtype==2">

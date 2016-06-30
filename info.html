@@ -21,6 +21,8 @@
 				$id: 'body',
 				info:{},
 				sellerid:'',
+				ticketprice: []
+
 			});
 
 			avalon.scan();
@@ -30,11 +32,18 @@
 			if (lineid=='' || lineid==null){
 				return false;
 			}
-			//console.log('/mobile/ipad_getTourTeam.action?jsoncallback=?&lineid='+lineid);
+			console.log(server_addr+'/mobile/ipad_getTourLine.action?jsoncallback=?&lineid='+lineid);
 			$.getJSON(server_addr+'/mobile/ipad_getTourLine.action?jsoncallback=?&lineid='+lineid,function(result){
 				BodyVM.info = result.lineVO;
 				console.log(BodyVM.info);
 				$('#info-section').append(BodyVM.info.productdescribe.replace(/&nbsp;/g,' '))
+
+				//如果类型是门票
+				if (result.lineVO.tourtype=='2'){
+					//将string格式的数据转换成JSON格式
+					BodyVM.ticketprice = JSON.parse(BodyVM.info.ticketprice);
+					//console.log(BodyVM.ticketprice);
+				}
 			});
 		});
 	</script>
@@ -202,12 +211,36 @@
 		<i class="am-icon-fw am-icon-weixin"></i>
 		{{info.salermemo|html}}
 	</li>
-	<li>
-		<a href="#" id="blockbooking">
-			想给孩子和小伙伴们组织包场吗？
-			<i class="am-icon-chevron-right am-align-right"></i>
-		</a>
+	<!--如果是普通价格模式-->
+	<li ms-if="info.tourtype==1 && info.ydyxprice>0">
+		<i class="am-icon-fw am-icon-slideshare"></i>
+		一大一小：&yen;{{info.ydyxprice}}元
 	</li>
+	<li ms-if="info.tourtype==1 && info.edyxprice>0">
+		<i class="am-icon-fw am-icon-users"></i>
+		二大一小：&yen;{{info.edyxprice}}元
+	</li>
+	<li ms-if="info.tourtype==1 && info.adultprice>0">
+		<i class="am-icon-fw am-icon-user"></i>
+		成人：&yen;{{info.adultprice}}元
+	</li>
+	<li ms-if="info.tourtype==1 && info.childprice>0">
+		<i class="am-icon-fw am-icon-child"></i>
+		儿童：&yen;{{info.childprice}}元
+	</li>
+	<!--如果是门票价格模式 TODO:暂时没数据显示-->
+	<li ms-if="info.tourtype==2">
+		<span ms-repeat-unit="ticketprice">
+			<i class="am-icon-fw am-icon-ticket"></i>{{unit.position}} - {{unit.price}}
+		</span>
+	</li>
+	<!--20160630 取消该功能，并加入显示具体的价格信息-->
+	<!--<li>-->
+		<!--<a href="#" id="blockbooking">-->
+			<!--想给孩子和小伙伴们组织包场吗？-->
+			<!--<i class="am-icon-chevron-right am-align-right"></i>-->
+		<!--</a>-->
+	<!--</li>-->
 </ul>
 <!--/信息列表-->
 

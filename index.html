@@ -23,7 +23,10 @@
 			console.log('Begin!');
 			var TourVM = avalon.define({
 				$id: 'tour',
-				list: []
+				list: [],
+				listRendered: function(){
+					$('[teamcount="0"]').addClass('gray').find('.price').html('售罄');
+				}
 			});
 
 			avalon.scan();
@@ -207,6 +210,10 @@
 		/* line-height: 200%; */
 		padding: 0 .5em 0.5em;
 	}
+	.gray {
+		filter: grayscale(100%);
+		-webkit-filter: grayscale(100%);
+	}
 
 	.price {
 		background-color: #F65934;
@@ -230,12 +237,13 @@
 		font-weight: normal;
 		margin-right: 5px;
 	}
+
 </style>
 
 <div id="main-section" ms-controller="tour">
 	<!--线路单元-->
-	<a ms-attr-href="info.html?lineid={{unit.lineid}}" ms-repeat-unit="list">
-	<div class="tour-unit-default">
+	<a ms-attr-href="info.html?lineid={{unit.lineid}}" ms-repeat-unit="list" data-repeat-rendered="listRendered">
+	<div class="tour-unit-default" ms-attr-teamcount="{{unit.teamcount}}">
 		<img ms-attr-src="http://www.xiaolvyou.com.cn/{{unit.spotviewpic}}" alt="">
 		<div class="price"><span class="yen">&yen;</span>{{unit.leastprice}}<span class="qi">起</span></div>
 		<div class="title">{{unit.tourproname}}</div>

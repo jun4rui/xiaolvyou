@@ -25,7 +25,12 @@
 				ticketprice: [],
 				adultNum:0,
 				childNum:0,
-				userList:[]
+				userList:[],
+				userRendered: function(){
+					$('.faceunit').popover({
+						trigger:'hover focus'
+					});
+				}
 			});
 
 			avalon.scan();
@@ -51,12 +56,12 @@
 			});
 
 			//获取预订用户人数
-			$.getJSON(server_addr+'/mobile/tourorder_queryOrderForPersonNum.action?lineid='+lineid,function(result){
+			$.getJSON(server_addr+'/mobile/tourorder_queryOrderForPersonNum.action?jsoncallback=?&lineid='+lineid,function(result){
 				BodyVM.adultNum = result.adult;
 				BodyVM.childNum = result.child;
 			});
 			//获取预订用户列表
-			$.getJSON(server_addr+'/mobile/tourorder_queryOrderForGuest.action?lineid='+lineid,function(result){
+			$.getJSON(server_addr+'/mobile/tourorder_queryOrderForGuest.action?jsoncallback=?&lineid='+lineid,function(result){
 				BodyVM.userList = result;
 			});
 		});
@@ -259,10 +264,26 @@
 <!--/信息列表-->
 
 <!--人数列表-->
+<style scoped>
+	img.faceunit {
+		width: 2em;
+		height: 2em;
+		border-radius: 50%;
+		float: left;
+		margin: .2em;
+		/* margin-bottom: 0.4em; */
+		border: 1px solid #ccc;
+		box-sizing: border-box;
+	}
+
+</style>
 <ul id="user-list" class="am-list am-list-static am-list-border">
-	<li >
+	<li>
 		累计{{adultNum}}个成人，{{childNum}}个儿童报名
-		<i class="am-icon-chevron-down am-align-right"></i>
+		<div class="facepanel" style="display:block">
+			<img ms-attr-src="{{unit.profession}}" alt="" class="faceunit" ms-repeat-unit="userList" ms-attr-data-am-popover="{theme: 'primary', content: '{{unit.guestName}}' }"  data-repeat-rendered="userRendered">
+			<div class="clear"></div>
+		</div>
 	</li>
 </ul>
 <!--/人数列表-->

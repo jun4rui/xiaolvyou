@@ -22,8 +22,10 @@
 				$id: 'body',
 				info:{},
 				sellerid:'',
-				ticketprice: []
-
+				ticketprice: [],
+				adultNum:0,
+				childNum:0,
+				userList:[]
 			});
 
 			avalon.scan();
@@ -33,6 +35,7 @@
 			if (lineid=='' || lineid==null){
 				return false;
 			}
+			// 获取线路详情
 			console.log(server_addr+'/mobile/ipad_getTourLine.action?jsoncallback=?&lineid='+lineid);
 			$.getJSON(server_addr+'/mobile/ipad_getTourLine.action?jsoncallback=?&lineid='+lineid,function(result){
 				BodyVM.info = result.lineVO;
@@ -47,6 +50,15 @@
 				}
 			});
 
+			//获取预订用户人数
+			$.getJSON(server_addr+'/mobile/tourorder_queryOrderForPersonNum.action?lineid='+lineid,function(result){
+				BodyVM.adultNum = result.adult;
+				BodyVM.childNum = result.child;
+			});
+			//获取预订用户列表
+			$.getJSON(server_addr+'/mobile/tourorder_queryOrderForGuest.action?lineid='+lineid,function(result){
+				BodyVM.userList = result;
+			});
 		});
 	</script>
 	<style>
@@ -246,6 +258,15 @@
 </ul>
 <!--/信息列表-->
 
+<!--人数列表-->
+<ul id="user-list" class="am-list am-list-static am-list-border">
+	<li >
+		累计{{adultNum}}个成人，{{childNum}}个儿童报名
+		<i class="am-icon-chevron-down am-align-right"></i>
+	</li>
+</ul>
+<!--/人数列表-->
+
 <ul id="expand-detail" class="am-list am-list-static am-list-border">
 	<li onclick="$('#info-section').show(); $('#expand-detail').hide();">
 		点击查看详情
@@ -318,7 +339,7 @@
 		background-color: #fe8568 !important;
 	}
 </style>
-<div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default" id="footer">
+<div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default" id="footer" ms-if="info.teamcount>0">
 	<div class="am-navbar-nav am-cf am-g doc-am-g">
 		<div class="am-u-sm-2 am-u-md-2 am-u-lg-2" style="background-color: #FFF;">
 			<a href="tel:4007770731" class="" style="color: #FE8568;">

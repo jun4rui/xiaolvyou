@@ -438,7 +438,7 @@ function showSellerUI(inDATA) {
 	});
 }
 
-//调试模式
+/*//调试模式
 if (window.localStorage.getItem('XLY_USERID') == 637486) {
 	alert('in @'+(new Date));
 	require(['wx'], function (wx) {
@@ -448,7 +448,7 @@ if (window.localStorage.getItem('XLY_USERID') == 637486) {
 			alert('weixin ok');
 		});
 	});
-}
+}*/
 $(document).ready(function () {
 
 	//页面载入后延迟3000ms再读取销售、员工数据，保证异步载入数据已处理完毕

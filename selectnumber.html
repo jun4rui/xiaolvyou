@@ -19,9 +19,9 @@
 		//http://www.96hn.com/mobile/ipad_getTourTeamDetail.action?teamcode=HT-CITP-10503561050-980017
 		avalon.ready(function () {
 			var BodyVM = avalon.define({
-				$id:  'body',
-				info: {},
-				ticketprice:[]
+				$id:         'body',
+				info:        {},
+				ticketprice: []
 			});
 
 			var jzluid = getParameterValue(window.location.href, 'jzluid');
@@ -30,16 +30,16 @@
 				alert('数据异常，系统终止');
 				return false;
 			}
-			console.log(server_addr+'/mobile/ipad_getTourTeamDetail.action?jsoncallback=?&teamcode=' + jzluid);
-			$.getJSON(server_addr+'/mobile/ipad_getTourTeamDetail.action?jsoncallback=?&teamcode=' + jzluid, function (result) {
+			console.log(server_addr + '/mobile/ipad_getTourTeamDetail.action?jsoncallback=?&teamcode=' + jzluid);
+			$.getJSON(server_addr + '/mobile/ipad_getTourTeamDetail.action?jsoncallback=?&teamcode=' + jzluid, function (result) {
 				BodyVM.info = result;
 				//如果类型是门票
-				if (result.htTourProVO.tourtype=='2'){
+				if (result.htTourProVO.tourtype == '2') {
 					//将string格式的数据转换成JSON格式
 					BodyVM.ticketprice = JSON.parse(BodyVM.info.htTourProVO.ticketprice);
 					//console.log(BodyVM.ticketprice);
 				}
-			}).done(function(){
+			}).done(function () {
 				avalon.scan();
 			});
 		});
@@ -147,6 +147,7 @@
 			<label class="am-u-sm-4 am-form-label">一大一小</label>
 			<label class="am-u-sm-4 am-form-label price">&yen;{{info.htTourProVO.ydyxprice}}元</label>
 			<input type="hidden" name="unitprice" ms-attr-value="{{info.htTourProVO.ydyxprice}}">
+			<input type="hidden" name="propricetype" value="ydyxprice">
 			<div class="am-u-sm-4">
 				<select name="unitnumber">
 					<option value="0" selected>0人</option>
@@ -169,6 +170,7 @@
 			<label class="am-u-sm-4 am-form-label">成人</label>
 			<label class="am-u-sm-4 am-form-label price">&yen;{{info.htTourProVO.adultprice}}元</label>
 			<input type="hidden" name="unitprice" ms-attr-value="{{info.htTourProVO.adultprice}}">
+			<input type="hidden" name="propricetype" value="adultprice">
 			<div class="am-u-sm-4">
 				<select name="unitnumber">
 					<option value="0" selected>0人</option>
@@ -191,6 +193,7 @@
 			<label class="am-u-sm-4 am-form-label">二大一小</label>
 			<label class="am-u-sm-4 am-form-label price">&yen;{{info.htTourProVO.edyxprice}}元</label>
 			<input type="hidden" name="unitprice" ms-attr-value="{{info.htTourProVO.edyxprice}}">
+			<input type="hidden" name="propricetype" value="edyxprice">
 			<div class="am-u-sm-4">
 				<select name="unitnumber">
 					<option value="0" selected>0人</option>
@@ -213,6 +216,7 @@
 			<label class="am-u-sm-4 am-form-label">儿童</label>
 			<label class="am-u-sm-4 am-form-label price">&yen;{{info.htTourProVO.childprice}}元</label>
 			<input type="hidden" name="unitprice" ms-attr-value="{{info.htTourProVO.childprice}}">
+			<input type="hidden" name="propricetype" value="childprice">
 			<div class="am-u-sm-4">
 				<select name="unitnumber">
 					<option value="0" selected>0人</option>
@@ -234,31 +238,11 @@
 	<!--/普通票的显示-->
 	<!--门票的显示 ticketprice-->
 	<form class="am-form am-form-horizontal" ms-if="info.htTourProVO.tourtype==2">
-		<!--门票 childprice-->
-		<!--<div class="am-form-group" ms-if="info.htTourProVO.ticketprice>0">-->
-			<!--<label class="am-u-sm-4 am-form-label">门票</label>-->
-			<!--<label class="am-u-sm-4 am-form-label price">&yen;{{info.htTourProVO.ticketprice}}元</label>-->
-			<!--<input type="hidden" name="unitprice" ms-attr-value="{{info.htTourProVO.ticketprice}}">-->
-			<!--<div class="am-u-sm-4">-->
-				<!--<select name="unitnumber">-->
-					<!--<option value="0" selected>0人</option>-->
-					<!--<option value="1">1人</option>-->
-					<!--<option value="2">2人</option>-->
-					<!--<option value="3">3人</option>-->
-					<!--<option value="4">4人</option>-->
-					<!--<option value="5">5人</option>-->
-					<!--<option value="6">6人</option>-->
-					<!--<option value="7">7人</option>-->
-					<!--<option value="8">8人</option>-->
-					<!--<option value="9">9人</option>-->
-					<!--<option value="10">10人</option>-->
-				<!--</select>-->
-			<!--</div>-->
-		<!--</div>-->
 		<div class="am-form-group" ms-repeat-unit="ticketprice">
 			<label class="am-u-sm-4 am-form-label">{{unit.position}}</label>
 			<label class="am-u-sm-4 am-form-label price">&yen;{{unit.price}}元</label>
 			<input type="hidden" name="unitprice" ms-attr-value="{{unit.price}}">
+			<input type="hidden" name="propricetype" value="ticketprice">
 			<div class="am-u-sm-4">
 				<select name="unitnumber">
 					<option value="0" selected>0张</option>
@@ -309,15 +293,18 @@
 	function doSubmit() {
 		/*
 		 /mobile/tourorder_tourOrderStep3.action
+		 参数范例：
 		 cteamcode=teamcode
 		 pronum=[5,2,1]
 		 proprice=[150,200,300]
 		 */
-		var t_pronum   = [];
-		var t_proprice = [];
+		var t_pronum       = [];
+		var t_proprice     = [];
+		var t_propricetype = [];
 
-		var pronum   = [];
-		var proprice = [];
+		var pronum       = [];
+		var proprice     = [];
+		var propricetype = [];
 
 		var cteamcode = getParameterValue(window.location.href, 'jzluid');
 
@@ -328,50 +315,53 @@
 		$('select[name=unitnumber]').each(function () {
 			t_pronum.push($(this).val());
 		});
+		$('input[name=propricetype]').each(function () {
+			t_propricetype.push($(this).val());
+		});
 		//console.log(t_proprice);
 		//console.log(t_pronum);
 
 		//剔除掉数组中无效的数据
-		for (var i in t_proprice){
-			if (t_proprice[i].replace(/ /g,'').length>0 && t_pronum[i]!=0){
+		for (var i in t_proprice) {
+			if (t_proprice[i].replace(/ /g, '').length > 0 && t_pronum[i] != 0) {
 				proprice.push(t_proprice[i]);
 				pronum.push(t_pronum[i]);
+				propricetype.push(t_propricetype[i]);
 			}
 		}
 		//console.log('final:'+proprice.toString());
 		//console.log('final:'+pronum.toString());
 
-		if (proprice.length==0 || pronum.length==0){
+		if (proprice.length == 0 || pronum.length == 0) {
 			alert('请至少选择一个出行人数');
 			return false;
 		}
-
 		//构造接口参数
-		//TEST: http://www.96hn.com/mobile/tourorder_tourOrderStep3.action?proprice=20,10&pronum=1,2&cteamcode=HT-GLOO-10848561056-189329
-		$.getJSON(server_addr+'/mobile/tourorder_tourOrderStep3.action?jsoncallback=?&proprice='+proprice.toString()+'&pronum='+pronum.toString()+'&cteamcode='+cteamcode+'&userid='+window.localStorage.getItem('XLY_USERID')+'&sellerid='+(getParameterValue(window.location.href, 'sellerid')||0), function(result){
+		//TEST: server_addr + '/mobile/tourorder_tourOrderStep3.action?jsoncallback=?&proprice=' + proprice.toString() + '&pronum=' + pronum.toString() + '&propricetype='+propricetype.toString()+'&cteamcode=' + cteamcode + '&userid=' + window.localStorage.getItem('XLY_USERID') + '&sellerid=' + (getParameterValue(window.location.href, 'sellerid') || 0)
+		console.log(server_addr + '/mobile/tourorder_tourOrderStep3.action?jsoncallback=?&proprice=' + proprice.toString() + '&pronum=' + pronum.toString() + '&propricetype='+propricetype.toString()+'&cteamcode=' + cteamcode + '&userid=' + window.localStorage.getItem('XLY_USERID') + '&sellerid=' + (getParameterValue(window.location.href, 'sellerid') || 0));
+		$.getJSON(server_addr + '/mobile/tourorder_tourOrderStep3.action?jsoncallback=?&proprice=' + proprice.toString() + '&pronum=' + pronum.toString() + '&propricetype='+propricetype.toString()+'&cteamcode=' + cteamcode + '&userid=' + window.localStorage.getItem('XLY_USERID') + '&sellerid=' + (getParameterValue(window.location.href, 'sellerid') || 0), function (result) {
 			/*
-			status：
-			1 成功
-			101 产品数量不能为零
-			102 产品数量不足
-			*/
+			 status：
+			 1 成功
+			 101 产品数量不能为零
+			 102 产品数量不足
+			 */
 			//成功提交，前往下一个流程
-			if (result.status==1){
+			if (result.status == 1) {
 				//window.location.href = 'fillorder.html?cteamcode='+cteamcode+'&order_amount='+result.tourOrderVO.order_amount+'&adult_num='+result.tourOrderVO.adult_num+'&child_num='+result.tourOrderVO.child_num+'&detailpre='+result.tourOrderVO.detailpre;http://www.96hn.com/mobile/tourorder_tourOrderStep3.action?proprice=20,10&pronum=1,2&cteamcode=HT-GLOO-10848561056-189329
 				window.location.href = 'fillorder.html';
-			}else{
+			} else {
 				var errMsg = '';
-				if (result.status==101){
+				if (result.status == 101) {
 					errMsg = '产品数量不能为零';
 				}
-				if (result.status==102){
+				if (result.status == 102) {
 					errMsg = '产品数量不足';
 				}
-				if (errMsg!=''){
-					alert('错误:'+errMsg+'\n请修改后重新提交');
+				if (errMsg != '') {
+					alert('错误:' + errMsg + '\n请修改后重新提交');
 					return false;
 				}
-
 			}
 		});
 	}

@@ -72,6 +72,7 @@
 
 
 			// 载入参数信息
+			console.log(server_addr+'/mobile/tourorder_getOrderParams.action?jsoncallback=?&userid=' + userid);
 			$.getJSON(server_addr+'/mobile/tourorder_getOrderParams.action?jsoncallback=?&userid=' + userid, function (result) {
 				// 数据错误的处理
 				if (!result.hasOwnProperty('jzl_cteamcode')){
@@ -81,6 +82,7 @@
 
 				BodyVM.params = result;
 				// 载入线路详情
+				console.log(server_addr+'/mobile/ipad_getTourTeamDetail.action?jsoncallback=?&teamcode=' + result.jzl_cteamcode);
 				$.getJSON(server_addr+'/mobile/ipad_getTourTeamDetail.action?jsoncallback=?&teamcode=' + result.jzl_cteamcode, function (result) {
 					BodyVM.info = result;
 				}).done(function(){

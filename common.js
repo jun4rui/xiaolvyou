@@ -471,4 +471,8 @@ if (window.localStorage.getItem('XLY_USERID') == 637486) {
 var userid = getParameterValue(window.location.href, 'userid');
 if (userid != '') {
 	window.localStorage.setItem('XLY_USERID', userid);
+	$.getJSON(server_addr+'/user/htuser_getGuestsInfoById.action?jsoncallback=?&userid='+userid, function (result) {
+		//从接口获得的用户数据保存到localStorage中
+		window.localStorage.setItem('XLY_USERNAME', result.guestVO.guestName);
+	});
 }

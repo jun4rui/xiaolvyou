@@ -13,7 +13,7 @@
 	<script src="jslib/avalon1.5/avalon.js"></script>
 
 	<link rel="stylesheet" href="common.css">
-	<script src="common.js?20160706f"></script>
+	<script src="common.js?20160706g"></script>
 
 	<script>
 		//alert(window.location.href);
@@ -435,10 +435,18 @@
 
 		//配置好权限以后会触发wx.ready
 		wx.ready(function(){
+			var _userid = window.localStorage.getItem('XLY_USERID')||0;
+			var _username = window.localStorage.getItem('XLY_USERNAME')||'';
+
 			var title  = $('#main-section .title').text();
 			var desc   = $('#main-section .desc').text();
 			var link   = window.location.href;
 			var imgUrl = $('body img').eq(0).attr('src');
+
+			//如果有销售人员姓名记录在案
+			if (_username!=''){
+				title = _username+'向您推荐:'+$('#main-section .title').text();
+			}
 
 			if (link.indexOf('?')) {
 				link = link + '&sellerid=' + (window.localStorage.getItem('XLY_USERID') || 0);

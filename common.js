@@ -476,3 +476,12 @@ if (userid != '') {
 		window.localStorage.setItem('XLY_USERNAME', result.guestVO.guestName);
 	});
 }
+
+//计数器代码 20160707
+var _hmt = _hmt || [];
+(function() {
+	var hm = document.createElement("script");
+	hm.src = "//hm.baidu.com/hm.js?7f7bf22240c225d844254d80f3a8f930";
+	var s = document.getElementsByTagName("script")[0];
+	s.parentNode.insertBefore(hm, s);
+})();

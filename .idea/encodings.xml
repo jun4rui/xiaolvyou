@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
-    <file url="remoteDeploymentFS://&lt;99b99603-47c9-4a91-bba6-c9d99e0a55a5&gt;/WEB-INF/common/common_footer.html" charset="GBK" />
+    <file url="remoteDeploymentFS://&lt;99b99603-47c9-4a91-bba6-c9d99e0a55a5&gt;/htonline-webroot/WEB-INF/common/common_footer.html" charset="GBK" />
+    <file url="remoteDeploymentFS://&lt;99b99603-47c9-4a91-bba6-c9d99e0a55a5&gt;/htonline-webroot/WEB-INF/common/common_head_a.html" charset="GBK" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

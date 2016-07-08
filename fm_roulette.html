@@ -40,6 +40,8 @@
 		var rotateBase = 44;
 		var msg        = '';
 
+		var _XLY_USERID = window.localStorage.getItem('XLY_USERID') || 0;
+
 		$(document).ready(function () {
 			$('#turntable').css({
 				'left': '89px',
@@ -50,14 +52,21 @@
 				'top':  '165px'
 			});
 
+
+
 			$.getJSON(server_addr + '/mobile/tourorder_queryChoujiOrder.action?jsoncallback=?', function (result) {
-				for (var i in result.slice(0, 8)) {
+				for (var i in result.slice(0, 6)) {
 					$('#userlist').append('<span class="userunit">' + result[i].name + '抽中' + result[i].miaoshaname + '</span>');
 				}
+			}).done(function(){
+				$.getJSON(server_addr + '/mobile/tourorder_queryChoujiOrder.action?jsoncallback=?&userid='+_XLY_USERID, function (result) {
+					for (var i in result) {
+						$('#userlist').append('<span class="userunit highlight">' + result[i].name + '抽中' + result[i].miaoshaname + '</span>');
+					}
+				});
 			});
 		});
 
-		var _XLY_USERID = window.localStorage.getItem('XLY_USERID') || 0;
 	</script>
 </head>
 <body>
@@ -78,7 +87,12 @@
 					animateTo: (36000 + parseInt(result.rotate))*-1/* - parseInt(Math.random() * 20)*/,
 					duration:  5000,
 					callback:  function () {
-						alert('您抽中了：' + result.miaoshaname);
+						if (miaoshaname=='谢谢参与'){
+							alert('（┬＿┬）居然没有抽中，下周二再来吧！');
+							return false;
+						}else{
+							alert('恭喜你，手气棒棒哒！明天我们将会有工作人员与你联系！');
+						}
 					}
 				});
 			} else {
@@ -115,8 +129,11 @@
 	span.userunit {
 		color: #FFF;
 		display: block;
-		font-size: 30px;
+		font-size: 26px;
 		line-height: 120%;
+	}
+	span.userunit.highlight {
+		color: #FFAF00;
 	}
 </style>
 <div id="userlist">
@@ -150,7 +167,7 @@
 	</style>
 	<div id="memo">
 		<ul>
-			<li>注册用户即有一次抽奖机会</li>
+			<li>注册用户每周有一次机会抽奖机会</li>
 			<li>抽奖时间：每周二晚上20点至22点</li>
 		</ul>
 	</div>

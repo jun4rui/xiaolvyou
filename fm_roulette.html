@@ -64,17 +64,18 @@
 <!--转盘-->
 <div id="turntable"></div>
 <!--指针-->
-<div id="pointer" <!--onclick="choujiang()"-->></div>
+<div id="pointer" onclick="choujiang()"></div>
 <script>
 	//点击抽奖按钮后的操作
 	function choujiang() {
 		$.getJSON(server_addr + '/mobile/tourorder_addChouJiangOrder.action?jsoncallback=?&userid=' + _XLY_USERID, function (result) {
 			//result = {"rotate":"254","status":"1","miaoshaname":"抽油烟机"};
+			/*alert(result.rotate);*/
 			//如果返回状态是1（成功）
 			if (result.status == 1) {
 				$("#turntable").rotate({
 					angle:     0,
-					animateTo: 36000 + parseInt(result.rotate) - parseInt(Math.random() * 20),
+					animateTo: (36000 + parseInt(result.rotate))*-1/* - parseInt(Math.random() * 20)*/,
 					duration:  5000,
 					callback:  function () {
 						alert('您抽中了：' + result.miaoshaname);

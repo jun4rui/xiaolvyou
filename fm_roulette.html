@@ -85,13 +85,13 @@
 				//如果是其他返回状态（失败）
 				var errMsg = '';
 				if (result.status == 101) {
-					errMsg = '抽奖时间错误';
+					errMsg = '抽奖尚未开放';
 				}
 				if (result.status == 102) {
-					errMsg = '您已经参加过抽奖了';
+					errMsg = '客官，本周你已经参加过抽奖，下周二再来吧！';
 				}
 				if (errMsg != '') {
-					alert('错误：' + errMsg);
+					alert(errMsg);
 					return false;
 				}
 			}

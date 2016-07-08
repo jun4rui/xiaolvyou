@@ -2,7 +2,7 @@
 <project version="4">
   <component name="WebServers">
     <option name="servers">
-      <webServer id="c35fd2b5-c2fc-45ad-8b53-9523870908b9" name="xiaolvyou" url="http://wx.96hn.com/">
+      <webServer id="c35fd2b5-c2fc-45ad-8b53-9523870908b9" name="xiaolvyou" url="http://wx.xiaolvyou.com.cn/">
         <fileTransfer host="114.67.53.113" port="23" rootFolder="/qzy/apache-tomcat-6.0.45/webapps/xiaolvyou" password="df9bdf9bdf9bdf9bdf9bdf9b" username="xiaolvyou">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" passiveMode="true" />

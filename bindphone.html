@@ -70,7 +70,9 @@
 					//console.log(result);
 					//正确则跳转到state参数指定的地址
 					if (result.status == 1) {
+						alert('绑定成功，点击 "确定" 进入下一步流程。');
 						var gotoUrl = decodeURIComponent(getParameterValue(window.location.href,'state').replace(/!/g,'%'));
+						//alert(gotoUrl);
 						window.location.href = gotoUrl;
 						return true;
 					}

@@ -5,21 +5,39 @@ body {
 }
 
 img {
-	display:block;
-	border:0;
+	display: block;
+	border: 0;
 }
 
 a {
-	text-decoration:none;
+	text-decoration: none;
 }
 
-ul,li {
+ul, li {
 	list-style: none;
 }
+
 .clear {
 	clear: both;
 }
+
 /*avalon框架用*/
-[ms-controller]{
-	display:none
+[ms-controller] {
+	display: none
+}
+
+.xly-red {
+	color: red;
+}
+
+.xly-green {
+	color: green;
+}
+
+.xly-blue {
+	color: blue;
+}
+
+.xly-yellow {
+	color: yellow;
 }

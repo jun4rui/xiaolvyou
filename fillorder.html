@@ -171,6 +171,11 @@
 		color: #666;
 		background-color: #F8F8F8;
 	}
+	.am-form li.title-line.title {
+		font-weight: bold;
+		border-left: 3px solid #ababab;
+		background-color: #f1f1f1;
+	}
 
 	.am-form .am-g label {
 		line-height: 19.2px;
@@ -193,6 +198,7 @@
 	<form actio="" class="am-form" id="contact_form">
 		<ul class="am-list am-list-static">
 			<li class="title-line">总计价格：&yen;<span class="highlight">{{params.order_amount}}</span>元</li>
+			<li class="title-line title">出行人信息：</li>
 			<li class="title-line" ms-if="info.htTourProVO.featured!='出行人不填'">
 				<span style="font-size:0.8em;"><span class="xly-red">*</span>请选择 <span class="xly-red">{{params.adult_num}}</span> 名成人和 <span class="xly-red">{{params.child_num}}</span> 名儿童</span>
 				<button class="am-btn am-btn-xs am-btn-warning am-round am-align-right" id="selectrole">
@@ -208,7 +214,7 @@
 				</div>
 				<div class="clear"></div>
 			</li>
-			<li class="title-line">联系人信息</li>
+			<li class="title-line title">联系人信息：</li>
 			<li>
 				<div class="am-form-group am-g">
 					<label for="contact_name" class="am-u-sm-3 am-form-label"><span class="xly-red">*</span>姓名</label>

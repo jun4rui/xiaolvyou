@@ -11,7 +11,7 @@
 	<script src="jslib/amazeui/js/amazeui.min.js"></script>
 	<script src="jslib/avalon1.5/avalon.js"></script>
 
-	<link rel="stylesheet" href="common.css">
+	<link rel="stylesheet" href="common.css?20160712">
 	<script src="common.js"></script>
 
 	<script>
@@ -193,24 +193,25 @@
 	<form actio="" class="am-form" id="contact_form">
 		<ul class="am-list am-list-static">
 			<li class="title-line">总计价格：&yen;<span class="highlight">{{params.order_amount}}</span>元</li>
-			<li class="title-line" ms-if="info.htTourProVO.featured!='出行人不填'">选择出行人：<span style="font-size:0.8em;">请选择 {{params.adult_num}} 名成人和 {{params.child_num}} 名儿童</span>
-			</li>
-			<li ms-if="info.htTourProVO.featured!='出行人不填'">
-				<div>
-					已选择：{{params.passengerNameStr}}
-				</div>
-				<button class="am-btn am-btn-success am-align-right" id="selectrole">
+			<li class="title-line" ms-if="info.htTourProVO.featured!='出行人不填'">
+				<span style="font-size:0.8em;"><span class="xly-red">*</span>请选择 <span class="xly-red">{{params.adult_num}}</span> 名成人和 <span class="xly-red">{{params.child_num}}</span> 名儿童</span>
+				<button class="am-btn am-btn-xs am-btn-warning am-round am-align-right" id="selectrole">
 					<a href="selectrole.html" style="color:#FFF;">
-						<i class="am-icon-group"></i>
+						<i class="am-icon-user-plus"></i>
 						选择出行人
 					</a>
 				</button>
+			</li>
+			<li ms-if="info.htTourProVO.featured!='出行人不填' && (params.passengerNameStr||'')!=''">
+				<div>
+					已选择：{{params.passengerNameStr}}
+				</div>
 				<div class="clear"></div>
 			</li>
 			<li class="title-line">联系人信息</li>
 			<li>
 				<div class="am-form-group am-g">
-					<label for="contact_name" class="am-u-sm-3 am-form-label">姓名</label>
+					<label for="contact_name" class="am-u-sm-3 am-form-label"><span class="xly-red">*</span>姓名</label>
 					<div class="am-u-sm-9">
 						<input type="text" id="contact_name" placeholder="请输入联系人姓名">
 					</div>
@@ -218,7 +219,7 @@
 			</li>
 			<li>
 				<div class="am-form-group am-g">
-					<label for="contact_phone" class="am-u-sm-3 am-form-label">手机</label>
+					<label for="contact_phone" class="am-u-sm-3 am-form-label"><span class="xly-red">*</span>手机</label>
 					<div class="am-u-sm-9">
 						<input type="text" id="contact_phone" placeholder="请输入联系人手机号码">
 					</div>

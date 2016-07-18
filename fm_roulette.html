@@ -70,12 +70,99 @@
 	</script>
 </head>
 <body>
+
+<style scoped>
+	#jiugongge {
+		position: absolute;
+		left:10px;
+		top:10px;
+		width:620px;
+	}
+	#jiugongge>.jgg-unit {
+		position:absolute;
+		width:190px;
+		height:170px;
+	}
+	#jiugongge>.prize {
+		background-color: #FFF;
+		border:5px solid #FFF;
+		background-position: 50% 50%;
+		background-repeat: no-repeat;
+	}
+	#jiugongge>.prize.active {
+		border:5px solid #F00;
+	}
+</style>
+<div id="jiugongge">
+	<div class="jgg-unit prize active" style="left:0;top:0;background-image:url(/images/choujiang_01.png)"></div>
+	<div class="jgg-unit prize" style="left:210px;top:0px;background-image:url(/images/choujiang_02.png)"></div>
+	<div class="jgg-unit prize" style="left:420px;top:0px;background-image:url(/images/choujiang_03.png)"></div>
+	<div class="jgg-unit prize" style="left:420px;top:190px;background-image:url(/images/choujiang_04.png)"></div>
+	<div class="jgg-unit prize" style="left:420px;top:380px;background-image:url(/images/choujiang_05.png)"></div>
+	<div class="jgg-unit prize" style="left:210px;top:380px;background-image:url(/images/choujiang_06.png)"></div>
+	<div class="jgg-unit prize" style="left:0;top:380px;background-image:url(/images/choujiang_07.png)"></div>
+	<div class="jgg-unit prize" style="left:0;top:190px;background-image:url(/images/choujiang_08.png)"></div>
+	<div class="jgg-unit button" onClick="xuanzhuan();" style="cursor:pointer;left:210px;top:190px;background:url(/images/choujiang_button.png) no-repeat 50% 50%;"></div>
+</div>
+<script>
+	function xuanzhuan() {
+		$('#jiugongge .prize.active').removeClass('active');
+		$('#jiugongge .prize').eq(0).addClass('active');
+		$.getJSON(server_addr + '/mobile/tourorder_addChouJiangOrder.action?jsoncallback=?&userid=' + _XLY_USERID, function (result) {
+			//result = {"rotate":"254","status":"1","miaoshaname":"抽油烟机"};
+			//result = {"rotate":"0~7","status":"1","miaoshaname":"抽油烟机"};//20160718修改接口，rotate从角度数改成0~7的数字
+//			result = {
+//				"rotate":      parseInt(Math.random() * 8),
+//				"status":      "1",
+//				"miaoshaname": "抽油烟机" + parseInt(Math.random() * 8)
+//			};
+			//alert(result.rotate);
+			//如果返回状态是1（成功）
+			if (result.status == 1) {
+				var rotate = result.rotate;
+				var count = 0;
+				var doRun = setInterval(function(){
+					if (count==10*8+rotate) {
+						if (result.miaoshaname=='谢谢参与'){
+							alert('（┬＿┬）居然没有抽中，下周二再来吧！');
+						}else{
+							alert('恭喜你，手气棒棒哒！明天我们将会有工作人员与你联系！');
+						}
+						clearInterval(doRun);
+						//alert(rotate);
+						return false;
+					}
+					var nextPoint = $('#jiugongge .prize.active').index()+1;
+					if(nextPoint>7){ nextPoint=0}
+					$('#jiugongge .prize.active').removeClass('active');
+					$('#jiugongge .prize').eq(nextPoint).addClass('active');
+					count++;
+				},60);
+			} else {
+				//如果是其他返回状态（失败）
+				var errMsg = '';
+				if (result.status == 101) {
+					errMsg = '客官，你记错时间啦！我们的抽奖时间是每周二的20点到22点';
+				}
+				if (result.status == 102) {
+					errMsg = '客官，本周你已经参加过抽奖，下周二再来吧！';
+				}
+				if (errMsg != '') {
+					alert(errMsg);
+					return false;
+				}
+			}
+		});
+	}
+</script>
+
 <!--转盘-->
-<div id="turntable"></div>
+<!--<div id="turntable"></div>-->
 <!--指针-->
-<div id="pointer" onclick="choujiang()"></div>
+<!--<div id="pointer" onclick="choujiang()"></div>-->
 <script>
 	//点击抽奖按钮后的操作
+	/*
 	function choujiang() {
 		$.getJSON(server_addr + '/mobile/tourorder_addChouJiangOrder.action?jsoncallback=?&userid=' + _XLY_USERID, function (result) {
 			//result = {"rotate":"254","status":"1","miaoshaname":"抽油烟机"};
@@ -85,12 +172,12 @@
 				"status":      "1",
 				"miaoshaname": "抽油烟机" + parseInt(math.random() * 8)
 			};
-			/*alert(result.rotate);*/
+			/!*alert(result.rotate);*!/
 			//如果返回状态是1（成功）
 			if (result.status == 1) {
 				$("#turntable").rotate({
 					angle:     0,
-					animateTo: (36000 + parseInt(result.rotate))*-1/* - parseInt(Math.random() * 20)*/,
+					animateTo: (36000 + parseInt(result.rotate))*-1/!* - parseInt(Math.random() * 20)*!/,
 					duration:  5000,
 					callback:  function () {
 						if (result.miaoshaname=='谢谢参与'){
@@ -116,8 +203,8 @@
 				}
 			}
 		});
-
 	}
+	*/
 </script>
 <!--中奖名单-->
 <style scoped>

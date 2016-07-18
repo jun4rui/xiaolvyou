@@ -79,6 +79,12 @@
 	function choujiang() {
 		$.getJSON(server_addr + '/mobile/tourorder_addChouJiangOrder.action?jsoncallback=?&userid=' + _XLY_USERID, function (result) {
 			//result = {"rotate":"254","status":"1","miaoshaname":"抽油烟机"};
+			//result = {"rotate":"0~7","status":"1","miaoshaname":"抽油烟机"};//20160718修改接口，rotate从角度数改成0~7的数字
+			result = {
+				"rotate":      parseInt(math.random() * 8),
+				"status":      "1",
+				"miaoshaname": "抽油烟机" + parseInt(math.random() * 8)
+			};
 			/*alert(result.rotate);*/
 			//如果返回状态是1（成功）
 			if (result.status == 1) {

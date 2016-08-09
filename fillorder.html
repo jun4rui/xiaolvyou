@@ -33,12 +33,14 @@
 					var contact_note  = $('#contact_note').val();
 					var order_source  = 12;
 					var pay_type      = 121603;
+					var jzl_order_id  = $('#coupon-code').val().trim();
+
 					if (contact_name=='' || contact_phone=='' || contact_phone.length<7 || userid==''){
 						alert('请填写好 联系人名称、联系人电话后再提交');
 						return false;
 					}
-					console.log(server_addr+'/mobile/tourorder_addTourOrder.action?jsoncallback=?&tourOrderVO.contact_name='+contact_name+'&tourOrderVO.contact_phone='+contact_phone+'&tourOrderVO.contact_note='+contact_note+'&tourOrderVO.order_source='+order_source+'&tourOrderVO.pay_type='+pay_type+'&userid='+userid);
-					$.getJSON(server_addr+'/mobile/tourorder_addTourOrder.action?jsoncallback=?&tourOrderVO.contact_name='+contact_name+'&tourOrderVO.contact_phone='+contact_phone+'&tourOrderVO.contact_note='+contact_note+'&tourOrderVO.order_source='+order_source+'&tourOrderVO.pay_type='+pay_type+'&userid='+userid, function(result){
+					console.log(server_addr+'/mobile/tourorder_addTourOrder.action?jsoncallback=?&tourOrderVO.contact_name='+contact_name+'&tourOrderVO.contact_phone='+contact_phone+'&tourOrderVO.contact_note='+contact_note+'&tourOrderVO.order_source='+order_source+'&tourOrderVO.pay_type='+pay_type+'&userid='+userid+'&tourOrderVO.jzl_order_id='+jzl_order_id);
+					$.getJSON(server_addr+'/mobile/tourorder_addTourOrder.action?jsoncallback=?&tourOrderVO.contact_name='+contact_name+'&tourOrderVO.contact_phone='+contact_phone+'&tourOrderVO.contact_note='+contact_note+'&tourOrderVO.order_source='+order_source+'&tourOrderVO.pay_type='+pay_type+'&userid='+userid+'&tourOrderVO.jzl_order_id='+jzl_order_id, function(result){
 						/*
 						1、成功
 						101、未填写联系人
@@ -214,6 +216,62 @@
 				</div>
 				<div class="clear"></div>
 			</li>
+			<!--优惠券区块-->
+			<div class="debug" style="display:none;">
+			<li class="title-line title">优惠卷：</li>
+			<li class="title-line">
+				<div class="am-input-group am-input-group-warning">
+					<input type="text" id="coupon-code-input" class="am-form-field" placeholder="优惠券代码">
+					<span class="am-input-group-btn">
+						<button class="am-btn am-btn-warning" onclick="checkCouponCode()" type="button">使用</button>
+					</span>
+				</div>
+				<input type="hidden" id="coupon-code"value="">
+			</li>
+			</div>
+			<script>
+				if (window.location.href.indexOf('debug=on')>-1){
+					$('.debug').show();
+				}
+				function checkCouponCode(){
+					var couponCode = $('#coupon-code-input').val().trim();
+					var couponCodeUsed = $('#coupon-code').val();
+					//检查是否已经使用过优惠券
+					if (couponCodeUsed!=''){
+						alert('您已使用过优惠券了');
+						return false;
+					}
+					//检查是否输入优惠券
+					if (couponCode.length==0){
+						alert('请填写优惠券代码再使用');
+						return false;
+					}
+					//调用接口验证优惠券
+					/*status :  1 成功  101 已使用 102 优惠券不存在 103  参数错误
+					infoVO :  新闻对象   info_name 优惠券名称  origin 优惠价格*/
+					$.getJSON(server_addr+'/mobile/tourorder_isVaildCoupon.action?jsoncallback=?&jzl_order_id='+couponCode, function(result){
+						if (result.status==1){
+							//使用优惠券成功的操作
+							//弹出提醒
+							alert('您已使用优惠券:'+result.infoVO.info_name+', 抵扣'+result.infoVO.origin+'元');
+							//修改优惠券隐藏域信息
+							$('#coupon-code').val(couponCode);
+							//修改优惠券输入input信息
+							$('#coupon-code-input').val('已用:'+result.infoVO.info_name+', 抵扣'+result.infoVO.origin+'元');
+							//将优惠券input改成只读
+							$('#coupon-code-input').prop('readonly', true);
+						}else{
+							//使用优惠券失败的操作
+							var errMsg = '';
+							if (result.status==101) errMsg = '该优惠券已被使用';
+							if (result.status==102) errMsg = '优惠券不存在';
+							if (result.status==103) errMsg = '优惠券错误';
+							alert(errMsg);
+						}
+					});
+				}
+			</script>
+			<!--/优惠券区块-->
 			<li class="title-line title">联系人信息：</li>
 			<li>
 				<div class="am-form-group am-g">

@@ -217,7 +217,6 @@
 				<div class="clear"></div>
 			</li>
 			<!--优惠券区块-->
-			<div class="debug" style="display:none;">
 			<li class="title-line title">优惠卷：</li>
 			<li class="title-line">
 				<div class="am-input-group am-input-group-warning">
@@ -228,11 +227,7 @@
 				</div>
 				<input type="hidden" id="coupon-code"value="">
 			</li>
-			</div>
 			<script>
-				if (window.location.href.indexOf('debug=on')>-1){
-					$('.debug').show();
-				}
 				function checkCouponCode(){
 					var couponCode = $('#coupon-code-input').val().trim();
 					var couponCodeUsed = $('#coupon-code').val();

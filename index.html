@@ -21,6 +21,8 @@
 		//http://www.96hn.com/mobile/ipad_queryTourLine.action?pagesize=999&jsoncallback=?
 		avalon.ready(function(){
 			console.log('Begin!');
+			var showList  = [];//当前展示列表
+			var delayList = [];//延迟显示列表
 			var TourVM = avalon.define({
 				$id: 'tour',
 				list: [],
@@ -32,7 +34,23 @@
 			avalon.scan();
 
 			$.getJSON(server_addr+'/mobile/ipad_queryTourLine.action?pagesize=999&jsoncallback=?', function(result){
-				TourVM.list = result.value;
+				showList = result.value.splice(0,3);	//先显示3个
+				delayList = result.value.splice(3);		//把剩余的装入延迟显示列表
+
+				TourVM.list = showList;					//将显示列表放入展示中
+			});
+
+			//20160809 加入延迟展示的效果
+			$(window).scroll(function(){
+				//console.log('页面高度：'+document.body.clientHeight,'卷动高度：'+window.scrollY, '窗口高度：'+window.innerHeight,'距离底边：'+(document.body.clientHeight-window.innerHeight-window.scrollY));
+				if (document.body.clientHeight-window.innerHeight-window.scrollY<10){
+					if (delayList.length>0){
+						showList.push(delayList[0]);
+						delayList = delayList.splice(1);
+
+						TourVM.list = showList;
+					}
+				}
 			});
 		});
 	</script>

@@ -200,7 +200,7 @@
 	<form actio="" class="am-form" id="contact_form">
 		<ul class="am-list am-list-static">
 			<li class="title-line">总计价格：&yen;<span class="highlight">{{params.order_amount}}</span>元</li>
-			<li class="title-line title">出行人信息：</li>
+			<li class="title-line title" ms-if="info.htTourProVO.featured!='出行人不填'">出行人信息：</li>
 			<li class="title-line" ms-if="info.htTourProVO.featured!='出行人不填'">
 				<span style="font-size:0.8em;"><span class="xly-red">*</span>请选择 <span class="xly-red">{{params.adult_num}}</span> 名成人和 <span class="xly-red">{{params.child_num}}</span> 名儿童</span>
 				<button class="am-btn am-btn-xs am-btn-warning am-round am-align-right" id="selectrole">
@@ -217,7 +217,7 @@
 				<div class="clear"></div>
 			</li>
 			<!--优惠券区块-->
-			<li class="title-line title">优惠卷：</li>
+			<li class="title-line title">优惠券：</li>
 			<li class="title-line">
 				<div class="am-input-group am-input-group-warning">
 					<input type="text" id="coupon-code-input" class="am-form-field" placeholder="优惠券代码">

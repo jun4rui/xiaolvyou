@@ -446,8 +446,6 @@
 
 		//配置好权限以后会触发wx.ready
 		wx.ready(function(){
-			//DEBUG
-			if (window.location.href.indexOf('debug=on')){alert('weixin ready!');}
 			var _userid = window.localStorage.getItem('XLY_USERID')||0;
 			var _username = window.localStorage.getItem('XLY_USERNAME')||'';
 

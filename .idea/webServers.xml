@@ -10,6 +10,14 @@
           <option name="port" value="23" />
         </fileTransfer>
       </webServer>
+      <webServer id="3a719c73-8cc5-4b4d-825d-6ce37b75e494" name="xiaolvyou_other" url="http://wx.xiaolvyou.com.cn/">
+        <fileTransfer host="114.67.53.113" port="23" rootFolder="/qzy/apache-tomcat-6.0.45/webapps" password="df9bdf9bdf9bdf9bdf9bdf9b" username="xiaolvyou">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" />
+          </advancedOptions>
+          <option name="port" value="23" />
+        </fileTransfer>
+      </webServer>
     </option>
   </component>
 </project>

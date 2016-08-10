@@ -438,18 +438,6 @@ function showSellerUI(inDATA) {
 	});
 }
 
-/*//调试模式
-if (window.localStorage.getItem('XLY_USERID') == 637486) {
-	alert('in @'+(new Date));
-	require(['wx'], function (wx) {
-		alert(typeof(wx));
-		//确保html运行在微信中
-		wx.ready(function(){
-			alert('weixin ok');
-		});
-	});
-}*/
-
 //低版本浏览器屏蔽console.log，再也不用因为某个console.log没干掉在低版本浏览器上出问题了
 (function () {
 	if (typeof(console) != "object") {
@@ -467,7 +455,7 @@ if (window.localStorage.getItem('XLY_USERID') == 637486) {
  * 小驴友项目用js代码起始段
  */
 
-	// 将userid更新保存到localStorage中去
+// 将userid更新保存到localStorage中去
 var userid = getParameterValue(window.location.href, 'userid');
 if (userid != '') {
 	window.localStorage.setItem('XLY_USERID', userid);
@@ -485,3 +473,21 @@ var _hmt = _hmt || [];
 	var s = document.getElementsByTagName("script")[0];
 	s.parentNode.insertBefore(hm, s);
 })();
+
+
+/**
+ * DEBUG 代码区域
+ */
+//调试模式
+if (window.localStorage.getItem('XLY_USERID') == 637517) {
+	alert(window.localStorage.getItem('XLY_USERNAME'));
+	alert(window.localStorage.getItem('XLY_USERID'));
+	alert('in @'+(new Date));
+	require(['wx'], function (wx) {
+		alert(typeof(wx));
+		//确保html运行在微信中
+		wx.ready(function(){
+			alert('weixin ok');
+		});
+	});
+}

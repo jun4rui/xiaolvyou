@@ -225,12 +225,14 @@
 						<button class="am-btn am-btn-warning" onclick="checkCouponCode()" type="button">使用</button>
 					</span>
 				</div>
-				<input type="hidden" id="coupon-code"value="">
+				<input type="hidden" id="coupon-code" value="">
+				<input type="hidden" id="lineid" ms-attr-value="{{params.lineid}}">
 			</li>
 			<script>
 				function checkCouponCode(){
 					var couponCode = $('#coupon-code-input').val().trim();
 					var couponCodeUsed = $('#coupon-code').val();
+					var lineid = $('#lineid').val();
 					//检查是否已经使用过优惠券
 					if (couponCodeUsed!=''){
 						alert('您已使用过优惠券了');
@@ -244,7 +246,7 @@
 					//调用接口验证优惠券
 					/*status :  1 成功  101 已使用 102 优惠券不存在 103  参数错误
 					infoVO :  新闻对象   info_name 优惠券名称  origin 优惠价格*/
-					$.getJSON(server_addr+'/mobile/tourorder_isVaildCoupon.action?jsoncallback=?&jzl_order_id='+couponCode, function(result){
+					$.getJSON(server_addr+'/mobile/tourorder_isVaildCoupon.action?jsoncallback=?&jzl_order_id='+couponCode+'&lineid='+lineid, function(result){
 						if (result.status==1){
 							//使用优惠券成功的操作
 							//弹出提醒
@@ -261,6 +263,7 @@
 							if (result.status==101) errMsg = '该优惠券已被使用';
 							if (result.status==102) errMsg = '优惠券不存在';
 							if (result.status==103) errMsg = '优惠券错误';
+							if (result.status==104) errMsg = '此线路不享受该优惠';
 							alert(errMsg);
 						}
 					});

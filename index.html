@@ -62,7 +62,7 @@
 			avalon.scan();
 
 			$.getJSON(server_addr+'/mobile/ipad_queryTourLine.action?pagesize=999&jsoncallback=?', function(result){
-				showList = result.value.splice(0,3);	//先显示3个
+				showList = result.value.splice(0,5);	//先显示5个
 				delayList = result.value;		//把剩余的装入延迟显示列表
 
 				TourVM.list = showList;					//将显示列表放入展示中

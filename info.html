@@ -41,10 +41,11 @@
 				return false;
 			}
 			// 获取线路详情
-			console.log(server_addr+'/mobile/ipad_getTourLine.action?jsoncallback=?&lineid='+lineid);
+			//console.log(server_addr+'/mobile/ipad_getTourLine.action?jsoncallback=?&lineid='+lineid);
 			$.getJSON(server_addr+'/mobile/ipad_getTourLine.action?jsoncallback=?&lineid='+lineid,function(result){
 				BodyVM.info = result.lineVO;
-				console.log(BodyVM.info);
+				//console.log(BodyVM.info);
+				//console.log('sold:',BodyVM.info.sold);
 				$('#info-section').append(BodyVM.info.productdescribe.replace(/&nbsp;/g,' '))
 
 				//如果类型是门票
@@ -175,11 +176,13 @@
 		<div class="title">{{info.tourproname}}</div>
 		<div class="desc">{{info.adtitle}}</div>
 		<div class="am-g doc-am-g" style="margin-top: .5em;">
-			<div class="am-u-sm-4 am-u-md-4 am-u-lg-4">
+			<div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
 				<div class="price">
 					<span class="yen">&yen;</span>
 					{{info.leastprice}}
 					<span class="qi">起</span>
+					<span class="qi" ms-if="info.sold==0">(本活动不可使用优惠券)</span>
+					<span class="qi" ms-if="info.sold>0">(本活动最多可使用优惠券{{info.sold}}元)</span>
 				</div>
 			</div>
 			<div class="am-u-sm-4 am-u-md-4 am-u-lg-4" style="font-size:.5em;line-height: 30px;">

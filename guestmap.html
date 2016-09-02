@@ -24,12 +24,14 @@
 	var map = new BMap.Map("guestmap");
 	var point = new BMap.Point(112.98, 28.19);
 	map.centerAndZoom(point, 15);
+	map.enableScrollWheelZoom(true);
 
 	//添加麻点
 	$.getJSON('http://www.xiaolvyou.com.cn/user/htuser_queryUserPosition.action?jsoncallback=?', function(result){
 		result.map(function(unit){
-			var marker = new BMap.Marker(new BMap.Point(unit.detail, unit.memo));
+			var marker = new BMap.Marker(new BMap.Point(parseFloat(unit.detail)+0.012, parseFloat(unit.memo)+0.002));
 			map.addOverlay(marker);
 		});
 	});
+	//var marker = new BMap.Marker(new BMap.Point(112.993156, 28.194965));map.addOverlay(marker);
 </script>

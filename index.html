@@ -2,7 +2,8 @@
 <html lang="zh-CN">
 <head>
 	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
+	<!--<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">-->
+	<meta name="viewport" content="width=750, user-scalable=no">
 	<title>小驴友</title>
 	<link rel="icon" type="image/png" href="jslib/amazeui/i/favicon.png">
 	<link rel="stylesheet" href="jslib/amazeui/css/amazeui.min.css">
@@ -90,128 +91,53 @@
 		margin:0;
 		padding: 3.5em 0 0;
 	}
-	#viewport {
-		padding-top: .5em;
-		width: 100%;
-		overflow: hidden;
-		height: 3.5em;
-		box-shadow: 0 2px 5px #cccccc;
-		position: fixed;
-		left: 0;
-		top: 0;
-		background-color: #fff;
+</style>
 
-		z-index: 999999999;
-	}
-	#viewport .flipsnap {
-		width:1920px;
-	}
 
-	#viewport .cal-unit {
-		width:3em;
-		height:3.5em;
-		/*line-height: 3em;*/
-		float:left;
+<!--顶部标题和4功能按钮-->
+<style scoped>
+	#home-title {
+		width: 750px;
+		height:798px;
+		position: relative;
+		background:url(images/home.png) no-repeat top center;
+		margin-bottom:132px;
+	}
+	#home-title .float-btn {
+		position:absolute;
+		width: 105px;
+		height:auto;
+		color:#000;
+		font:26px/150% '微软雅黑','Microsoft YaHei';
 		text-align: center;
-		color:#3B3B3B;
-		font-size:0.8em;
 	}
-
-
-	#viewport .cal-unit span {
-		color:#3B3B3B;
-		display: block;
-		border: 1px solid #3B3B3B;
-		border-radius: 50%;
-		text-align: center;
-		margin: 0 auto;
-		width: 2em;
-		height: 2em;
-		line-height: 2em;
-		background-color:#FFF;
-	}
-	#viewport .cal-unit.have {
-		color: #00ff00;
-	}
-	#viewport .cal-unit.have span {
-		background-color: #0f0;
-		color:#FFF;
-		border:1px solid #0f0;
-	}
-	#viewport .cal-unit.active span{
-		background-color: #0f0;
-		color:#FFF;
-		border:1px solid #0f0;
-	}
-
-	#viewport .cal-unit.hot {
-		color: #f00;
-	}
-	#viewport .cal-unit.hot span {
-		background-color: #f00;
-		color:#FFF;
-		border:1px solid #f00;
+	#home-title .float-btn>img {
+		width:105px;
+		height:105px;
+		display:block;
 	}
 </style>
-<div id="viewport">
-	<div class="flipsnap">
-		<!--<div class="cal-unit hot active"><span>28</span>本周二</div>-->
-		<!--<div class="cal-unit"><span>29</span>周三</div>-->
-		<!--<div class="cal-unit have"><span>30</span>周四</div>-->
-		<!--<div class="cal-unit"><span>1</span>周五</div>-->
-		<!--<div class="cal-unit hot"><span>2</span>周六</div>-->
-		<!--<div class="cal-unit"><span>3</span>周日</div>-->
-		<!--<div class="cal-unit"><span>4</span>周一</div>-->
-		<!--<div class="cal-unit"><span>5</span>周二</div>-->
-		<!--<div class="cal-unit"><span>6</span>周三</div>-->
-		<!--<div class="cal-unit"><span>7</span>周四</div>-->
-		<!--<div class="cal-unit hot"><span>8</span>周五</div>-->
-		<!--<div class="cal-unit"><span>9</span>周六</div>-->
-		<!--<div class="cal-unit"><span>10</span>周日</div>-->
-		<!--<div class="cal-unit"><span>11</span>周一</div>-->
-		<!--<div class="cal-unit hot"><span>12</span>周二</div>-->
-		<!--<div class="cal-unit"><span>13</span>周三</div>-->
-		<!--<div class="cal-unit"><span>14</span>周四</div>-->
-		<!--<div class="cal-unit"><span>15</span>周五</div>-->
-		<!--<div class="cal-unit"><span>16</span>周六</div>-->
-		<!--<div class="cal-unit"><span>17</span>周日</div>-->
-		<!--<div class="cal-unit"><span>18</span>周一</div>-->
-		<!--<div style="clear:both;"></div>-->
+<div id="home-title">
+	<div class="float-btn" style="left:63px;bottom:-66px;">
+		<img src="images/home-btn1.gif" alt="周末活动">
+		周末活动
+	</div>
+	<div class="float-btn" style="left:232px;bottom:-93px;">
+		<img src="images/home-btn2.gif" alt="寒假活动">
+		寒假活动
+	</div>
+	<div class="float-btn" style="left:412px;bottom:-86px;">
+		<img src="images/home-btn3.gif" alt="亲自旅游">
+		亲自旅游
+	</div>
+	<div class="float-btn" style="left:574px;bottom:-66px;">
+		<img src="images/home-btn4.gif" alt="优惠门票">
+		优惠门票
 	</div>
 </div>
+<!--/顶部标题和4功能按钮-->
 
-<script>
-	//返回星期的函数
-	function getDayName(inNum){
-		if (inNum<0 || inNum>6){
-			return '';
-		}
-		var weekStr = ['周日','周一', '周二', '周三', '周四', '周五', '周六'];
-		return weekStr[inNum];
-	}
-	//绘制60天的日期
-	for (var i=0;i<60;i++){
-		var dayNo = moment().add(i, 'day').format('d');
-		var dayNum = moment().add(i, 'day').format('D');
-		var dayClass = 'cal-unit';
 
-		if (dayNo==0 || dayNo==6) dayClass = 'cal-unit hot';
-		var _tempStr = '<div class="'+dayClass+'"><span>'+dayNum+'</span>'+getDayName(dayNo)+'</div>';
-		$('#viewport .flipsnap').append(_tempStr);
-	}
-	//将今日标记成绿色
-	$('#viewport .flipsnap .cal-unit').eq(0).addClass('active');
-	//清理浮动层
-	$('#viewport .flipsnap').append('<div style="clear:both;"></div>');
-	//设定宽度
-	$('#viewport .flipsnap').css({'width':''+$('.cal-unit').length*3+'em'});
-	//设置为可卷动
-	Flipsnap('.flipsnap', {
-		maxPoint: 7    // move able 3 times
-	});
-</script>
-
-<!--/滚动日历区域-->
 <!--主要内容区-->
 <style>
 	#main-section {

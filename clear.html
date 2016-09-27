@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+	<meta charset="UTF-8">
+	<title>清空用户信息</title>
+</head>
+<body>
+<script>
+	alert(window.localStorage.getItem('XLY_USERID')+'\n'+window.localStorage.getItem('XLY_USERNAME'));
+	/*
+	window.localStorage.removeItem('XLY_USERID');
+	window.localStorage.removeItem('XLY_USERNAME');
+	if (window.localStorage.getItem('XLY_USERID')==null && window.localStorage.getItem('XLY_USERNAME')==null){
+		alert('绑定信息已清空！');
+	}
+	*/
+</script>
+</body>
+</html>

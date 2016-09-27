@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" serverName="xiaolvyou">
+  <component name="PublishConfigData" autoUpload="Always" serverName="xiaolvyou">
     <serverData>
       <paths name="chm">
         <serverdata>
@@ -31,5 +31,6 @@
         </serverdata>
       </paths>
     </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
   </component>
 </project>

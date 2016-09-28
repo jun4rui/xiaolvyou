@@ -36,7 +36,7 @@
 			var TourVM    = avalon.define({
 				$id:          'tour',
 				list:         [],
-				title:        '热门活动',
+				title:        '周末活动',
 				listRendered: function () {
 					//$('[teamcount="0"]').addClass('gray').find('.price').html('已结束');
 					$('.tour-unit-default').each(function () {
@@ -63,7 +63,9 @@
 
 			avalon.scan();
 
-			$.getJSON(server_addr + '/mobile/ipad_queryTourLine.action?pagesize=999&jsoncallback=?', function (result) {
+			//20160928 曹熙要求默认显示周末活动
+			//$.getJSON(server_addr + '/mobile/ipad_queryTourLine.action?pagesize=999&jsoncallback=?', function (result) {
+			$.getJSON(server_addr + '/mobile/ipad_queryTourLine.action?jsoncallback=?&commendtype=1&pagesize=-1', function(result){
 				showList  = result.value.splice(0, 5);	//先显示5个
 				delayList = result.value;		//把剩余的装入延迟显示列表
 
@@ -142,7 +144,7 @@
 	</div>
 	<div class="float-btn" style="left:407px;bottom:-86px;" keyword="亲子旅游" kid="3">
 		<img src="images/home-btn3.gif" alt="亲子旅游">
-		亲自旅游
+		亲子旅游
 	</div>
 	<div class="float-btn" style="left:569px;bottom:-66px;" keyword="优惠门票" kid="4">
 		<img src="images/home-btn4.gif" alt="优惠门票">
@@ -252,10 +254,11 @@
 		text-indent: 20px;
 		line-height: 40px;
 		height: 40px;
-		margin: 20px 0;
+		margin: 20px auto;
 		font-weight: bold;
 		font-size: 36px;
 		color: #666;
+		width:710px;
 	}
 </style>
 

@@ -267,6 +267,14 @@
 						left: 215px;
 						//transform: rotate(-60deg);//0:-60deg, 1000:60deg
 					}
+					.showTitle {
+						position: absolute;
+						left: 526px;
+						top: 170px;
+						/* background-color: rgba(255, 0, 0, 0.21); */
+						width: 142px;
+						height: 48px;
+					}
 				</style>
 				<div style="width: 673px;height:225px; background:url(images/home_userpoint.png) no-repeat center top; position:relative;">
 					<div style="position: absolute; font-size: 34px; left: 527px; top: 102px; color: #585865;">{{info.ui_vipclass}}</div>
@@ -274,6 +282,19 @@
 					<div class="total_num" style="left: 581px; top: 16px;">{{total_score2}}</div>
 					<div class="total_num" style="left: 632px; top: 16px;">{{total_score3}}</div>
 					<div class="pointer" ms-attr-style="transform:rotate({{pointer_deg}}deg)"></div>
+					<div class="showTitle" data-am-modal="{target: '#doc-modal-1', closeViaDimmer: 0, width: 400, height: 425}">&nbsp;</div>
+					<!--弹出显示框-->
+					<div class="am-modal am-modal-no-btn" tabindex="-1" id="doc-modal-1">
+						<div class="am-modal-dialog">
+							<div class="am-modal-hd">关于信用分
+								<a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+							</div>
+							<div class="am-modal-bd">
+								系统会根据你参加活动的总次数、活动过程中参与度、取消次数等多维度测算，每周更新一次。
+							</div>
+						</div>
+					</div>
+					<!--/弹出显示框-->
 				</div>
 			</li>
 		</ul>

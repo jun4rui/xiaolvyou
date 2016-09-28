@@ -89,8 +89,15 @@
 			$('#home-title').delegate('.float-btn', 'click', function () {
 				//console.log(server_addr + '/mobile/ipad_queryTourLine.action?jsoncallback=?&commendtype=' + encodeURI($(this).attr('kid')) + '&pagesize=-1');
 				$.getJSON(server_addr + '/mobile/ipad_queryTourLine.action?jsoncallback=?&commendtype=' + encodeURI($(this).attr('kid')) + '&pagesize=-1', function (result) {
-					TourVM.list = result.value || [];
-					TourVM.title = $(this).attr('keyword');
+					if (result.value!=null){
+						showList  = result.value.splice(0, 5);	//先显示5个
+						delayList = result.value;		//把剩余的装入延迟显示列表
+
+						TourVM.list = showList;					//将显示列表放入展示中
+						TourVM.title = $(this).attr('keyword');
+					}else{
+						alert('抱歉该分类暂无活动');
+					}
 				}.bind(this));
 			});
 		});

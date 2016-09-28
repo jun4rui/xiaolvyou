@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=750, user-scalable=no">
+	<title>会员信息</title>
+	<!--<link rel="icon" type="image/png" href="jslib/amazeui/i/favicon.png">-->
+	<link rel="stylesheet" href="jslib/amazeui/css/amazeui.min.css">
+	<link rel="stylesheet" href="jslib/amazeui/css/app.css">
+	<script src="jslib/amazeui/js/jquery.min.js"></script>
+	<script src="jslib/amazeui/js/amazeui.min.js"></script>
+	<script src="jslib/avalon1.5/avalon.js"></script>
+
+	<link rel="stylesheet" href="common.css?20160712">
+	<script src="common.js"></script>
+	<style>
+		html {
+			font-size: 18px !important;
+		}
+	</style>
+
+	<script>
+
+		avalon.ready(function () {
+			var userid = window.localStorage.getItem('XLY_USERID');
+
+			var BodyVM = avalon.define({
+				$id: 'body',
+				info:{},
+				bills:[],
+				coupon:[],
+				total_score1:0,	//写成数组avalon不认，没办法了只好分成3个属性写
+				total_score2:0,
+				total_score3:0,
+				pointer_deg:-60	//指针旋转角度
+			});
+
+			avalon.scan();
+
+			//获取用户信息
+			console.log(server_addr+'/user/htuser_getGuestsInfoById.action?userid='+userid);
+			$.getJSON(server_addr+'/user/htuser_getGuestsInfoById.action?jsoncallback=?&userid='+userid, function(result){
+				BodyVM.info = result.guestVO;
+				var _tempScore = result.guestVO.tot_score.toString();
+				if (_tempScore.length==1){
+					_tempScore = '00'+_tempScore;
+				}
+				if (_tempScore.length==2){
+					_tempScore = '0'+_tempScore;
+				}
+				if (_tempScore.length>3){
+					_tempScore = _tempScore.substr(-3,3);
+				}
+				BodyVM.total_score1 = _tempScore.substr(0,1);
+				BodyVM.total_score2 = _tempScore.substr(1,1);
+				BodyVM.total_score3 = _tempScore.substr(2,1);
+
+				//计算指针旋转角度
+				BodyVM.pointer_deg = result.guestVO.tot_score/1000*120-60;
+			});
+
+			//获取用户账单
+			$.getJSON(server_addr+'/user/htuser_getTourOrderDetail.action?jsoncallback=?&userid='+userid, function(result){
+				BodyVM.bills = result;
+			});
+
+			//获取用户优惠券
+			$.getJSON(server_addr + '/common/websinfo_queryWebsInfos.action?jsoncallback=?&url=' + userid + '&infoClass=732&submit=ajax', function (result) {
+				BodyVM.coupon = result;
+			});
+		});
+	</script>
+</head>
+<body ms-controller="body">
+
+<!--主要内容区-->
+<style>
+	#main-section {
+		background-color: #FFF;
+		box-sizing: border-box;
+		padding: 0;
+		width: 100%;
+	}
+	.nobb {
+		border-bottom: 0px !important;
+	}
+	.hot {
+		color:#F00;
+	}
+	.highlight {
+		color: #108bdd;
+	}
+
+	.am-accordion-gapped {
+		margin: 0 !important;
+	}
+	.am-accordion-gapped .am-accordion-item {
+		margin: 0 !important;
+		border:0 !important;
+	}
+	.am-accordion-title {
+		border:0 !important;
+	}
+	.am-panel-hd {
+		border:0 !important;
+	}
+	.am-panel {
+		margin-bottom:0 !important;
+	}
+
+	.am-panel-default>.am-panel-hd {
+		color: #444;
+		background-color: #FFFFFF;
+		border-color: #ddd;
+	}
+	.am-accordion-gapped .am-active .am-accordion-title,
+	.am-list>li {
+		background-color: #f8f8f8;
+	}
+</style>
+<div id="main-section" ms-controller="body">
+	<!--头像-->
+	<style scoped>
+		#face>#info-panel {
+			margin: 0 auto;
+			width: 10em;
+			text-align: center;
+			padding-top: 80px;
+		}
+		#face img {
+			width: 6em;
+			height: 6em;
+			border: 4px solid #fff;
+			border-radius: 50%;
+			margin: 0 auto;
+		}
+		div#username {
+			color: #FFF;
+			font-size: 46px;
+		}
+		div#sex {
+			font-size: 28px;
+			color: #FFF;
+			background-color: #fdae05;
+			border-radius: 20px;
+			width: 3em;
+			margin: 0 auto;
+		}
+	</style>
+	<div id="face" style="background:url(images/userinfo_bg.png) no-repeat center top; background-size:cover; height:422px;">
+		<div id="info-panel">
+			<img ms-attr-src="{{info.profession}}" alt="">
+			<div id="username">{{info.guestName}}</div>
+			<div id="sex">{{info.ui_guestSex}}</div>
+		</div>
+	</div>
+	<!--/头像-->
+	
+	<div class="am-panel am-panel-default nobb">
+		<div class="am-panel-hd">
+			<h3 class="am-panel-title">个人信息</h3>
+		</div>
+		<ul class="am-list am-list-static">
+			<li>姓名：{{info.guestName}}</li>
+			<li style="position:relative;">手机：{{info.mobilePhone}} <a ms-attr-href="bindphone.html?userid={{window.localStorage.getItem('XLY_USERID')||''}}&state=userinfo.html" style="position: absolute; right: 10px; top: 10px; padding: 4px !important;">绑定手机&gt;&gt;</a></li>
+		</ul>
+	</div>
+
+	<div class="am-panel am-panel-default nobb">
+		<div class="am-panel-hd">
+			<h3 class="am-panel-title">活动信息</h3>
+		</div>
+		<ul class="am-list">
+			<li>
+				<section data-am-widget="accordion" class="am-accordion am-accordion-gapped" data-am-accordion='{  }'>
+					<dl class="am-accordion-item am-active">
+						<dt class="am-accordion-title">
+							您已经参加过<span class="hot">{{bills.length}}</span>场活动
+						</dt>
+						<dd class="am-accordion-bd am-collapse">
+							<!-- 规避 Collapase 处理有 padding 的折叠内容计算计算有误问题， 加一个容器 -->
+							<div class="am-accordion-content">
+								<table class="am-table">
+									<thead>
+									<tr>
+										<th>线路名称</th>
+										<th>出行时间</th>
+										<th>人数</th>
+										<th>联系人</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr ms-repeat-unit="bills">
+										<td>{{unit.tourproname}}</td>
+										<td>{{unit.start_date}}</td>
+										<td>{{unit.adult_num+unit.child_num}}</td>
+										<td>{{unit.contact_name}}</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+						</dd>
+					</dl>
+				</section>
+			</li>
+		</ul>
+	</div>
+
+	<div class="am-panel am-panel-default nobb">
+		<div class="am-panel-hd">
+			<h3 class="am-panel-title">优惠券</h3>
+		</div>
+		<ul class="am-list">
+			<li>
+				<section data-am-widget="accordion" class="am-accordion am-accordion-gapped" data-am-accordion='{  }'>
+					<dl class="am-accordion-item am-active">
+						<dt class="am-accordion-title">
+							您有<span class="hot">{{coupon.length}}</span>张优惠券未使用
+						</dt>
+						<dd class="am-accordion-bd am-collapse">
+							<!-- 规避 Collapase 处理有 padding 的折叠内容计算计算有误问题， 加一个容器 -->
+							<div class="am-accordion-content">
+								<table class="am-table">
+									<thead>
+									<tr>
+										<th>兑换码</th>
+										<th>立减</th>
+										<th>有效期限</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr ms-repeat-unit="coupon">
+										<td class="highlight">{{unit.description}}</td>
+										<td class="hot">{{unit.origin}}元</td>
+										<td>{{unit.info_pubtime}}-{{unit.info_endtime}}</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+						</dd>
+					</dl>
+				</section>
+			</li>
+		</ul>
+	</div>
+
+	<div class="am-panel am-panel-default nobb">
+		<div class="am-panel-hd">
+			<h3 class="am-panel-title">信用分</h3>
+		</div>
+		<ul class="am-list am-list-static">
+			<li>当前信用：</li>
+			<li>
+				<style scoped>
+					.total_num {
+						position: absolute;
+						color: #FFF;
+						font-size: 60px;
+						line-height: 100%;
+					}
+					.pointer {
+						background: url(images/home_pointer.png) no-repeat center top;
+						width: 17px;
+						height: 420px;
+						position: absolute;
+						top: 60px;
+						left: 215px;
+						//transform: rotate(-60deg);//0:-60deg, 1000:60deg
+					}
+				</style>
+				<div style="width: 673px;height:225px; background:url(images/home_userpoint.png) no-repeat center top; position:relative;">
+					<div style="position: absolute; font-size: 34px; left: 527px; top: 102px; color: #585865;">{{info.ui_vipclass}}</div>
+					<div class="total_num" style="left: 529px; top: 16px;">{{total_score1}}</div>
+					<div class="total_num" style="left: 581px; top: 16px;">{{total_score2}}</div>
+					<div class="total_num" style="left: 632px; top: 16px;">{{total_score3}}</div>
+					<div class="pointer" ms-attr-style="transform:rotate({{pointer_deg}}deg)"></div>
+				</div>
+			</li>
+		</ul>
+	</div>
+
+	<div class="am-panel am-panel-default nobb">
+		<div class="am-panel-hd" style="position: relative;">
+			<h3 class="am-panel-title">孩子信息</h3>
+			<a href="managerole.html" style="position: absolute; right: 10px; top: 10px;">查看孩子信息&gt;&gt;</a>
+		</div>
+	</div>
+
+</div>
+<!--/主要内容区-->
+
+<!--返回首页按钮-->
+<style scoped>
+	#ret-btn {
+		opacity: 0.5;
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 88px;
+		height: 88px;
+		font-size: 44px;
+		line-height: 88px;
+		background-color: rgba(238, 238, 238, 0);
+		color: rgb(255, 255, 255);
+	}
+</style>
+<a href="/" class="am-icon-btn am-icon-chevron-left" id="ret-btn"></a>
+
+</body>
+</html>

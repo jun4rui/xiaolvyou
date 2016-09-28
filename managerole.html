@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
+	<title>孩子信息</title>
+	<!--<link rel="icon" type="image/png" href="jslib/amazeui/i/favicon.png">-->
+	<link rel="stylesheet" href="jslib/amazeui/css/amazeui.min.css">
+	<link rel="stylesheet" href="jslib/amazeui/css/app.css">
+	<script src="jslib/amazeui/js/jquery.min.js"></script>
+	<script src="jslib/amazeui/js/amazeui.min.js"></script>
+	<script src="jslib/avalon1.5/avalon.js"></script>
+
+	<script src="jslib/moment-with-locales.js" charset="utf-8"></script>
+	<script src="jslib/underscore.js" charset="utf-8"></script>
+	<script src="jslib/clndr.js" charset="utf-8"></script>
+
+	<link rel="stylesheet" href="common.css">
+	<script src="common.js"></script>
+
+	<script>
+		avalon.ready(function () {
+			var userid = window.localStorage.getItem('XLY_USERID');
+
+			var BodyVM = avalon.define({
+				$id: 'body',
+				list: [],
+				info:{},
+				roleListRendered: function(){
+					if (BodyVM.info.hasOwnProperty('passengerIDStr')){
+						var _templist = BodyVM.info.passengerIDStr.split(',');
+						for (var i in _templist){
+							console.log(_templist[i]);
+							$("input[name='roleid'][value='"+_templist[i]+"']").prop('checked', true);
+						}
+					}
+				}
+			});
+
+
+			// 更新出行人列表的函数
+			function loadRoleList(){
+				$.getJSON(server_addr+'/user/htuser_queryPassengerInfo.action?jsoncallback=?&userid='+userid, function(result){
+					BodyVM.list = result;
+				});
+			}
+			// 更新订单信息
+			$.getJSON(server_addr+'/mobile/tourorder_getOrderParams.action?jsoncallback=?&userid='+userid, function(result){
+				BodyVM.info = result;
+			});
+
+			//好了后立刻执行载入出行人一次
+			loadRoleList();
+
+			avalon.scan();
+
+			// 点击编辑出行人按钮的处理
+			$('table.am-table').delegate('.btn-edit', 'click', function(){
+				var editrole = {};
+				var roleid = $(this).attr('roleid');
+				//获取出行人信息列表
+				loadRoleList();
+				//找到所属该ID的出行人信息
+				for (var i in BodyVM.list){
+					if (BodyVM.list[i].passengerId==roleid) {
+						editrole = BodyVM.list[i];
+					}
+				}
+				//如果没有找到值就报错返回
+				if (!editrole.hasOwnProperty('identifytype')){
+					alert('错误：未找到该出行人');
+					return false;
+				}
+				//编辑窗口显示后立刻填充数据*
+				$('#frame-editrole').on('opened.modal.amui', function(){
+					$('#frame-editrole input').eq(0).val(editrole.passengerName);
+					$('#frame-editrole input').eq(1).val(editrole.passengerIdentify);
+					$('#frame-editrole input').eq(2).val(editrole.passengerId);
+				});
+				//显示编辑表单
+				$('#frame-editrole').modal({
+					relatedTarget: this,
+					onConfirm: function(e) {
+						var userid = window.localStorage.getItem('XLY_USERID');
+						console.log(server_addr+'/user/savePassengerInfo.action?jsoncallback=?&passengerVO.passengerId='+e.data[2]+'&passengerVO.passengerIdentify='+e.data[1]+'&passengerVO.passengerName='+e.data[0]);
+						$.getJSON(server_addr+'/user/htuser_savePassengerInfo.action?jsoncallback=?&passengerVO.passengerId='+e.data[2]+'&passengerVO.passengerIdentify='+e.data[1]+'&passengerVO.passengerName='+e.data[0], function(result){
+							http://www.96hn.com/user/htuser_savePassengerInfo.action?passengerVO.passengerId=4&passengerVO.passengerIdentify=430202197802254017&passengerVO.passengerName=%E9%92%B1%E9%98%BF%E9%A1%B61
+									console.log(result);
+							if (result.status==1){
+								alert('添加成功！');
+								$('#frame-addrole input').val('');
+								// 更新该用户的用户列表
+								loadRoleList();
+								return true;
+							}else{
+								var errMsg = '';
+								if (result.status==101){
+									errMsg = '身份证错误';
+								}
+								if (errMsg!=''){
+									alert('发生错误：'+errMsg+'\n请重新填写后提交');
+								}
+								return false;
+							}
+						});
+					},
+					// 关闭新增出行人窗口的操作
+					onCancel: function(e) {
+						//alert('已取消');
+						//清空表单
+						$('#frame-addrole input').val('');
+					}
+				});
+			});
+
+			// 点击添加出行人按钮的处理
+			$('header').delegate('#btn-addrole', 'click', function(){
+				console.log('click');
+				$('#frame-addrole').modal({
+					relatedTarget: this,
+					onConfirm: function(e) {
+						var userid = window.localStorage.getItem('XLY_USERID');
+						console.log(server_addr+'/user/htuser_addPassengerInfo.action?jsoncallback=?&passengerVO.guestId='+userid+'&passengerVO.passengerName='+e.data[0]+'&passengerVO.passengerIdentify='+e.data[1]);
+						$.getJSON(server_addr+'/user/htuser_addPassengerInfo.action?jsoncallback=?&passengerVO.guestId='+userid+'&passengerVO.passengerName='+e.data[0]+'&passengerVO.passengerIdentify='+e.data[1], function(result){
+							console.log(result);
+							if (result.status==1){
+								alert('添加成功！');
+								$('#frame-addrole input').val('');
+								// 更新该用户的用户列表
+								loadRoleList();
+								return true;
+							}else{
+								var errMsg = '';
+								if (result.status==101){
+									errMsg = '身份证错误';
+								}
+								if (errMsg!=''){
+									alert('发生错误：'+errMsg+'\n请重新填写后提交');
+								}
+								return false;
+							}
+						});
+					},
+					// 关闭新增出行人窗口的操作
+					onCancel: function(e) {
+						//alert('已取消');
+						//清空表单
+						$('#frame-addrole input').val('');
+					}
+				});
+			});
+
+			// 提交出行人
+			$('#footer').delegate('#submitrolelist', 'click', function(){
+				var rolelist = [];
+				$("input[name='roleid']").each(function(){
+					if ($(this).prop('checked')){
+						rolelist.push($(this).attr('value'));
+					}
+				})
+				console.log(server_addr+'/user/htuser_isVaildPassenger.action?jsoncallback=?&userid='+userid+'&passengerIDStr='+rolelist.toString());
+				$.getJSON(server_addr+'/user/htuser_isVaildPassenger.action?jsoncallback=?&userid='+userid+'&passengerIDStr='+rolelist.toString(),function(result){
+					//判断返回状态
+					if (result.status==1){
+						//成功后跳转到填写订单页面
+						window.location.href = 'fillorder.html';
+					}else{
+						//失败后提示错误，刷新出行人列表，要求用户重新检查后提交
+						alert('错误：验证失败\n请重新检查人数后再次提交');
+						loadRoleList();
+					}
+				});
+			});
+		});
+	</script>
+</head>
+<body ms-controller="body">
+<!--顶部Header-->
+<style>
+	header.am-header {
+		box-shadow: 0 1px 3px #C2C2C2;
+	}
+
+	/*.am-header > .am-header-left > a {*/
+	/*color: #4EC585;*/
+	/*}*/
+
+	/*.am-header >.am-header-right>a {*/
+	/*color:#ff9179;*/
+	/*}*/
+	/*.am-header > .am-header-title > a {*/
+	/*color: #000;*/
+	/*}*/
+
+	/*.am-header-default {*/
+	/*background-color: #FFF;*/
+	/*}*/
+</style>
+<header data-am-widget="header"
+		class="am-header am-header-default">
+	<div class="am-header-left am-header-nav">
+		<a href="userinfo.html" class="">
+			<i class="am-header-icon am-icon-angle-left"></i>
+		</a>
+	</div>
+
+	<h1 class="am-header-title">
+		<a href="#title-link" class="">
+			孩子信息
+		</a>
+	</h1>
+
+	<div class="am-header-right am-header-nav">
+		<a href="#" class="" id="btn-addrole">
+			增加
+		</a>
+	</div>
+</header>
+<!--/顶部Header-->
+<!--新增出行人html-->
+<div class="am-modal am-modal-prompt" tabindex="-1" id="frame-addrole">
+	<div class="am-modal-dialog">
+		<div class="am-modal-hd">新增出行人</div>
+		<div class="am-modal-bd">
+			<input type="text" class="am-modal-prompt-input" placeholder="请填写出行人姓名">
+			<input type="text" class="am-modal-prompt-input" placeholder="请填写出行人身份证号码">
+		</div>
+		<div class="am-modal-footer">
+			<span class="am-modal-btn" data-am-modal-cancel>取消</span>
+			<span class="am-modal-btn" data-am-modal-confirm>提交</span>
+		</div>
+	</div>
+</div>
+<!--/新增出行人html-->
+
+<!--编辑出行人html-->
+<div class="am-modal am-modal-prompt" tabindex="-1" id="frame-editrole">
+	<div class="am-modal-dialog">
+		<div class="am-modal-hd title">编辑出行人</div>
+		<div class="am-modal-bd info">
+			<input type="text" class="am-modal-prompt-input" placeholder="出行人姓名">
+			<input type="text" class="am-modal-prompt-input" placeholder="出行人身份证号码">
+			<input type="hidden" class="am-modal-prompt-input" value="">
+		</div>
+		<div class="am-modal-footer">
+			<span class="am-modal-btn" data-am-modal-cancel>取消</span>
+			<span class="am-modal-btn" data-am-modal-confirm>修改</span>
+		</div>
+	</div>
+</div>
+<!--/编辑出行人html-->
+
+<!--主要内容区-->
+<style>
+	#main-section {
+		background-color: #FFF;
+		box-sizing: border-box;
+		padding:0;
+		width:100%;
+	}
+	#main-section td {
+		white-space: nowrap;
+		vertical-align: middle;
+	}
+	#main-section table tr td label {
+		text-align: center;
+		line-height: 100%;
+	}
+	#main-section h3 {
+		padding:.5em;
+	}
+	#notibar {
+		margin-top:0;
+	}
+
+	table>thead>tr>th,
+	table tr td {
+		padding: .7rem 0 !important;
+		font-size:1em;
+		text-align: center;
+		white-space: nowrap;
+	}
+</style>
+<!--信息提示栏-->
+
+<!--/信息提示栏-->
+<div id="main-section">
+	<form class="am-form" data-am-validator>
+		<div class="am-form-group">
+
+			<table class="am-table">
+				<thead>
+				<tr>
+					<th>姓名</th>
+					<th>证件</th>
+					<th>编辑</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr ms-repeat-unit="list" data-repeat-rendered="roleListRendered">
+					<td>
+						{{unit.passengerName}}
+					</td>
+					<td>{{unit.passengerIdentify}}</td>
+					<td>
+						<i class="am-icon-edit am-icon-fw btn-edit" ms-attr-roleid="{{unit.passengerId}}"></i>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+	</form>
+</div>
+<!--/主要内容区-->
+</body>
+</html>

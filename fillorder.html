@@ -205,7 +205,7 @@
 		line-height: 200%;
 		/* margin-right: 1em; */
 		padding: 0 .5em;
-		display: inline-block;
+		display: block;
 		margin: 5px 1em 0 0;
 		border: 1px solid #ea7777;
 		cursor: pointer;
@@ -248,7 +248,9 @@
 						<button class="am-btn am-btn-warning" onclick="checkCouponCode()" type="button">使用</button>
 					</span>
 				</div>
-				您当前拥有的优惠券：<span class="coupon-unit" ms-repeat-coupon="coupon" ms-attr-code="{{coupon.description}}">{{coupon.info_name}}&nbsp;减{{coupon.origin}}元</span>
+				您当前拥有的优惠券：<br>
+				<span class="coupon-unit" ms-repeat-coupon="coupon" ms-attr-code="{{coupon.description}}">{{coupon.info_name}}&nbsp;减{{coupon.origin}}元 {{coupon.info_endtime}}到期</span>
+
 				<input type="hidden" id="coupon-code" value="">
 				<input type="hidden" id="lineid" ms-attr-value="{{params.lineid}}">
 			</li>

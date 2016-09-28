@@ -248,7 +248,7 @@
 						<button class="am-btn am-btn-warning" onclick="checkCouponCode()" type="button">使用</button>
 					</span>
 				</div>
-				您当前拥有的优惠券：<span class="coupon-unit" ms-repeat-coupon="coupon" ms-attr-code="{{coupon.description}}">减{{coupon.origin}}元</span>
+				您当前拥有的优惠券：<span class="coupon-unit" ms-repeat-coupon="coupon" ms-attr-code="{{coupon.description}}">{{coupon.info_name}}&nbsp;减{{coupon.origin}}元</span>
 				<input type="hidden" id="coupon-code" value="">
 				<input type="hidden" id="lineid" ms-attr-value="{{params.lineid}}">
 			</li>

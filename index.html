@@ -36,7 +36,7 @@
 			var TourVM    = avalon.define({
 				$id:          'tour',
 				list:         [],
-				title:        '周末活动',
+				title:        '近期活动',
 				listRendered: function () {
 					//$('[teamcount="0"]').addClass('gray').find('.price').html('已结束');
 					$('.tour-unit-default').each(function () {
@@ -63,7 +63,7 @@
 
 			avalon.scan();
 
-			//20160928 曹熙要求默认显示周末活动
+			//20160928 曹熙要求默认显示近期活动
 			//$.getJSON(server_addr + '/mobile/ipad_queryTourLine.action?pagesize=999&jsoncallback=?', function (result) {
 			$.getJSON(server_addr + '/mobile/ipad_queryTourLine.action?jsoncallback=?&commendtype=1&pagesize=-1', function(result){
 				showList  = result.value.splice(0, 5);	//先显示5个
@@ -110,6 +110,9 @@
 		margin: 0;
 		background-color: #F3F3F3;
 	}
+	.am-with-fixed-navbar {
+		padding-bottom: 100px;
+	}
 </style>
 
 
@@ -141,9 +144,9 @@
 	}
 </style>
 <div id="home-title">
-	<div class="float-btn" style="left:58px;bottom:-66px;" keyword="周末活动" kid="1">
-		<img src="images/home-btn1.gif" alt="周末活动">
-		周末活动
+	<div class="float-btn" style="left:58px;bottom:-66px;" keyword="近期活动" kid="1">
+		<img src="images/home-btn1.gif" alt="近期活动">
+		近期活动
 	</div>
 	<div class="float-btn" style="left:227px;bottom:-93px;" keyword="寒假活动" kid="2">
 		<img src="images/home-btn2.gif" alt="寒假活动">
@@ -293,5 +296,82 @@
 	<!--/线路单元-->
 </div>
 <!--/主要内容区-->
+
+<!--底部工具栏-->
+<style scoped>
+	#navbar {
+		border-bottom: 0;
+		border-top: 1px solid #d9d9d9;
+		background-color: #FFF !important;
+
+		height:100px;
+		line-height: 100px;
+	}
+	#navbar .am-navbar-nav {
+		background-color: #FFF !important;
+	}
+	#navbar .am-navbar-default a {
+		color: #999;
+	}
+	#navbar .am-navbar-label {
+		font-size: 22px;
+		color: #999;
+		font-family: '微软雅黑','Microsoft YaHei';
+	}
+	#navbar a.active span[class*=am-icon] {
+		color:#F39800;
+	}
+	#navbar a.active .am-navbar-label {
+		color:#F39800;
+	}
+	#navbar .am-navbar-nav a {
+		display: inline-block;
+		width: 100%;
+		height: 100px;
+		line-height: 100px;
+	}
+	#navbar ul li span[class*=am-icon] {
+		color:#8c8b94;
+		font-size:50px !important;
+		width:50px;
+		height:50px;
+		line-height: 50px;
+		margin-bottom: 10px;
+	}
+	#navbar .am-navbar-nav a [class*=am-icon]:before {
+		font-size: 40px;
+		vertical-align: middle;
+	}
+</style>
+<div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default "
+	 id="navbar">
+	<ul class="am-navbar-nav am-cf am-avg-sm-4">
+		<li>
+			<a href="#" class="active">
+				<span class="am-icon-home am-icon-sm"></span>
+				<span class="am-navbar-label">首页</span>
+			</a>
+		</li>
+		<li>
+			<a href="javascript:alert('即将推出，敬请期待！')" class="">
+				<span class="am-icon-thumbs-o-up am-icon-md"></span>
+				<span class="am-navbar-label">推荐</span>
+			</a>
+		</li>
+		<li>
+			<a href="javascript:alert('即将推出，敬请期待！')" class="">
+				<span class="am-icon-envelope-o am-icon-lg"></span>
+				<span class="am-navbar-label">消息</span>
+			</a>
+		</li>
+		<li>
+			<a href="http://www.xiaolvyou.com.cn/weixin/thirdWebPageLogin.action?page_url=userinfo.html!3Flineid!3D0" class="">
+				<span class="am-icon-user am-icon-sm"></span>
+				<span class="am-navbar-label">我的</span>
+			</a>
+		</li>
+	</ul>
+</div>
+<!--/底部工具栏-->
 </body>
 </html>

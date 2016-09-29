@@ -56,7 +56,7 @@
 				BodyVM.total_score3 = _tempScore.substr(2,1);
 
 				//计算指针旋转角度
-				BodyVM.pointer_deg = result.guestVO.tot_score/1000*120-60;
+				BodyVM.pointer_deg = parseInt(result.guestVO.tot_score/1000*120-60);
 			});
 
 			//获取用户账单
@@ -281,7 +281,7 @@
 					<div class="total_num" style="left: 529px; top: 16px;">{{total_score1}}</div>
 					<div class="total_num" style="left: 581px; top: 16px;">{{total_score2}}</div>
 					<div class="total_num" style="left: 632px; top: 16px;">{{total_score3}}</div>
-					<div class="pointer" ms-attr-style="transform:rotate({{pointer_deg}}deg)"></div>
+					<div class="pointer" ms-css-transform="rotate({{pointer_deg}}deg)"></div>
 					<div class="showTitle" data-am-modal="{target: '#doc-modal-1', closeViaDimmer: 0, width: 400, height: 425}">&nbsp;</div>
 					<!--弹出显示框-->
 					<div class="am-modal am-modal-no-btn" tabindex="-1" id="doc-modal-1">
@@ -326,6 +326,5 @@
 	}
 </style>
 <a href="/" class="am-icon-btn am-icon-chevron-left" id="ret-btn"></a>
-
 </body>
 </html>

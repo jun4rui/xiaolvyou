@@ -201,19 +201,21 @@
 	#main-section .price span.yen {
 		font-size: 0.8em;
 		font-weight: normal;
-		/* margin-left: 5px; */
 		color: #F0C30D;
-		/* line-height: 3em; */
-		/* vertical-align: top; */
+		float: left;
+		padding-top: 15px;
+		line-height: 100%;
 	}
-
+	#main-section .price span.pricenum {
+		float: left;
+	}
 	#main-section .price span.qi {
 		font-size: 0.6em;
-		/* line-height: 250%; */
-		/* vertical-align: bottom; */
 		font-weight: normal;
-		/* margin-right: 5px; */
 		color: #F0C30D;
+		float: left;
+		padding-top: 20px;
+		line-height: 100%;
 	}
 
 	#main-section .count-num {
@@ -244,7 +246,7 @@
 			<div class="am-u-sm-6 am-u-md-6 am-u-lg-6">
 				<div class="price">
 					<span class="yen">&yen;</span>
-					{{info.leastprice}}
+					<span class="pricenum">{{info.leastprice}}</span>
 					<span class="qi">起</span>
 				</div>
 			</div>
@@ -488,7 +490,7 @@
 		padding: 0 1em;
 		width: 100%;
 		padding-top: 3em;
-
+		border: 1px solid #dedede;
 		display: none;
 	}
 
@@ -531,7 +533,7 @@
 <style>
 	#footer {
 		/*background-color: #fe8568;*/
-		border-top: 1px solid #CCC;
+		border-top: 1px solid #DEDEDE;
 	}
 
 	#footer .am-navbar-nav,

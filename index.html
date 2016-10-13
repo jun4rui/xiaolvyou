@@ -98,7 +98,12 @@
 					}else{
 						alert('抱歉该分类暂无活动');
 					}
-				}.bind(this));
+				}.bind(this))
+				.done(function(){
+					//载入数据后执行的操作
+					$('#subtitle').text('小驴友可为广大学校、家委会、企业团体提供亲子活动策划、报名、在线收费、执行等全流程的解决方案');
+				}
+				);
 			});
 		});
 	</script>
@@ -270,6 +275,15 @@
 		color: #666;
 		width:710px;
 	}
+
+	div#subtitle {
+		background-color: #cfe178;
+		color: #333;
+		padding: .5em;
+		font-size: 20px;
+		border-radius: 5px;
+		margin-bottom: 1em;
+	}
 </style>
 
 <div id="main-section">
@@ -277,6 +291,7 @@
 	<div id="current-title">
 		{{title}}
 	</div>
+	<div id="subtitle"></div>
 	<!--线路单元-->
 	<a ms-attr-href="info.html?lineid={{unit.lineid}}" ms-repeat-unit="list" data-repeat-rendered="listRendered">
 		<div class="tour-unit-default" ms-attr-teamcount="{{unit.teamcount}}" ms-attr-daydiff="{{unit.daydiff}}">

@@ -100,8 +100,18 @@
 					}
 				}.bind(this))
 				.done(function(){
+					var _subtitle = '';
 					//载入数据后执行的操作
-					$('#subtitle').text('小驴友可为广大学校、家委会、企业团体提供亲子活动策划、报名、在线收费、执行等全流程的解决方案');
+					if ($(this).attr('kid')==4){
+						_subtitle = '小驴友可为广大学校、家委会、企业团体提供亲子活动策划、报名、在线收费、执行等全流程的解决方案';
+					}
+					//有就显示，没有就隐藏
+					if (_subtitle!=''){
+						$('#subtitle').show().text(_subtitle);
+					}else{
+						$('#subtitle').hide();
+					}
+
 				}
 				);
 			});
@@ -283,6 +293,7 @@
 		font-size: 20px;
 		border-radius: 5px;
 		margin-bottom: 1em;
+		display:none;
 	}
 </style>
 

@@ -2,14 +2,6 @@
 <project version="4">
   <component name="WebServers">
     <option name="servers">
-      <webServer id="c35fd2b5-c2fc-45ad-8b53-9523870908b9" name="xiaolvyou" url="http://www.xiaolvyou.com.cn/">
-        <fileTransfer host="www.xiaolvyou.com.cn" port="222" rootFolder="/xiaolvyou">
-          <advancedOptions>
-            <advancedOptions compatibilityMode="true" dataProtectionLevel="Private" passiveMode="true" />
-          </advancedOptions>
-          <option name="port" value="222" />
-        </fileTransfer>
-      </webServer>
       <webServer id="3a719c73-8cc5-4b4d-825d-6ce37b75e494" name="xiaolvyou_other" url="http://wx.xiaolvyou.com.cn/">
         <fileTransfer host="114.67.53.113" port="23" rootFolder="/qzy/apache-tomcat-6.0.45/webapps">
           <advancedOptions>

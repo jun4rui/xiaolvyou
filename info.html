@@ -20,18 +20,19 @@
 		//alert(window.location.href);
 		avalon.ready(function () {
 			var BodyVM = avalon.define({
-				$id:          'body',
-				info:         {},
-				sellerid:     '',
-				ticketprice:  [],
-				adultNum:     0,
-				childNum:     0,
-				userList:     [],
-				specialalert: [],	//记录各种属性，例如：铁定成团等，从info.specialalert中获取，原数据用空格分开，获取线路详情后转成array更新进来
-				salerName:    '',	//领队名称
-				salerPhone:   '',	//领队电话
-				salerAvatar:  '',	//领队头像url
-				userRendered: function () {
+				$id:            'body',
+				info:           {},
+				sellerid:       '',
+				ticketprice:    [],
+				adultNum:       0,	//当前成人数
+				childNum:       0,	//当前儿童数
+				personNumTotal: 0,	//累计人数
+				userList:       [],
+				specialalert:   [],	//记录各种属性，例如：铁定成团等，从info.specialalert中获取，原数据用空格分开，获取线路详情后转成array更新进来
+				salerName:      '',	//领队名称
+				salerPhone:     '',	//领队电话
+				salerAvatar:    '',	//领队头像url
+				userRendered:   function () {
 					$('.faceunit').popover({
 						trigger: 'hover focus'
 					});
@@ -74,6 +75,10 @@
 				BodyVM.adultNum = result.adult;
 				BodyVM.childNum = result.child;
 			});
+			//获取累计用户人数
+			$.getJSON(server_addr + '/mobile/tourorder_queryOrderForPersonNum.action?jsoncallback=?&personNumType=leiji&lineid=' + lineid, function (result) {
+				BodyVM.personNumTotal = parseInt(result.adult)+parseInt(result.child);
+			});
 			//获取预订用户列表
 			$.getJSON(server_addr + '/mobile/tourorder_queryOrderForGuest.action?jsoncallback=?&lineid=' + lineid, function (result) {
 				BodyVM.userList = result;
@@ -97,29 +102,37 @@
 		}
 
 		.color-hot {
-			color:#F0C30D;
+			color: #F0C30D;
 		}
+
 		.color-default {
-			color:#333;
+			color: #333;
 		}
+
 		.color-light {
-			color:#999;
+			color: #999;
 		}
+
 		.color-gray {
-			color:#666;
+			color: #666;
 		}
+
 		.bg-hot {
 			background-color: #F0C30D;
 		}
+
 		.bg-gray {
-			background-color: #f3f3f3;
+			background-color: #F3F3F3;
 		}
+
 		.bg-default {
 			background-color: #FFF;
 		}
+
 		.text-right {
 			text-align: right;
 		}
+
 		.text-left {
 			text-align: left;
 		}
@@ -206,9 +219,11 @@
 		padding-top: 15px;
 		line-height: 100%;
 	}
+
 	#main-section .price span.pricenum {
 		float: left;
 	}
+
 	#main-section .price span.qi {
 		font-size: 0.6em;
 		font-weight: normal;
@@ -251,7 +266,7 @@
 				</div>
 			</div>
 			<div class="am-u-sm-6 am-u-md-6 am-u-lg-6 count-num">
-				已累计报名<span>{{adultNum+childNum}}</span>人次
+				已累计报名<span>{{personNumTotal}}</span>人次
 			</div>
 			<style scoped>
 				.coupon-show {
@@ -490,7 +505,7 @@
 		padding: 0 1em;
 		width: 100%;
 		padding-top: 3em;
-		border: 1px solid #dedede;
+		border: 1px solid #DEDEDE;
 		display: none;
 	}
 

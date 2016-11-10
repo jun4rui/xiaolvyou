@@ -592,6 +592,13 @@
 	//转发积分记录函数 20161110
 	function addIntegral(){
 		$.getJSON(server_addr+'/user/htuser_addTransmitScore.action?userid='+window.localStorage.getItem('XLY_USERID'),function(result){
+			var _msg = '';
+			if (parseInt(result.count)==1){
+				_msg = '感谢你的分享 ,信用分+1！';
+			}else{
+				_msg = '感谢您的分享！';
+			}
+			alert(_msg);
 			console.log('增加积分结果:', result.count);
 		});
 	}
@@ -689,7 +696,6 @@
 				imgUrl:  imgUrl,
 				success: function () {
 					addIntegral();
-					alert('感谢您的分享');
 				},
 				cancel:  function () {
 					alert('欢迎您下次再进行分享');
@@ -705,7 +711,6 @@
 				dataUrl: '',	// 如果type是music或video，则要提供数据链接，默认为空
 				success: function () {
 					addIntegral();
-					alert('感谢您的分享');
 				},
 				cancel:  function () {
 					alert('欢迎您下次再进行分享');

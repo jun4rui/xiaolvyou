@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh_CN">
+<head>
+	<meta charset="GBK">
+	<title>感谢您支持小驴友的活动</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<script src="http://www.htyou.com/common/2015_bbasia/bower_components/jquery/dist/jquery.min.js"></script>
+	<link  href="http://www.htyou.com/common/2015_bbasia/bower_components/amazeui/dist/css/amazeui.css" rel="stylesheet"/>
+	<script src="http://www.htyou.com/common/2015_bbasia/bower_components/amazeui/dist/js/amazeui.min.js"></script>
+	<script src="http://www.htyou.com/common/2015_bbasia/bower_components/amazeui/dist/js/amazeui.widgets.helper.min.js"></script>
+	<script src="http://www.htyou.com/common/2015_bbasia/bower_components/avalon/dist/avalon.js"></script>
+
+	<style>
+		/*Hack Amazeui*/
+		.am-header .am-header-title {
+			margin: 0 1em;
+		}
+
+		.product-info {
+			text-align: center;
+		}
+		.QR-code {
+			text-align:center;
+		}
+
+		.noti {
+			text-align: left;
+		}
+	</style>
+</head>
+<body>
+<header data-am-widget="header" class="am-header am-header-default">
+	<h1 class="am-header-title">
+		<a href="#title-link" class="">
+			感谢您支持小驴友的活动！
+		</a>
+	</h1>
+</header>
+
+<div id="wxpay-panel">
+	<!--产品名称-->
+	<div class="product-info">
+		<h1>&nbsp;</h1>
+	</div>
+	<div class="QR-code">
+		<!--<h2>账单总计：<span>&yen;${payVO.pay_total_fee} 元</span></h2>-->
+		欢迎扫描下方二维码关注小驴友官网微信
+		<hr/>
+		<img src="./images/qrcode_for_gh.jpg" alt=""/>
+		<!--<div class="noti">
+			<span>友情提示：</span><br/>
+			使用微信支付，需要在微信中绑定银行卡并开通支付功能，如果未能支付成功，请咨询服务员微信支付使用方法，或返回上一步，选择其他支付方式。
+		</div>-->
+	</div>
+</div>
+</body>
+</html>

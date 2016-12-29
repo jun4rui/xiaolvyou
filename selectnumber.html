@@ -148,6 +148,7 @@
 			<label class="am-u-sm-4 am-form-label price">&yen;{{info.htTourProVO.ydyxprice}}元</label>
 			<input type="hidden" name="unitprice" ms-attr-value="{{info.htTourProVO.ydyxprice}}">
 			<input type="hidden" name="propricetype" value="ydyxprice">
+			<input type="hidden" name="propricedesc" value="一大一小">
 			<div class="am-u-sm-4">
 				<select name="unitnumber">
 					<option value="0" selected>未选择</option>
@@ -171,6 +172,7 @@
 			<label class="am-u-sm-4 am-form-label price">&yen;{{info.htTourProVO.adultprice}}元</label>
 			<input type="hidden" name="unitprice" ms-attr-value="{{info.htTourProVO.adultprice}}">
 			<input type="hidden" name="propricetype" value="adultprice">
+			<input type="hidden" name="propricedesc" value="成人">
 			<div class="am-u-sm-4">
 				<select name="unitnumber">
 					<option value="0" selected>未选择</option>
@@ -194,6 +196,7 @@
 			<label class="am-u-sm-4 am-form-label price">&yen;{{info.htTourProVO.edyxprice}}元</label>
 			<input type="hidden" name="unitprice" ms-attr-value="{{info.htTourProVO.edyxprice}}">
 			<input type="hidden" name="propricetype" value="edyxprice">
+			<input type="hidden" name="propricedesc" value="二大一小">
 			<div class="am-u-sm-4">
 				<select name="unitnumber">
 					<option value="0" selected>未选择</option>
@@ -217,6 +220,7 @@
 			<label class="am-u-sm-4 am-form-label price">&yen;{{info.htTourProVO.childprice}}元</label>
 			<input type="hidden" name="unitprice" ms-attr-value="{{info.htTourProVO.childprice}}">
 			<input type="hidden" name="propricetype" value="childprice">
+			<input type="hidden" name="propricedesc" value="儿童">
 			<div class="am-u-sm-4">
 				<select name="unitnumber">
 					<option value="0" selected>未选择</option>
@@ -243,6 +247,7 @@
 			<label class="am-u-sm-4 am-form-label price">&yen;{{unit.price}}元</label>
 			<input type="hidden" name="unitprice" ms-attr-value="{{unit.price}}">
 			<input type="hidden" name="propricetype" value="ticketprice">
+			<input type="hidden" name="propricedesc" ms-attr-value="{{unit.position}}">
 			<div class="am-u-sm-4">
 				<select name="unitnumber">
 					<option value="0" selected>未选择</option>
@@ -297,14 +302,17 @@
 		 cteamcode=teamcode
 		 pronum=[5,2,1]
 		 proprice=[150,200,300]
+		 propricedesc=['成人价','儿童价','一大一小','二大一小']
 		 */
 		var t_pronum       = [];
 		var t_proprice     = [];
 		var t_propricetype = [];
+		var t_propricedesc = [];
 
 		var pronum       = [];
 		var proprice     = [];
 		var propricetype = [];
+		var propricedesc = [];
 
 		var cteamcode = getParameterValue(window.location.href, 'jzluid');
 
@@ -318,6 +326,10 @@
 		$('input[name=propricetype]').each(function () {
 			t_propricetype.push($(this).val());
 		});
+		//保存名称到数组中
+		$('input[name=propricedesc]').each(function () {
+			t_propricedesc.push($(this).val());
+		});
 		//console.log(t_proprice);
 		//console.log(t_pronum);
 
@@ -327,6 +339,7 @@
 				proprice.push(t_proprice[i]);
 				pronum.push(t_pronum[i]);
 				propricetype.push(t_propricetype[i]);
+				propricedesc.push(t_propricedesc[i]);
 			}
 		}
 		//console.log('final:'+proprice.toString());
@@ -338,8 +351,8 @@
 		}
 		//构造接口参数
 		//TEST: server_addr + '/mobile/tourorder_tourOrderStep3.action?jsoncallback=?&proprice=' + proprice.toString() + '&pronum=' + pronum.toString() + '&propricetype='+propricetype.toString()+'&cteamcode=' + cteamcode + '&userid=' + window.localStorage.getItem('XLY_USERID') + '&sellerid=' + (getParameterValue(window.location.href, 'sellerid') || 0)
-		console.log(server_addr + '/mobile/tourorder_tourOrderStep3.action?jsoncallback=?&proprice=' + proprice.toString() + '&pronum=' + pronum.toString() + '&propricetype='+propricetype.toString()+'&cteamcode=' + cteamcode + '&userid=' + window.localStorage.getItem('XLY_USERID') + '&sellerid=' + (getParameterValue(window.location.href, 'sellerid') || 0));
-		$.getJSON(server_addr + '/mobile/tourorder_tourOrderStep3.action?jsoncallback=?&proprice=' + proprice.toString() + '&pronum=' + pronum.toString() + '&propricetype='+propricetype.toString()+'&cteamcode=' + cteamcode + '&userid=' + window.localStorage.getItem('XLY_USERID') + '&sellerid=' + (getParameterValue(window.location.href, 'sellerid') || 0), function (result) {
+		console.log(server_addr + '/mobile/tourorder_tourOrderStep3.action?jsoncallback=?&proprice=' + proprice.toString() + '&pronum=' + pronum.toString() + '&propricetype='+propricetype.toString()+'&propricedesc='+propricedesc.toString()+'&cteamcode=' + cteamcode + '&userid=' + window.localStorage.getItem('XLY_USERID') + '&sellerid=' + (getParameterValue(window.location.href, 'sellerid') || 0));
+		$.getJSON(server_addr + '/mobile/tourorder_tourOrderStep3.action?jsoncallback=?&proprice=' + proprice.toString() + '&pronum=' + pronum.toString() + '&propricetype='+propricetype.toString()+'&propricedesc='+propricedesc.toString()+'&cteamcode=' + cteamcode + '&userid=' + window.localStorage.getItem('XLY_USERID') + '&sellerid=' + (getParameterValue(window.location.href, 'sellerid') || 0), function (result) {
 			/*
 			 status：
 			 1 成功

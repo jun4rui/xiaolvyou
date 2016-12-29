@@ -2,6 +2,13 @@
 <project version="4">
   <component name="PublishConfigData" autoUpload="Always">
     <serverData>
+      <paths name="New HTYOU">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="chm">
         <serverdata>
           <mappings>
@@ -16,7 +23,7 @@
           </mappings>
         </serverdata>
       </paths>
-      <paths name="xiaolvyou_other">
+      <paths name="xiaolvyou">
         <serverdata>
           <mappings>
             <mapping deploy="/" local="$PROJECT_DIR$" web="/" />

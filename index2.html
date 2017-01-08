@@ -34,9 +34,9 @@
 			var showList  = [];//当前展示列表
 			var delayList = [];//延迟显示列表
 			var TourVM    = avalon.define({
-				$id:          'tour',
-				list:         [],
-				title:        '近期活动',
+				$id: 'tour',
+				list: [],
+				title: '近期活动',
 				listRendered: function () {
 					//$('[teamcount="0"]').addClass('gray').find('.price').html('已结束');
 					$('.tour-unit-default').each(function () {
@@ -65,7 +65,7 @@
 
 			//20160928 曹熙要求默认显示近期活动
 			//$.getJSON(server_addr + '/mobile/ipad_queryTourLine.action?pagesize=999&jsoncallback=?', function (result) {
-			$.getJSON(server_addr + '/mobile/ipad_queryTourLine.action?jsoncallback=?&commendtype=1&pagesize=-1', function(result){
+			$.getJSON(server_addr + '/mobile/ipad_queryTourLine.action?jsoncallback=?&commendtype=1&pagesize=-1', function (result) {
 				showList  = result.value.splice(0, 5);	//先显示5个
 				delayList = result.value;		//把剩余的装入延迟显示列表
 
@@ -78,11 +78,11 @@
 				if (document.body.clientHeight - window.innerHeight - window.scrollY < 10) {
 					if (delayList.length > 0) {
 						showList.push(delayList[0]);
-						delayList = delayList.splice(1);
+						delayList   = delayList.splice(1);
 						TourVM.list = showList;
 
 						//滚完了就把底限亮出来
-						if (delayList.length==0) $('#bottom-line').show();
+						if (delayList.length == 0) $('#bottom-line').show();
 					}
 				}
 			});
@@ -91,26 +91,26 @@
 			$('#home-title').delegate('.float-btn', 'click', function () {
 				//console.log(server_addr + '/mobile/ipad_queryTourLine.action?jsoncallback=?&commendtype=' + encodeURI($(this).attr('kid')) + '&pagesize=-1');
 				$.getJSON(server_addr + '/mobile/ipad_queryTourLine.action?jsoncallback=?&commendtype=' + encodeURI($(this).attr('kid')) + '&pagesize=-1', function (result) {
-					if (result.value!=null){
+					if (result.value != null) {
 						showList  = result.value.splice(0, 5);	//先显示5个
 						delayList = result.value;		//把剩余的装入延迟显示列表
 
-						TourVM.list = showList;					//将显示列表放入展示中
+						TourVM.list  = showList;					//将显示列表放入展示中
 						TourVM.title = $(this).attr('keyword');
-					}else{
+					} else {
 						alert('抱歉该分类暂无活动');
 					}
 				}.bind(this))
-					.done(function(){
+					.done(function () {
 							var _subtitle = '';
 							//载入数据后执行的操作
-							if ($(this).attr('kid')==4){
+							if ($(this).attr('kid') == 4) {
 								_subtitle = '小驴友可为广大学校、家委会、企业团体提供亲子活动策划、报名、在线收费、执行等全流程的解决方案';
 							}
 							//有就显示，没有就隐藏
-							if (_subtitle!=''){
+							if (_subtitle != '') {
 								$('#subtitle').show().text(_subtitle);
-							}else{
+							} else {
 								$('#subtitle').hide();
 							}
 
@@ -127,6 +127,7 @@
 		margin: 0;
 		background-color: #F3F3F3;
 	}
+
 	.am-with-fixed-navbar {
 		padding-bottom: 100px;
 	}
@@ -139,13 +140,12 @@
 		width: 750px;
 		height: 798px;
 		position: relative;
-		background: url(images/home.png) no-repeat top center;
-		margin: 0 auto 132px auto;
+		background: url(images/home2.png) no-repeat top center;
+		margin: 0 auto 20px auto;
+		background-color: #FFF;
 	}
 
 	#home-title .float-btn {
-		position: absolute;
-		width: 120px;
 		height: auto;
 		color: #000;
 		font: 26px/150% '微软雅黑', 'Microsoft YaHei';
@@ -154,36 +154,152 @@
 	}
 
 	#home-title .float-btn > img {
-		width: 105px;
-		height: 105px;
+		width: 112px;
+		height: 74px;
 		display: block;
 		margin: 0 auto;
 	}
+
+	#home-title .float-btn-panel {
+		width: 100%;
+		display: flex;
+		top: 520px;
+		left: 0;
+		position: absolute;
+		justify-content: space-around;
+		align-items: baseline;
+	}
+	#home-title>.userinfo {
+		width: 161px;
+		height: 83px;
+		background-color: #436883;
+		position: absolute;
+		top: 168px;
+		border-radius: 0 10px 10px 0;
+		padding: 10px 0 10px 5px;
+		box-shadow: 1px 1px 3px rgba(53, 53, 53, 0.35);
+		display: flex;
+		flex-direction: column;
+		align-content: space-between;
+		align-items: center;
+		justify-content: center;
+	}
+	#home-title>.userinfo>.info-unit {
+		width: 100%;
+		flex: 2 2 auto;
+		/* vertical-align: middle; */
+		display: flex;
+		align-items: center;
+		font-size: 2rem;
+		color: #FFF;
+		text-align: left;
+	}
+	#home-title>.userinfo>.info-unit>span {
+		color: #FF0;
+	}
 </style>
 <div id="home-title">
-	<div class="float-btn" style="left:58px;bottom:-66px;" keyword="近期活动" kid="1">
-		<img src="images/home-btn1.gif" alt="近期活动">
-		近期活动
+	<!--用户信息块-->
+	<div class="userinfo">
+		<div class="info-unit">
+			<i class="am-icon-product-hunt am-icon-fw"></i>&nbsp;积分：<span>550分</span>
+		</div>
+		<div class="info-unit">
+			<i class="am-icon-money am-icon-fw"></i>&nbsp;优惠券：<span>5张</span>
+		</div>
 	</div>
-	<div class="float-btn" style="left:227px;bottom:-93px;" keyword="寒假活动" kid="2">
-		<img src="images/home-btn2.gif" alt="寒假活动">
-		寒假活动
+	<!--/用户信息块-->
+	<!--用户欢迎信息-->
+	<style>
+		.welcomeinfo {
+			display: flex;
+			position: absolute;
+			top: 370px;
+			left: 2.4rem;
+			font-size: 3rem;
+			justify-content: center;
+			align-items: center;
+		}
+		.welcomeinfo>img {
+			width: 5rem;
+			height: 5rem;
+		}
+	</style>
+	<div class="welcomeinfo">
+		<img src="images/nowprinting.jpg" alt="" class="am-circle">&nbsp;下午好，舒涛
 	</div>
-	<div class="float-btn" style="left:407px;bottom:-86px;" keyword="温泉体验" kid="3">
-		<img src="images/home-btn5.gif" alt="温泉体验">
-		温泉体验
+	<!--/用户欢迎信息-->
+	<!--公告文字-->
+	<style>
+		.noticetext {
+			position: absolute;
+			left: 2.4rem;
+			top: 435px;
+			font-size: 4rem;
+		}
+	</style>
+	<div class="noticetext">
+		小驴友长沙总部办公室扩建升级中！
 	</div>
-	<div class="float-btn" style="left:569px;bottom:-66px;" keyword="活动定制" kid="4">
-		<img src="images/home-btn4.gif" alt="活动定制">
-		活动定制
+	<!--/公告文字-->
+	<!--功能按钮面板-->
+	<div class="float-btn-panel">
+		<div class="float-btn" keyword="酒店" kid="1">
+			<img src="images/home2-btn1.png" alt="酒店">
+			酒店
+		</div>
+		<div class="float-btn" keyword="儿童剧" kid="2">
+			<img src="images/home2-btn2.png" alt="儿童剧">
+			儿童剧
+		</div>
+		<div class="float-btn" keyword="夏令营" kid="3">
+			<img src="images/home2-btn5.png" alt="夏令营">
+			夏令营
+		</div>
+		<div class="float-btn" keyword="国内游" kid="4">
+			<img src="images/home2-btn4.png" alt="国内游">
+			国内游
+		</div>
+		<div class="float-btn" keyword="户外" kid="4">
+			<img src="images/home2-btn5.png" alt="户外">
+			户外
+		</div>
 	</div>
+	<!--/功能按钮面板-->
+	<!--辣妈推荐-->
+	<style>
+		.hot-mom-recommended {
+			position: absolute;
+			left: 2.4rem;
+			top: 660px;
+			display: flex;
+			/* justify-content: flex-start; */
+			align-items: center;
+		}
+		.hot-mom-recommended>img {
+			border-right: 1px solid #E4E4E4;
+			padding-right: 2.4rem;
+			margin-right: 2rem;
+		}
+		.hot-mom-recommended>p {
+			font-size: 2.6rem;
+		}
+	</style>
+	<div class="hot-mom-recommended">
+		<img src="images/hotmomrecommended.png" alt="">
+		<p>
+			@蓉儿 推荐 <br>
+			海底晚宴 与鲨鱼共眠|夜宿长风海洋馆 度过...
+		</p>
+	</div>
+	<!--/辣妈推荐-->
 </div>
-<!--/顶部标题和4功能按钮-->
+<!--/顶部标题和5功能按钮-->
 
 
 <!--主要内容区-->
 <style>
-	#main-section {
+	.main-section {
 		/*background-color: #FFF;*/
 		margin: 0 20px auto 20px;
 	}
@@ -219,7 +335,7 @@
 	.tour-unit-default > .notiy-panel {
 		box-sizing: border-box;
 		padding: 0 20px;
-		color: #F49F11;
+		color: #45B700;
 		font-size: 24px;
 		margin-top: 16px;
 	}
@@ -229,7 +345,7 @@
 	}
 
 	.tour-unit-default > .notiy-panel > .notiy {
-		border: 1px solid #F49F11;
+		border: 1px solid #45B700;
 		line-height: 46px;
 		border-radius: 10px;
 		margin-right: 0.5em;
@@ -248,8 +364,8 @@
 		-webkit-filter: grayscale(100%);
 	}
 
-	.price {
-		background-color: #F0C30D;
+	.main-section .price {
+		background-color: #45B700;
 		color: #FFF;
 		position: absolute;
 		top: 210px;
@@ -262,57 +378,165 @@
 		padding: 0 20px;
 	}
 
-	.price span.qi {
+	.main-section .price span.qi {
 		font-size: 24px;
 		/* line-height: 220px; */
 		font-weight: normal;
 		margin-left: 5px;
 	}
 
-	.price span.yen {
+	.main-section .price span.yen {
 		font-size: 39px;
 		line-height: 220%;
 		vertical-align: top;
 		font-weight: normal;
 	}
 
-	#current-title {
-		border-left: 10px solid #F0C30D;
-		text-indent: 20px;
-		line-height: 40px;
-		height: 40px;
+	.current-title {
+		/*border-left: 10px solid #45B700;*/
+		line-height: 75px;
+		height: 75px;
 		margin: 20px auto;
-		font-weight: bold;
-		font-size: 36px;
-		color: #666;
-		width:710px;
+		/* font-weight: bold; */
+		font-size: 28px;
+		color: #45B700;
+		width: 100%;
+		background-color: #FFF;
 	}
-
-	div#subtitle {
+	.current-title>.title {
+		border-left: 10px solid #45B700;
+		padding-left: 0.5em;
+		margin-left: 20px;
+	}
+	.current-title>.morelink {
+		float: right;
+		margin-right: 20px;
+		color: #555;
+		font-size: .8em;
+	}
+	div.subtitle {
 		background-color: #cfe178;
 		color: #333;
 		padding: .5em;
 		font-size: 20px;
 		border-radius: 5px;
 		margin-bottom: 1em;
-		display:none;
+		display: none;
 	}
 
 	#bottom-line {
-		width:100%;
-		height:44px;
-		background:url(images/bottom-line.png) no-repeat center center;
+		width: 100%;
+		height: 138px;
+		background: url(images/bottom-line2.png) no-repeat center center;
 
-		display:none;
+		display: none;
+	}
+
+	.hottext {
+		color:#45B700;
+	}
+	.hotbackground {
+		background-color: #45B700;
 	}
 </style>
 
-<div id="main-section">
-	<!--当前选择的主题-->
-	<div id="current-title">
-		{{title}}
-	</div>
-	<div id="subtitle"></div>
+
+<style>
+	/*20170108 append*/
+	.half-section {
+		display: flex;
+		flex-wrap: wrap;
+	}
+	.tour-unit-half {
+		width: 350px;
+		padding: 8px;
+		margin: 0 0 15px 16px;
+		background-color: #FFF;
+		border: 1px solid #D9D9D9;
+		position: relative;
+	}
+	.tour-unit-half>img {
+		width: 100%;
+	}
+	.tour-unit-half>.title {
+		color: #3C3C3C;
+		font-size: 24px;
+		height: 36px;
+		overflow: hidden;
+	}
+	.tour-unit-half .pricefen {
+		font-size: 24px;
+		line-height: 140%;
+		color: #3C3C3C;
+	}
+	.tour-unit-half .pricefen .yen {
+		font-size: 1.4em;
+	}
+
+	.tour-unit-half>.price {
+		color: #333;
+		font-size: 20px;
+		line-height: 28px;
+	}
+	.tour-unit-half>.price>span {
+		font-size: 1.4em;
+	}
+	.progress {
+		width: 100%;
+		height: 16px;
+	}
+	.progress>.bar {
+		width: 100%;
+		background: url(images/progress.png);
+		height: 16px;
+	}
+</style>
+
+<!--会员专享-->
+<div class="current-title">
+	<span class="title">会员专享</span>
+	<span class="morelink"><i class="am-icon-diamond am-icon-fw hottext"></i>&nbsp;如何成为会员？</span>
+</div>
+<div class="half-section">
+	<!--半长产品单元-->
+	<a ms-attr-href="info.html?lineid={{unit.lineid}}" ms-repeat-unit="list" data-repeat-rendered="listRendered">
+		<div class="tour-unit-half" ms-attr-teamcount="{{unit.teamcount}}" ms-attr-daydiff="{{unit.daydiff}}">
+			<img ms-attr-src="http://www.xiaolvyou.com.cn/{{unit.spotviewpic}}" alt="">
+			<div class="title">{{unit.tourproname}}</div>
+			<div class="pricefen"><span class="yen hottext">{{unit.leastprice}}</span><span class="hottext">元</span>+<span class="hottext">{{unit.leastprice}}积分</span></div>
+		</div>
+	</a>
+	<!--/半长产品单元-->
+</div>
+<!--/会员专享-->
+
+<!--限时团购-->
+<div class="current-title">
+	<span class="title">限时团购</span>
+	<span class="morelink"><i class="am-icon-share-square-o am-icon-fw hottext"></i>&nbsp;我要发布团购</span>
+</div>
+<div class="half-section">
+	<!--半长产品单元-->
+	<a ms-attr-href="info.html?lineid={{unit.lineid}}" ms-repeat-unit="list" data-repeat-rendered="listRendered">
+		<div class="tour-unit-half" ms-attr-teamcount="{{unit.teamcount}}" ms-attr-daydiff="{{unit.daydiff}}">
+			<img ms-attr-src="http://www.xiaolvyou.com.cn/{{unit.spotviewpic}}" alt="">
+			<div class="title">{{unit.tourproname}}</div>
+			<div class="price"><span class="hottext">&yen;{{unit.leastprice}}</span>起</div>
+			<div class="progress">
+				<div class="bar" style="width:50%;"></div>
+			</div>
+		</div>
+	</a>
+	<!--/半长产品单元-->
+</div>
+<!--/限时团购-->
+
+<!--当前选择的主题-->
+<div class="current-title">
+	<span class="title">{{title}}</span>
+</div>
+<div class="main-section">
+	<div class="subtitle"></div>
 	<!--线路单元-->
 	<a ms-attr-href="info.html?lineid={{unit.lineid}}" ms-repeat-unit="list" data-repeat-rendered="listRendered">
 		<div class="tour-unit-default" ms-attr-teamcount="{{unit.teamcount}}" ms-attr-daydiff="{{unit.daydiff}}">
@@ -343,40 +567,48 @@
 		border-top: 1px solid #d9d9d9;
 		background-color: #FFF !important;
 
-		height:100px;
+		height: 100px;
 		line-height: 100px;
 	}
+
 	#navbar .am-navbar-nav {
 		background-color: #FFF !important;
 	}
+
 	#navbar .am-navbar-default a {
 		color: #999;
 	}
+
 	#navbar .am-navbar-label {
 		font-size: 22px;
 		color: #999;
-		font-family: '微软雅黑','Microsoft YaHei';
+		font-family: '微软雅黑', 'Microsoft YaHei';
 	}
+
 	#navbar a.active span[class*=am-icon] {
-		color:#F39800;
+		color: #45B700;
 	}
+
 	#navbar a.active .am-navbar-label {
-		color:#F39800;
+		color: #45B700;
 	}
+
 	#navbar .am-navbar-nav a {
 		display: inline-block;
 		width: 100%;
 		height: 100px;
 		line-height: 100px;
 	}
+
 	#navbar ul li span[class*=am-icon] {
-		color:#8c8b94;
-		font-size:50px !important;
-		width:50px;
-		height:50px;
+		color: #8c8b94;
+		font-size: 50px !important;
+		width: 50px;
+		height: 50px;
 		line-height: 50px;
 		margin-bottom: 10px;
 	}
+
 	#navbar .am-navbar-nav a [class*=am-icon]:before {
 		font-size: 40px;
 		vertical-align: middle;
@@ -404,7 +636,8 @@
 			</a>
 		</li>
 		<li>
-			<a href="http://www.xiaolvyou.com.cn/weixin/thirdWebPageLogin.action?page_url=userinfo.html!3Flineid!3D0" class="">
+			<a href="http://www.xiaolvyou.com.cn/weixin/thirdWebPageLogin.action?page_url=userinfo.html!3Flineid!3D0"
+			   class="">
 				<span class="am-icon-user am-icon-sm"></span>
 				<span class="am-navbar-label">我的</span>
 			</a>

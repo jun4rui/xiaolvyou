@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
+	<title>选择出行人数</title>
+	<!--<link rel="icon" type="image/png" href="jslib/amazeui/i/favicon.png">-->
+	<link rel="stylesheet" href="jslib/amazeui/css/amazeui.min.css">
+	<link rel="stylesheet" href="jslib/amazeui/css/app.css">
+	<script src="jslib/amazeui/js/jquery.min.js"></script>
+	<script src="jslib/amazeui/js/amazeui.min.js"></script>
+	<script src="jslib/avalon1.5/avalon.js"></script>
+
+	<link rel="stylesheet" href="common.css">
+	<script src="common.js"></script>
+
+	<script>
+		//jzluid
+		//http://www.96hn.com/mobile/ipad_getTourTeamDetail.action?teamcode=HT-CITP-10503561050-980017
+		avalon.ready(function () {
+			var BodyVM = avalon.define({
+				$id:         'body',
+				info:        {},
+				ticketprice: [],
+				tourType:    0 //产品类型
+			});
+
+			var jzluid = getParameterValue(window.location.href, 'jzluid');
+			//参数错误则退出
+			if (jzluid == '') {
+				alert('数据异常，系统终止');
+				return false;
+			}
+			console.log(server_addr + '/mobile/ipad_getTourTeamDetail.action?jsoncallback=?&teamcode=' + jzluid);
+			$.getJSON(server_addr + '/mobile/ipad_getTourTeamDetail.action?jsoncallback=?&teamcode=' + jzluid, function (result) {
+				BodyVM.info = result;
+				BodyVM.tourType = result.htTourProVO.tourtype;
+				//如果类型是门票
+				//20170109 加入类型是实物产品的处理
+				if (result.htTourProVO.tourtype == '2' || result.htTourProVO.tourtype == '3') {
+					//将string格式的数据转换成JSON格式
+					BodyVM.ticketprice = JSON.parse(BodyVM.info.htTourProVO.ticketprice);
+					//console.log(BodyVM.ticketprice);
+				}
+				//20170109 如果是实物产品则……
+				console.log(result.htTourProVO.tourtype);
+				if (result.htTourProVO.tourtype == '3') {
+					//修改title信息
+					document.title = '选择商品数量';
+					$('header>.am-header-title>a').text('选择商品数量');
+				}
+			}).done(function () {
+				avalon.scan();
+			});
+		});
+	</script>
+</head>
+<body ms-controller="body" style="padding-bottom: 3em;">
+<!--顶部Header-->
+<style>
+	header.am-header {
+		box-shadow: 0 1px 3px #C2C2C2;
+	}
+
+	.am-header > .am-header-left > a {
+		color: #4EC585;
+	}
+
+	.am-header > .am-header-right > a {
+		color: #FF9179;
+	}
+
+	.am-header > .am-header-title > a {
+		color: #000;
+	}
+
+	.am-header-default {
+		background-color: #FFF;
+	}
+</style>
+<header data-am-widget="header"
+		class="am-header am-header-default">
+	<div class="am-header-left am-header-nav">
+		<a href="#left-link" class="">
+			<i class="am-header-icon am-icon-angle-left"></i>
+		</a>
+	</div>
+
+	<h1 class="am-header-title">
+		<a href="#title-link" class="">
+			选择出行人数
+		</a>
+	</h1>
+
+</header>
+<!--/顶部Header-->
+
+<!--主要内容区-->
+<style>
+	#main-section {
+		background-color: #FFF;
+		box-sizing: border-box;
+		padding: 0;
+		width: 100%;
+	}
+
+	#main-section > .title {
+		background-color: #4BBD7F;
+		font-size: 1.1em;
+		line-height: 120%;
+		color: #FFF;
+		box-sizing: border-box;
+		padding: 1em .5em;
+		text-align: left;
+	}
+
+	#main-section > .subtitle {
+		margin: 1em 1em .5em 1em;
+	}
+
+	div#selecteddate {
+		width: 7em;
+		font-size: 1.5em;
+		border: 2px solid #4BBD7F;
+		border-radius: 5px;
+		text-align: center;
+		margin: 0 auto;
+		line-height: 220%;
+	}
+
+	label.am-u-sm-4.am-form-label {
+		line-height: 2em;
+	}
+
+	label.am-u-sm-4.am-form-label.price {
+		color: #F37B1D;
+	}
+</style>
+<div id="main-section">
+	<!--绿色背景显示白色线路标题 -->
+	<div class="title">
+		{{info.htTourProVO.tourproname}}
+	</div>
+	<!--/绿色背景显示白色线路标题-->
+	<!--显示选择的时间-->
+	<div class="subtitle" ms-if="tourType!='3'">已选择出行时间</div>
+	<div id="selecteddate" ms-if="tourType!='3'">
+		{{info.htTourProVO.tourdate}}
+	</div>
+	<!--/显示选择的时间-->
+	<!--选择人数-->
+	<div class="subtitle">选择数量</div>
+	<!--普通票的显示-->
+	<form class="am-form am-form-horizontal" ms-if="info.htTourProVO.tourtype==1">
+		<!--一大一小 ydyxprice-->
+		<div class="am-form-group" ms-if="info.htTourProVO.ydyxprice>0">
+			<label class="am-u-sm-4 am-form-label">一大一小</label>
+			<label class="am-u-sm-4 am-form-label price">&yen;{{info.htTourProVO.ydyxprice}}元</label>
+			<input type="hidden" name="unitprice" ms-attr-value="{{info.htTourProVO.ydyxprice}}">
+			<input type="hidden" name="propricetype" value="ydyxprice">
+			<input type="hidden" name="propricedesc" value="一大一小">
+			<div class="am-u-sm-4">
+				<select name="unitnumber">
+					<option value="0" selected>未选择</option>
+					<option value="1">1x一大一小</option>
+					<option value="2">2x一大一小</option>
+					<option value="3">3x一大一小</option>
+					<option value="4">4x一大一小</option>
+					<option value="5">5x一大一小</option>
+					<option value="6">6x一大一小</option>
+					<option value="7">7x一大一小</option>
+					<option value="8">8x一大一小</option>
+					<option value="9">9x一大一小</option>
+					<option value="10">10x一大一小</option>
+				</select>
+			</div>
+		</div>
+		<!--/一大一小-->
+		<!--成人 adultprice-->
+		<div class="am-form-group" ms-if="info.htTourProVO.adultprice>0">
+			<label class="am-u-sm-4 am-form-label">成人</label>
+			<label class="am-u-sm-4 am-form-label price">&yen;{{info.htTourProVO.adultprice}}元</label>
+			<input type="hidden" name="unitprice" ms-attr-value="{{info.htTourProVO.adultprice}}">
+			<input type="hidden" name="propricetype" value="adultprice">
+			<input type="hidden" name="propricedesc" value="成人">
+			<div class="am-u-sm-4">
+				<select name="unitnumber">
+					<option value="0" selected>未选择</option>
+					<option value="1">1x成人</option>
+					<option value="2">2x成人</option>
+					<option value="3">3x成人</option>
+					<option value="4">4x成人</option>
+					<option value="5">5x成人</option>
+					<option value="6">6x成人</option>
+					<option value="7">7x成人</option>
+					<option value="8">8x成人</option>
+					<option value="9">9x成人</option>
+					<option value="10">10x成人</option>
+				</select>
+			</div>
+		</div>
+		<!--/成人-->
+		<!--二大一小 edyxprice-->
+		<div class="am-form-group" ms-if="info.htTourProVO.edyxprice>0">
+			<label class="am-u-sm-4 am-form-label">二大一小</label>
+			<label class="am-u-sm-4 am-form-label price">&yen;{{info.htTourProVO.edyxprice}}元</label>
+			<input type="hidden" name="unitprice" ms-attr-value="{{info.htTourProVO.edyxprice}}">
+			<input type="hidden" name="propricetype" value="edyxprice">
+			<input type="hidden" name="propricedesc" value="二大一小">
+			<div class="am-u-sm-4">
+				<select name="unitnumber">
+					<option value="0" selected>未选择</option>
+					<option value="1">1x二大一小</option>
+					<option value="2">2x二大一小</option>
+					<option value="3">3x二大一小</option>
+					<option value="4">4x二大一小</option>
+					<option value="5">5x二大一小</option>
+					<option value="6">6x二大一小</option>
+					<option value="7">7x二大一小</option>
+					<option value="8">8x二大一小</option>
+					<option value="9">9x二大一小</option>
+					<option value="10">10x二大一小</option>
+				</select>
+			</div>
+		</div>
+		<!--/二大一小-->
+		<!--儿童 childprice-->
+		<div class="am-form-group" ms-if="info.htTourProVO.childprice>0">
+			<label class="am-u-sm-4 am-form-label">儿童</label>
+			<label class="am-u-sm-4 am-form-label price">&yen;{{info.htTourProVO.childprice}}元</label>
+			<input type="hidden" name="unitprice" ms-attr-value="{{info.htTourProVO.childprice}}">
+			<input type="hidden" name="propricetype" value="childprice">
+			<input type="hidden" name="propricedesc" value="儿童">
+			<div class="am-u-sm-4">
+				<select name="unitnumber">
+					<option value="0" selected>未选择</option>
+					<option value="1">1x儿童</option>
+					<option value="2">2x儿童</option>
+					<option value="3">3x儿童</option>
+					<option value="4">4x儿童</option>
+					<option value="5">5x儿童</option>
+					<option value="6">6x儿童</option>
+					<option value="7">7x儿童</option>
+					<option value="8">8x儿童</option>
+					<option value="9">9x儿童</option>
+					<option value="10">10x儿童</option>
+				</select>
+			</div>
+		</div>
+		<!--/儿童-->
+	</form>
+	<!--/普通票的显示-->
+	<!--门票的显示 ticketprice-->
+	<form class="am-form am-form-horizontal" ms-if="info.htTourProVO.tourtype==2">
+		<div class="am-form-group" ms-repeat-unit="ticketprice">
+			<label class="am-u-sm-4 am-form-label">{{unit.position}}</label>
+			<label class="am-u-sm-4 am-form-label price">&yen;{{unit.price}}元</label>
+			<input type="hidden" name="unitprice" ms-attr-value="{{unit.price}}">
+			<input type="hidden" name="propricetype" value="ticketprice">
+			<input type="hidden" name="propricedesc" ms-attr-value="{{unit.position}}">
+			<div class="am-u-sm-4">
+				<select name="unitnumber">
+					<option value="0" selected>未选择</option>
+					<option value="1">1张</option>
+					<option value="2">2张</option>
+					<option value="3">3张</option>
+					<option value="4">4张</option>
+					<option value="5">5张</option>
+					<option value="6">6张</option>
+					<option value="7">7张</option>
+					<option value="8">8张</option>
+					<option value="9">9张</option>
+					<option value="10">10张</option>
+				</select>
+			</div>
+		</div>
+		<!--/门票-->
+	</form>
+	<!--/门票的显示-->
+	<!--实物产品的显示-->
+	<form class="am-form am-form-horizontal" ms-if="info.htTourProVO.tourtype==3">
+		<div class="am-form-group" ms-repeat-unit="ticketprice">
+			<label class="am-u-sm-4 am-form-label">{{unit.position}}</label>
+			<label class="am-u-sm-4 am-form-label price">&yen;{{unit.price}}元</label>
+			<input type="hidden" name="unitprice" ms-attr-value="{{unit.price}}">
+			<input type="hidden" name="propricetype" value="ticketprice">
+			<input type="hidden" name="propricedesc" ms-attr-value="{{unit.position}}">
+			<div class="am-u-sm-4">
+				<select name="unitnumber">
+					<option value="0" selected>未选择</option>
+					<option value="1">1件</option>
+					<option value="2">2件</option>
+					<option value="3">3件</option>
+					<option value="4">4件</option>
+					<option value="5">5件</option>
+					<option value="6">6件</option>
+					<option value="7">7件</option>
+					<option value="8">8件</option>
+					<option value="9">9件</option>
+					<option value="10">10件</option>
+				</select>
+			</div>
+		</div>
+	</form>
+	<!--/实物产品的显示-->
+	<!--/选择人数-->
+</div>
+<!--/主要内容区-->
+<!--底部工具栏-->
+<style>
+	#footer {
+		/*background-color: #fe8568;*/
+	}
+
+	#footer .am-navbar-nav,
+	#footer .am-navbar-nav > div {
+		padding: 0;
+	}
+
+	#footer .am-navbar-nav button {
+		background-color: #FE8568;
+		line-height: 33px;
+		border: 0;
+	}
+</style>
+<div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default" id="footer">
+	<div class="am-navbar-nav am-cf am-g doc-am-g">
+		<button type="button" onClick="doSubmit()" class="am-btn am-btn-primary am-btn-block">确定</button>
+	</div>
+</div>
+<!--/底部工具栏-->
+
+<script>
+	function doSubmit() {
+		/*
+		 /mobile/tourorder_tourOrderStep3.action
+		 参数范例：
+		 cteamcode=teamcode
+		 pronum=[5,2,1]
+		 proprice=[150,200,300]
+		 propricedesc=['成人价','儿童价','一大一小','二大一小']
+		 */
+		var t_pronum       = [];
+		var t_proprice     = [];
+		var t_propricetype = [];
+		var t_propricedesc = [];
+
+		var pronum       = [];
+		var proprice     = [];
+		var propricetype = [];
+		var propricedesc = [];
+
+		var cteamcode = getParameterValue(window.location.href, 'jzluid');
+
+		//保存人数和单价到数组中
+		$('input[name=unitprice]').each(function () {
+			t_proprice.push($(this).val());
+		});
+		$('select[name=unitnumber]').each(function () {
+			t_pronum.push($(this).val());
+		});
+		$('input[name=propricetype]').each(function () {
+			t_propricetype.push($(this).val());
+		});
+		//保存名称到数组中
+		$('input[name=propricedesc]').each(function () {
+			t_propricedesc.push($(this).val());
+		});
+		//console.log(t_proprice);
+		//console.log(t_pronum);
+
+		//剔除掉数组中无效的数据
+		for (var i in t_proprice) {
+			if (t_proprice[i].replace(/ /g, '').length > 0 && t_pronum[i] != 0) {
+				proprice.push(t_proprice[i]);
+				pronum.push(t_pronum[i]);
+				propricetype.push(t_propricetype[i]);
+				propricedesc.push(t_propricedesc[i]);
+			}
+		}
+		//console.log('final:'+proprice.toString());
+		//console.log('final:'+pronum.toString());
+
+		if (proprice.length == 0 || pronum.length == 0) {
+			alert('请至少选择一个产品');
+			return false;
+		}
+		//构造接口参数
+		//TEST: server_addr + '/mobile/tourorder_tourOrderStep3.action?jsoncallback=?&proprice=' + proprice.toString() + '&pronum=' + pronum.toString() + '&propricetype='+propricetype.toString()+'&cteamcode=' + cteamcode + '&userid=' + window.localStorage.getItem('XLY_USERID') + '&sellerid=' + (getParameterValue(window.location.href, 'sellerid') || 0)
+		console.log(server_addr + '/mobile/tourorder_tourOrderStep3.action?jsoncallback=?&proprice=' + proprice.toString() + '&pronum=' + pronum.toString() + '&propricetype=' + propricetype.toString() + '&propricedesc=' + propricedesc.toString() + '&cteamcode=' + cteamcode + '&userid=' + window.localStorage.getItem('XLY_USERID') + '&sellerid=' + (getParameterValue(window.location.href, 'sellerid') || 0));
+		$.getJSON(server_addr + '/mobile/tourorder_tourOrderStep3.action?jsoncallback=?&proprice=' + proprice.toString() + '&pronum=' + pronum.toString() + '&propricetype=' + propricetype.toString() + '&propricedesc=' + propricedesc.toString() + '&cteamcode=' + cteamcode + '&userid=' + window.localStorage.getItem('XLY_USERID') + '&sellerid=' + (getParameterValue(window.location.href, 'sellerid') || 0), function (result) {
+			/*
+			 status：
+			 1 成功
+			 101 产品数量不能为零
+			 102 产品数量不足
+			 */
+			//成功提交，前往下一个流程
+			if (result.status == 1) {
+				//window.location.href = 'fillorder2.html?cteamcode='+cteamcode+'&order_amount='+result.tourOrderVO.order_amount+'&adult_num='+result.tourOrderVO.adult_num+'&child_num='+result.tourOrderVO.child_num+'&detailpre='+result.tourOrderVO.detailpre;http://www.96hn.com/mobile/tourorder_tourOrderStep3.action?proprice=20,10&pronum=1,2&cteamcode=HT-GLOO-10848561056-189329
+				window.location.href = 'fillorder2.html';
+			} else {
+				var errMsg = '';
+				if (result.status == 101) {
+					errMsg = '产品数量不能为零';
+				}
+				if (result.status == 102) {
+					errMsg = '产品数量不足';
+				}
+				if (errMsg != '') {
+					alert('错误:' + errMsg + '\n请修改后重新提交');
+					return false;
+				}
+			}
+		});
+	}
+</script>
+</body>
+</html>

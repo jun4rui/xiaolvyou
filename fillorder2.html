@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
+	<title>填写信息</title>
+	<!--<link rel="icon" type="image/png" href="jslib/amazeui/i/favicon.png">-->
+	<link rel="stylesheet" href="jslib/amazeui/css/amazeui.min.css">
+	<link rel="stylesheet" href="jslib/amazeui/css/app.css">
+	<script src="jslib/amazeui/js/jquery.min.js"></script>
+	<script src="jslib/amazeui/js/amazeui.min.js"></script>
+	<script src="jslib/avalon1.5/avalon.js"></script>
+
+	<link rel="stylesheet" href="common.css?20160712">
+	<script src="common.js"></script>
+
+	<script>
+		$('#addrole-link').ready(function () {
+			$('#addrole-link').attr({'href': 'addrole.html' + window.location.href.substring(window.location.href.indexOf('?'))});
+		});
+
+		avalon.ready(function () {
+			var userid = window.localStorage.getItem('XLY_USERID');
+
+			var BodyVM = avalon.define({
+				$id:      'body',
+				info:     {},	//用户信息
+				params:   {},
+				coupon:   [], //优惠券列表
+				tourType: 0,	//商品类型
+				// 处理提交表单
+				submit:   function () {
+					var contact_name  = $('#contact_name').val();
+					var contact_phone = $('#contact_phone').val();
+					var contact_note  = $('#contact_note').val();
+					var order_source  = 12;
+					var pay_type      = 121603;
+					var jzl_order_id  = $('#coupon-code').val().trim();
+
+					if (contact_name == '' || contact_phone == '' || contact_phone.length < 7 || userid == '') {
+						alert('请填写好 联系人名称、联系人电话后再提交');
+						return false;
+					}
+					//20170109 加入实物产品需要填写送货地址的检测
+					if ($('#tourtype').val()=='3' && $('.contact_note_as_address').val().length<5){
+						alert('请填写好 送货地址');
+						return false;
+					}
+					//console.log(server_addr+'/mobile/tourorder_addTourOrder.action?jsoncallback=?&tourOrderVO.contact_name='+contact_name+'&tourOrderVO.contact_phone='+contact_phone+'&tourOrderVO.contact_note='+contact_note+'&tourOrderVO.order_source='+order_source+'&tourOrderVO.pay_type='+pay_type+'&userid='+userid+'&tourOrderVO.jzl_order_id='+jzl_order_id);
+					$.getJSON(server_addr + '/mobile/tourorder_addTourOrder.action?jsoncallback=?&tourOrderVO.contact_name=' + contact_name + '&tourOrderVO.contact_phone=' + contact_phone + '&tourOrderVO.contact_note=' + contact_note + '&tourOrderVO.order_source=' + order_source + '&tourOrderVO.pay_type=' + pay_type + '&userid=' + userid + '&tourOrderVO.jzl_order_id=' + jzl_order_id, function (result) {
+						/*
+						 1、成功
+						 101、未填写联系人
+						 102、出行人信息不正确
+						 */
+						if (result.status == 1) {
+							//成功的后续处理
+							//console.log('success!');
+							var payUrl = server_addr + '/tour/tourorder_payForShowSysOrder.action?sys_show_order_id=' + result.orderParam.sys_show_order_id;
+							if (result.orderParam.preferential_price == 0) {
+								payUrl = 'pay4free_mobile.html';
+							}
+							window.location.href = payUrl;
+						} else {
+							//失败的后续处理
+							var errMsg = '';
+							if (result.status == 101) {
+								errMsg = '未填写联系人或联系电话';
+							}
+							if (result.status == 102) {
+								errMsg = '出行人信息不正确';
+							}
+							if (result.status == 103) {
+								errMsg = '用户信息错误';
+							}
+							if (errMsg != '') {
+								alert('错误：' + errMsg + '\n请返回后重新检查');
+							}
+							return false;
+						}
+					});
+				}
+			});
+
+
+			// 载入参数信息
+			console.log(server_addr + '/mobile/tourorder_getOrderParams.action?jsoncallback=?&userid=' + userid);
+			$.getJSON(server_addr + '/mobile/tourorder_getOrderParams.action?jsoncallback=?&userid=' + userid, function (result) {
+				// 数据错误的处理
+				if (!result.hasOwnProperty('jzl_cteamcode')) {
+					alert('数据错误，系统将自动跳转回首页，请尝试再次重新提交订单');
+					window.location.href = 'index.html';
+				}
+
+				BodyVM.params = result;
+				BodyVM.tourType = result.tourtype;
+				console.log('TourType: ',BodyVM.tourType);
+				// 载入线路详情
+				//console.log(server_addr+'/mobile/ipad_getTourTeamDetail.action?jsoncallback=?&teamcode=' + result.jzl_cteamcode);
+				$.getJSON(server_addr + '/mobile/ipad_getTourTeamDetail.action?jsoncallback=?&teamcode=' + result.jzl_cteamcode, function (result) {
+					BodyVM.info = result;
+				}).done(function () {
+					avalon.scan();
+				});
+			});
+
+			//载入用户优惠券信息
+			var XLY_USERID = window.localStorage.getItem('XLY_USERID') || '';	//获取用户ID，没有则为''
+			console.log(server_addr + '/common/websinfo_queryWebsInfos.action?jsoncallback=?&url=' + XLY_USERID + '&infoClass=732&submit=ajax');
+			if (XLY_USERID != '') {
+				$.getJSON(server_addr + '/common/websinfo_queryWebsInfos.action?jsoncallback=?&url=' + XLY_USERID + '&infoClass=732&submit=ajax', function (result) {
+					BodyVM.coupon = result;
+				});
+			}
+
+		});
+	</script>
+</head>
+<body ms-controller="body" style="padding-bottom: 3em;">
+<input type="hidden" id="tourtype" ms-attr-value="{{tourType}}">
+<!--顶部Header-->
+<style>
+	header.am-header {
+		box-shadow: 0 1px 3px #C2C2C2;
+	}
+
+	.am-header > .am-header-left > a {
+		color: #4EC585;
+	}
+
+	.am-header > .am-header-right > a {
+		color: #FF9179;
+	}
+
+	.am-header > .am-header-title > a {
+		color: #000;
+	}
+
+	.am-header-default {
+		background-color: #FFF;
+	}
+</style>
+<header data-am-widget="header"
+		class="am-header am-header-default">
+	<div class="am-header-left am-header-nav">
+		<a href="#left-link" class="">
+			<i class="am-header-icon am-icon-angle-left"></i>
+		</a>
+	</div>
+
+	<h1 class="am-header-title">
+		<a href="#title-link" class="">
+			填写信息
+		</a>
+	</h1>
+
+</header>
+<!--/顶部Header-->
+
+<!--主要内容区-->
+<style>
+	#main-section {
+		background-color: #FFF;
+		box-sizing: border-box;
+		padding: 0;
+		width: 100%;
+	}
+
+	#main-section > .title {
+		background-color: #4BBD7F;
+		font-size: 1.1em;
+		line-height: 120%;
+		color: #FFF;
+		box-sizing: border-box;
+		padding: 1em .5em;
+		text-align: left;
+	}
+
+	#main-section > .title > span {
+		font-size: 0.9em;
+		display: block;
+		margin-top: .5em;
+	}
+
+	.am-form .am-form-group {
+		margin-bottom: 0;
+	}
+
+	.am-form li {
+		padding: .5em;
+	}
+
+	.am-form li.title-line {
+		color: #666;
+		background-color: #F8F8F8;
+	}
+
+	.am-form li.title-line.title {
+		font-weight: bold;
+		border-left: 3px solid #ABABAB;
+		background-color: #F1F1F1;
+	}
+
+	.am-form .am-g label {
+		line-height: 19.2px;
+		padding: 8px 0;
+	}
+
+	.highlight {
+		color: #DD514C;
+		font-size: 1.2em;
+	}
+
+	span.coupon-unit {
+		background-color: #DC2F2F;
+		color: #FFF;
+		line-height: 200%;
+		/* margin-right: 1em; */
+		padding: 0 .5em;
+		display: block;
+		margin: 5px 1em 0 0;
+		border: 1px solid #EA7777;
+		cursor: pointer;
+		border-radius: 3px;
+	}
+</style>
+<div id="main-section">
+	<!--绿色背景显示白色线路标题 -->
+	<div class="title">
+		{{info.htTourProVO.tourproname}}
+		<span ms-if="tourType!='3'">出行日期：{{info.htTourProVO.tourdate}}</span>
+	</div>
+	<!--/绿色背景显示白色线路标题-->
+
+	<form actio="" class="am-form" id="contact_form">
+		<ul class="am-list am-list-static">
+			<li class="title-line">总计价格：&yen;<span class="highlight">{{params.order_amount}}</span>元</li>
+			<li class="title-line title" ms-if="info.htTourProVO.featured!='出行人不填'">出行人信息：</li>
+			<li class="title-line" ms-if="info.htTourProVO.featured!='出行人不填'">
+				<span style="font-size:0.8em;"><span class="xly-red">*</span>请选择 <span class="xly-red">{{params.adult_num}}</span> 名成人和 <span class="xly-red">{{params.child_num}}</span> 名儿童</span>
+				<button class="am-btn am-btn-xs am-btn-warning am-round am-align-right" id="selectrole">
+					<a href="selectrole.html" style="color:#FFF;">
+						<i class="am-icon-user-plus"></i>
+						选择出行人
+					</a>
+				</button>
+			</li>
+			<li ms-if="info.htTourProVO.featured!='出行人不填' && (params.passengerNameStr||'')!=''">
+				<div>
+					已选择：{{params.passengerNameStr}}
+				</div>
+				<div class="clear"></div>
+			</li>
+			<!--优惠券区块-->
+			<li class="title-line title">优惠券：</li>
+			<li class="title-line">
+				<div class="am-input-group am-input-group-warning">
+					<input type="text" id="coupon-code-input" class="am-form-field" placeholder="优惠券代码">
+					<span class="am-input-group-btn">
+						<button class="am-btn am-btn-warning" onclick="checkCouponCode()" type="button">使用</button>
+					</span>
+				</div>
+				您当前拥有的优惠券：<br>
+				<span class="coupon-unit" ms-repeat-coupon="coupon" ms-attr-code="{{coupon.description}}">{{coupon.info_name}}&nbsp;减{{coupon.origin}}元 {{coupon.info_endtime}}到期</span>
+
+				<input type="hidden" id="coupon-code" value="">
+				<input type="hidden" id="lineid" ms-attr-value="{{params.lineid}}">
+			</li>
+			<script>
+				function checkCouponCode() {
+					var couponCode     = $('#coupon-code-input').val().trim();
+					var couponCodeUsed = $('#coupon-code').val();
+					var lineid         = $('#lineid').val();
+					//检查是否已经使用过优惠券
+					if (couponCodeUsed != '') {
+						alert('您已使用过优惠券了');
+						return false;
+					}
+					//检查是否输入优惠券
+					if (couponCode.length == 0) {
+						alert('请填写优惠券代码再使用');
+						return false;
+					}
+					//调用接口验证优惠券
+					/*status :  1 成功  101 已使用 102 优惠券不存在 103  参数错误
+					 infoVO :  新闻对象   info_name 优惠券名称  origin 优惠价格*/
+					$.getJSON(server_addr + '/mobile/tourorder_isVaildCoupon.action?jsoncallback=?&jzl_order_id=' + couponCode + '&lineid=' + lineid, function (result) {
+						if (result.status == 1) {
+							//使用优惠券成功的操作
+							//弹出提醒
+							alert('您已使用优惠券:' + result.infoVO.info_name + ', 抵扣' + result.infoVO.origin + '元');
+							//修改优惠券隐藏域信息
+							$('#coupon-code').val(couponCode);
+							//修改优惠券输入input信息
+							$('#coupon-code-input').val('已用:' + result.infoVO.info_name + ', 抵扣' + result.infoVO.origin + '元');
+							//将优惠券input改成只读
+							$('#coupon-code-input').prop('readonly', true);
+						} else {
+							//使用优惠券失败的操作
+							var errMsg = '';
+							if (result.status == 101) errMsg = '该优惠券已被使用';
+							if (result.status == 102) errMsg = '优惠券不存在';
+							if (result.status == 103) errMsg = '优惠券错误';
+							if (result.status == 104) errMsg = '此线路不享受该优惠';
+							alert(errMsg);
+						}
+					});
+				}
+				$('#contact_form').delegate('.coupon-unit', 'click', function () {
+					$('#coupon-code-input').val($(this).attr('code'));
+					alert('请点击右侧“使用”按钮确认使用该优惠券');
+				});
+			</script>
+			<!--/优惠券区块-->
+			<li class="title-line title">联系人信息：</li>
+			<li>
+				<div class="am-form-group am-g">
+					<label for="contact_name" class="am-u-sm-3 am-form-label"><span class="xly-red">*</span>姓名</label>
+					<div class="am-u-sm-9">
+						<input type="text" id="contact_name" placeholder="请输入联系人姓名">
+					</div>
+				</div>
+			</li>
+			<li>
+				<div class="am-form-group am-g">
+					<label for="contact_phone" class="am-u-sm-3 am-form-label"><span class="xly-red">*</span>手机</label>
+					<div class="am-u-sm-9">
+						<input type="text" id="contact_phone" placeholder="请输入联系人手机号码">
+					</div>
+				</div>
+			</li>
+			<li>
+				<div class="am-form-group am-g" ms-if="tourType!='3'">
+					<label for="contact_note">备注</label>
+					<textarea class="" rows="5" id="contact_note" placeholder="请告诉我们您的特殊需求"></textarea>
+				</div>
+				<div class="am-form-group am-g" ms-if="tourType=='3'">
+					<label for="contact_note"><span class="xly-red">*</span>送货地址</label>
+					<textarea class="contact_note_as_address" rows="5" id="contact_note" placeholder="请您填写好送货地址"></textarea>
+				</div>
+			</li>
+			<!--<li>-->
+			<!--我已阅读并同意 <a href="#" style="display:inline">《用户须知》</a>-->
+			<!--</li>-->
+		</ul>
+	</form>
+</div>
+<!--/主要内容区-->
+<!--底部工具栏-->
+<style>
+	#footer {
+		/*background-color: #fe8568;*/
+	}
+
+	#footer .am-navbar-nav,
+	#footer .am-navbar-nav > div {
+		padding: 0;
+	}
+
+	#footer .am-navbar-nav button {
+		background-color: #FE8568;
+		line-height: 33px;
+		border: 0;
+	}
+</style>
+<div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default" id="footer">
+	<div class="am-navbar-nav am-cf am-g doc-am-g">
+		<button type="button" ms-click="submit" class="am-btn am-btn-primary am-btn-block">前往支付</button>
+	</div>
+</div>
+
+</body>
+</html>

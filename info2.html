@@ -69,7 +69,8 @@
 				$('#info-section').append(BodyVM.info.productdescribe.replace(/&nbsp;/g, ' '));
 
 				//如果类型是门票
-				if (result.lineVO.tourtype == '2') {
+				//20170109 加入tourtype=='3' 的实体物品
+				if (result.lineVO.tourtype == '2' || result.lineVO.tourtype == '3') {
 					//将string格式的数据转换成JSON格式
 					BodyVM.ticketprice = JSON.parse(BodyVM.info.ticketprice);
 				}
@@ -165,10 +166,7 @@
 		<!--渲染完毕后执行galleryRendered-->
 		<li>
 			<a href="#">
-				<!-- TODO:注意这里是写死的
 				<img ms-attr-src="http://www.xiaolvyou.com.cn/{{info.spotviewpic}}" style="object-fit:fill;">
-				-->
-				<img src="http://www.xiaolvyou.com.cn/pic/tour/2016-10-17_23-01-50_0186.jpg" style="object-fit:fill;">
 			</a>
 		</li>
 	</ul>
@@ -414,14 +412,28 @@
 			</div>
 		</div>
 	</li>
-	<!--如果是门票价格模式 TODO:暂时没数据显示-->
-	<li ms-if="info.tourtype==2">
+	<!--如果是门票价格模式-->
+	<li ms-if="info.tourtype==2" ms-repeat-unit="ticketprice">
 		<div class="am-g doc-am-g">
-			<span ms-repeat-unit="ticketprice" style="display:block;">
-				<div class="am-u-sm-7 am-u-md-7 am-u-lg-7" style="color:#333;">{{unit.position}}</div>
-				<div class="am-u-sm-3 am-u-md-3 am-u-lg-3" style="color: #F0C30D;">&yen;{{unit.price}}元</div>
-				<div class="am-u-sm-2 am-u-md-2 am-u-lg-2"><a ms-attr-href="http://www.xiaolvyou.com.cn/weixin/thirdWebPageLogin.action?page_url={{(encodeURIComponent('selectdate.html?lineid='+info.lineid+'&sellerid='+sellerid)).replace(/%/g,'!')}}" class="am-btn am-btn-default am-btn-xs am-radius">报名</a></div>
-			</span>
+			<div class="am-u-sm-7 am-u-md-7 am-u-lg-7" style="color:#333;">{{unit.position}}</div>
+			<div class="am-u-sm-3 am-u-md-3 am-u-lg-3" style="color: #F0C30D;">&yen;{{unit.price}}元</div>
+			<div class="am-u-sm-2 am-u-md-2 am-u-lg-2">
+				<a ms-attr-href="http://www.xiaolvyou.com.cn/weixin/thirdWebPageLogin.action?page_url={{(encodeURIComponent('selectdate.html?lineid='+info.lineid+'&sellerid='+sellerid)).replace(/%/g,'!')}}" class="am-btn am-btn-default am-btn-xs am-radius">
+					报名
+				</a>
+			</div>
+		</div>
+	</li>
+	<!--20170109 加入实物商品模式 tourtype==3-->
+	<li ms-if="info.tourtype==3" ms-repeat-unit="ticketprice">
+		<div class="am-g doc-am-g">
+			<div class="am-u-sm-7 am-u-md-7 am-u-lg-7" style="color:#333;">{{unit.position}}</div>
+			<div class="am-u-sm-3 am-u-md-3 am-u-lg-3" style="color: #F0C30D;">&yen;{{unit.price}}元</div>
+			<div class="am-u-sm-2 am-u-md-2 am-u-lg-2">
+				<a ms-attr-href="http://www.xiaolvyou.com.cn/weixin/thirdWebPageLogin.action?page_url={{(encodeURIComponent('selectdate.html?lineid='+info.lineid+'&sellerid='+sellerid)).replace(/%/g,'!')}}" class="am-btn am-btn-default am-btn-xs am-radius">
+					购买
+				</a>
+			</div>
 		</div>
 	</li>
 </ul>

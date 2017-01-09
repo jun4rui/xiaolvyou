@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
+	<title>产品详情</title>
+	<!--<link rel="icon" type="image/png" href="jslib/amazeui/i/favicon.png">-->
+	<script src="jslib/amazeui/js/jquery.min.js"></script>
+	<link rel="stylesheet" href="jslib/amazeui/css/amazeui.min.css">
+	<link rel="stylesheet" href="jslib/amazeui/css/app.css">
+
+	<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+	<script src="jslib/amazeui/js/amazeui.min.js"></script>
+	<script src="jslib/avalon1.5/avalon.js"></script>
+
+	<link rel="stylesheet" href="common.css">
+	<script src="common.js?20160706g"></script>
+
+	<script>
+		//alert(window.location.href);
+		avalon.ready(function () {
+			var BodyVM = avalon.define({
+				$id:            'body',
+				info:           {},
+				sellerid:       '',
+				ticketprice:    [],
+				adultNum:       0,	//当前成人数
+				childNum:       0,	//当前儿童数
+				personNumTotal: 0,	//累计人数
+				userList:       [],
+				specialalert:   [],	//记录各种属性，例如：铁定成团等，从info.specialalert中获取，原数据用空格分开，获取线路详情后转成array更新进来
+				salerName:      '',	//领队名称
+				salerPhone:     '',	//领队电话
+				salerAvatar:    '',	//领队头像url
+
+				tourType:     0,	//产品类型（3是水果之类实物产品，很多地方需要用这个来判断显示的内容）
+				userRendered: function () {
+					$('.faceunit').popover({
+						trigger: 'hover focus'
+					});
+				}
+			});
+
+			avalon.scan();
+
+			var lineid      = getParameterValue(window.location.href, 'lineid');
+			BodyVM.sellerid = getParameterValue(window.location.href, 'sellerid') || 0;
+			if (lineid == '' || lineid == null) {
+				return false;
+			}
+			// 获取线路详情
+			//console.log(server_addr+'/mobile/ipad_getTourLine.action?jsoncallback=?&lineid='+lineid);
+			$.getJSON(server_addr + '/mobile/ipad_getTourLine.action?jsoncallback=?&lineid=' + lineid, function (result) {
+				BodyVM.info         = result.lineVO;
+				BodyVM.specialalert = result.lineVO.specialalert.split(',');	//将specialalert用空格分隔转换为array
+
+				//获得产品类型
+				BodyVM.tourType = result.lineVO.tourtype;
+
+				//获取领队信息
+				var _tempSalerInfo = result.lineVO.salermemo.split('&nbsp;');
+				console.log(_tempSalerInfo);
+				BodyVM.salerName  = _tempSalerInfo[1];
+				BodyVM.salerPhone = _tempSalerInfo[0];
+				$.getJSON(server_addr + '/user/htuser_getGuestsInfoByPhone.action?jsoncallback=?&phone=' + BodyVM.salerPhone, function (result) {
+					BodyVM.salerAvatar = result.guestVO.profession;
+				});
+
+				$('#info-section').append(BodyVM.info.productdescribe.replace(/&nbsp;/g, ' '));
+
+				//如果类型是门票
+				if (result.lineVO.tourtype == '2') {
+					//将string格式的数据转换成JSON格式
+					BodyVM.ticketprice = JSON.parse(BodyVM.info.ticketprice);
+				}
+			});
+
+			//获取预订用户人数
+			$.getJSON(server_addr + '/mobile/tourorder_queryOrderForPersonNum.action?jsoncallback=?&lineid=' + lineid, function (result) {
+				BodyVM.adultNum = result.adult;
+				BodyVM.childNum = result.child;
+			});
+			//获取累计用户人数
+			$.getJSON(server_addr + '/mobile/tourorder_queryOrderForPersonNum.action?jsoncallback=?&personNumType=leiji&lineid=' + lineid, function (result) {
+				BodyVM.personNumTotal = parseInt(result.adult) + parseInt(result.child);
+			});
+			//获取预订用户列表
+			$.getJSON(server_addr + '/mobile/tourorder_queryOrderForGuest.action?jsoncallback=?&lineid=' + lineid, function (result) {
+				BodyVM.userList = result;
+			});
+		});
+	</script>
+	<style>
+		body {
+			background-color: #F3F3F3;
+		}
+
+		img.faceunit {
+			width: 2em;
+			height: 2em;
+			border-radius: 50%;
+			float: left;
+			margin: .2em;
+			/* margin-bottom: 0.4em; */
+			border: 1px solid #CCC;
+			box-sizing: border-box;
+		}
+
+		.color-hot {
+			color: #F0C30D;
+		}
+
+		.color-default {
+			color: #333;
+		}
+
+		.color-light {
+			color: #999;
+		}
+
+		.color-gray {
+			color: #666;
+		}
+
+		.bg-hot {
+			background-color: #F0C30D;
+		}
+
+		.bg-gray {
+			background-color: #F3F3F3;
+		}
+
+		.bg-default {
+			background-color: #FFF;
+		}
+
+		.text-right {
+			text-align: right;
+		}
+
+		.text-left {
+			text-align: left;
+		}
+	</style>
+</head>
+<body class="am-with-fixed-navbar" ms-controller="body" oncontextmenu="return false" ondragstart="return false" onselectstart="return false" onselect="document.selection.empty()" oncopy="document.selection.empty()" onbeforecopy="return false">
+<!--顶部画廊-->
+<style>
+	#galleryAD {
+		position: relative;
+	}
+
+	#galleryAD .float-btn {
+		position: absolute;
+		top: .5em;
+		z-index: 9999999999;
+		opacity: 0.5;
+		width: 1.5em;
+		height: 1.5em;
+		line-height: 1.5em;
+	}
+</style>
+<div data-am-widget="slider" id="galleryAD" class="ms-controller am-slider-manual am-slider am-slider-a5">
+	<ul class="am-slides">
+		<!--渲染完毕后执行galleryRendered-->
+		<li>
+			<a href="#">
+				<!-- TODO:注意这里是写死的
+				<img ms-attr-src="http://www.xiaolvyou.com.cn/{{info.spotviewpic}}" style="object-fit:fill;">
+				-->
+				<img src="http://www.xiaolvyou.com.cn/pic/tour/2016-10-17_23-01-50_0186.jpg" style="object-fit:fill;">
+			</a>
+		</li>
+	</ul>
+	<!--返回图标-->
+	<a href="index.html" class="float-btn am-icon-btn am-icon-reply" style="left:.2em;"></a>
+	<!--电话咨询图标-->
+	<a href="tel:4007770731" class="float-btn am-icon-btn am-icon-phone" style="right:.2em;"></a>
+</div>
+<script>
+	$('.am-slider-manual').flexslider({"directionNav": false});
+</script>
+<!--/顶部画廊-->
+
+<!--主要内容区-->
+<style>
+	#main-section {
+		background-color: #FDFDFE;
+		box-sizing: border-box;
+		/*padding: 0 .5em;*/
+		width: 100%;
+		margin-bottom: 1.2em;
+		border-bottom: 1px solid #DEDEDE;
+	}
+
+	#main-section > .title {
+		box-sizing: border-box;
+		line-height: 1.5em;
+		/*height: 2.4em;*/
+		font-size: 1.2em;
+		font-weight: bold;
+		padding: 0 .5em;
+	}
+
+	#main-section > .desc {
+		color: #333;
+		/* line-height: 200%; */
+		font-size: 1em;
+		padding: 0 .6em;
+	}
+
+	#main-section .price {
+		/* background-color: #F65934; */
+		color: #F0C30D;
+		line-height: 200%;
+		font-size: 1.5em;
+		font-weight: bold;
+		display: inline;
+	}
+
+	#main-section .price span.yen {
+		font-size: 0.8em;
+		font-weight: normal;
+		color: #F0C30D;
+		float: left;
+		padding-top: 15px;
+		line-height: 100%;
+	}
+
+	#main-section .price span.pricenum {
+		float: left;
+	}
+
+	#main-section .price span.qi {
+		font-size: 0.6em;
+		font-weight: normal;
+		color: #F0C30D;
+		float: left;
+		padding-top: 20px;
+		line-height: 100%;
+	}
+
+	#main-section .count-num {
+		color: #939393;
+		line-height: 2;
+		text-align: right;
+	}
+
+	#main-section .count-num > span {
+		font-size: 1.5em;
+	}
+
+	#main-section [class*=am-u-] {
+		padding: 0;
+	}
+
+	#main-section #date-select {
+		line-height: 1.5em;
+		border-color: #F37B1D;
+		padding: 0 .5em;
+	}
+</style>
+<form class="am-form am-form-horizontal">
+	<div id="main-section">
+		<div class="title">{{info.tourproname}}</div>
+		<div class="desc">{{info.adtitle}}</div>
+		<div class="am-g doc-am-g" style="border-bottom:1px solid #DEDEDE;padding: 0 0.6em;">
+			<div class="am-u-sm-6 am-u-md-6 am-u-lg-6">
+				<div class="price">
+					<span class="yen">&yen;</span>
+					<span class="pricenum">{{info.leastprice}}</span>
+					<span class="qi">起</span>
+				</div>
+			</div>
+			<!--活动产品的累计显示-->
+			<div class="am-u-sm-6 am-u-md-6 am-u-lg-6 count-num" ms-if="tourType!=3">
+				已累计报名<span>{{personNumTotal}}</span>人次
+			</div>
+			<!--实物产品的累计显示-->
+			<div class="am-u-sm-6 am-u-md-6 am-u-lg-6 count-num" ms-if="tourType==3">
+				已累计销售<span>{{personNumTotal}}</span>笔
+			</div>
+			<style scoped>
+				.coupon-show {
+					display: inline;
+					vertical-align: middle;
+					float: left;
+					/* line-height: 48px; */
+					margin: 0.6em 0;
+				}
+
+				.coupon-show > span {
+					display: inline-block;
+					background-color: #FF575B;
+					border: 1px solid #FF575B;
+					color: #FFF;
+					float: left;
+					padding: 0 .5em;
+				}
+
+				.coupon-show > div {
+					display: inline-block;
+					color: #FF575B;
+					border: 1px solid #FF575B;
+					float: left;
+					padding: 0 .5em;
+				}
+
+				.special-unit {
+					display: inline-block;
+					margin-right: 1em;
+					padding: 12px 0;
+				}
+			</style>
+			<div class="am-u-sm-12 am-u-md-12 am-u-lg-12" ms-if="info.sold>0">
+				<img src="images/coupon_icon.png" alt="" style="height: 3em;display: inline;float: left;vertical-align: middle;">
+				<div class="coupon-show">
+					<span>优惠券</span>
+					<div>本活动最多可使用优惠券{{info.sold}}元</div>
+				</div>
+			</div>
+			<!--实物市场价显示-->
+			<div class="am-u-sm-12 am-u-md-12 am-u-lg-12" ms-if="tourType==3">
+				<div class="color-gray">
+					<div>市场价：<span style="text-decoration: line-through">{{info.adcontent}}</span></div>
+				</div>
+			</div>
+			<!--/实物市场价显示-->
+			<!--实物销售详情显示-->
+			<div class="am-u-sm-12 am-u-md-12 am-u-lg-12" ms-if="tourType==3">
+				<div class="color-gray">
+					<div>{{info.booknotes}}</div>
+				</div>
+			</div>
+			<!--/实物销售详情显示-->
+		</div>
+		<div class="am-g doc-am-g" style="padding: 0 0.6em;">
+			<div class="special-unit" ms-repeat-unit="specialalert">
+				<span class="am-icon-check-square-o am-icon-fw am-success" style="color:#F0C30D;"></span>{{unit}}
+			</div>
+		</div>
+	</div>
+</form>
+<!--/主要内容区-->
+<!--信息列表-->
+<style>
+	.info-list,
+	#expand-detail {
+		background-color: #FFF;
+		color: #373737;
+		margin-top: 0;
+	}
+
+	.info-list [class*=am-icon-],
+	#expand-detail [class*=am-icon-] {
+		color: #BDBDBD;
+	}
+
+	.info-list li a {
+		display: inline !important;
+	}
+
+	#blockbooking {
+		padding: 0 !important;
+	}
+
+	#price-list [class*=am-u-],
+	#tour-info [class*=am-u-] {
+		padding-left: 0;
+		padding-right: 0;
+	}
+
+	#price-list .am-btn-default {
+		color: #FFF;
+		background-color: #F0C30D;
+		border-color: #F0C30D;
+	}
+</style>
+<ul id="price-list" class="info-list am-list am-list-static am-list-border">
+	<!--如果是普通价格模式-->
+	<li ms-if="info.tourtype==1 && info.ydyxprice>0">
+		<div class="am-g doc-am-g">
+			<div class="am-u-sm-7 am-u-md-7 am-u-lg-7" style="color:#333;">一大一小价</div>
+			<div class="am-u-sm-3 am-u-md-3 am-u-lg-3" style="color: #F0C30D;">&yen;{{info.ydyxprice}}元</div>
+			<div class="am-u-sm-2 am-u-md-2 am-u-lg-2">
+				<a ms-attr-href="http://www.xiaolvyou.com.cn/weixin/thirdWebPageLogin.action?page_url={{(encodeURIComponent('selectdate.html?lineid='+info.lineid+'&sellerid='+sellerid)).replace(/%/g,'!')}}" class="am-btn am-btn-default am-btn-xs am-radius">报名</a>
+			</div>
+		</div>
+	</li>
+	<li ms-if="info.tourtype==1 && info.edyxprice>0">
+		<div class="am-g doc-am-g">
+			<div class="am-u-sm-7 am-u-md-7 am-u-lg-7" style="color:#333;">二大一小价</div>
+			<div class="am-u-sm-3 am-u-md-3 am-u-lg-3" style="color: #F0C30D;">&yen;{{info.edyxprice}}元</div>
+			<div class="am-u-sm-2 am-u-md-2 am-u-lg-2">
+				<a ms-attr-href="http://www.xiaolvyou.com.cn/weixin/thirdWebPageLogin.action?page_url={{(encodeURIComponent('selectdate.html?lineid='+info.lineid+'&sellerid='+sellerid)).replace(/%/g,'!')}}" class="am-btn am-btn-default am-btn-xs am-radius">报名</a>
+			</div>
+		</div>
+	</li>
+	<li ms-if="info.tourtype==1 && info.adultprice>0">
+		<div class="am-g doc-am-g">
+			<div class="am-u-sm-7 am-u-md-7 am-u-lg-7" style="color:#333;">成人价</div>
+			<div class="am-u-sm-3 am-u-md-3 am-u-lg-3" style="color: #F0C30D;">&yen;{{info.adultprice}}元</div>
+			<div class="am-u-sm-2 am-u-md-2 am-u-lg-2">
+				<a ms-attr-href="http://www.xiaolvyou.com.cn/weixin/thirdWebPageLogin.action?page_url={{(encodeURIComponent('selectdate.html?lineid='+info.lineid+'&sellerid='+sellerid)).replace(/%/g,'!')}}" class="am-btn am-btn-default am-btn-xs am-radius">报名</a>
+			</div>
+		</div>
+	</li>
+	<li ms-if="info.tourtype==1 && info.childprice>0">
+		<div class="am-g doc-am-g">
+			<div class="am-u-sm-7 am-u-md-7 am-u-lg-7" style="color:#333;">儿童价</div>
+			<div class="am-u-sm-3 am-u-md-3 am-u-lg-3" style="color: #F0C30D;">&yen;{{info.childprice}}元</div>
+			<div class="am-u-sm-2 am-u-md-2 am-u-lg-2">
+				<a ms-attr-href="http://www.xiaolvyou.com.cn/weixin/thirdWebPageLogin.action?page_url={{(encodeURIComponent('selectdate.html?lineid='+info.lineid+'&sellerid='+sellerid)).replace(/%/g,'!')}}" class="am-btn am-btn-default am-btn-xs am-radius">报名</a>
+			</div>
+		</div>
+	</li>
+	<!--如果是门票价格模式 TODO:暂时没数据显示-->
+	<li ms-if="info.tourtype==2">
+		<div class="am-g doc-am-g">
+			<span ms-repeat-unit="ticketprice" style="display:block;">
+				<div class="am-u-sm-7 am-u-md-7 am-u-lg-7" style="color:#333;">{{unit.position}}</div>
+				<div class="am-u-sm-3 am-u-md-3 am-u-lg-3" style="color: #F0C30D;">&yen;{{unit.price}}元</div>
+				<div class="am-u-sm-2 am-u-md-2 am-u-lg-2"><a ms-attr-href="http://www.xiaolvyou.com.cn/weixin/thirdWebPageLogin.action?page_url={{(encodeURIComponent('selectdate.html?lineid='+info.lineid+'&sellerid='+sellerid)).replace(/%/g,'!')}}" class="am-btn am-btn-default am-btn-xs am-radius">报名</a></div>
+			</span>
+		</div>
+	</li>
+</ul>
+
+<!--活动产品信息-->
+<ul id="tour-info" class="info-list am-list am-list-static am-list-border" ms-if="tourType!=3">
+	<li>
+		<div class="am-g doc-am-g">
+			<div class="am-u-sm-6 am-u-md-6 am-u-lg-6 color-default">
+				<i class="am-icon-fw am-icon-child"></i>&nbsp;适合年龄
+			</div>
+			<div class="am-u-sm-6 am-u-md-6 am-u-lg-6 color-light text-right">
+				{{info.adcontent|html}}
+			</div>
+		</div>
+	</li>
+	<li>
+		<div class="am-g doc-am-g">
+			<div class="am-u-sm-6 am-u-md-6 am-u-lg-6 color-default">
+				<i class="am-icon-fw am-icon-clock-o"></i>&nbsp;活动时间
+			</div>
+			<div class="am-u-sm-6 am-u-md-6 am-u-lg-6 color-light text-right">
+				{{info.tourdaterule|html}}
+			</div>
+		</div>
+	</li>
+	<li>
+		<div class="am-g doc-am-g">
+			<div class="am-u-sm-6 am-u-md-6 am-u-lg-6 color-default">
+				<i class="am-icon-fw am-icon-map-marker"></i>&nbsp;活动地点
+			</div>
+			<div class="am-u-sm-6 am-u-md-6 am-u-lg-6 color-light text-right">
+				{{info.destination|html}}
+			</div>
+		</div>
+	</li>
+	<li>
+		<div class="am-g doc-am-g">
+			<div class="am-u-sm-6 am-u-md-6 am-u-lg-6 color-default">
+				<i class="am-icon-fw am-icon-user"></i>&nbsp;产品老师
+			</div>
+			<div class="am-u-sm-6 am-u-md-6 am-u-lg-6 color-light text-right">
+				<span style="float:right;">
+					{{salerName}}<img ms-attr-src="{{salerAvatar}}" alt="" class="faceunit" style="width:1.5em;height:1.5em; margin:0;display:inline-block;">
+				</span>
+			</div>
+		</div>
+	</li>
+	<li>
+		<div class="am-g doc-am-g">
+			<div class="am-u-sm-6 am-u-md-6 am-u-lg-6 color-default">
+				<i class="am-icon-fw am-icon-mobile"></i>&nbsp;手机微信
+			</div>
+			<div class="am-u-sm-6 am-u-md-6 am-u-lg-6 color-light text-right">
+				<a ms-attr-href="tel:{{salerPhone}}" class="color-light">{{salerPhone}}</a>
+			</div>
+		</div>
+	</li>
+</ul>
+<!--/活动产品信息-->
+
+<!--实物产品信息-->
+<ul id="tour-info" class="info-list am-list am-list-static am-list-border" ms-if="tourType==3">
+	<li>
+		<div class="am-g doc-am-g">
+			<div class="am-u-sm-6 am-u-md-6 am-u-lg-6 color-default">
+				<i class="am-icon-fw am-icon-clock-o"></i>&nbsp;发货时间
+			</div>
+			<div class="am-u-sm-6 am-u-md-6 am-u-lg-6 color-light text-right">
+				{{info.tourdaterule|html}}
+			</div>
+		</div>
+	</li>
+	<li>
+		<div class="am-g doc-am-g">
+			<div class="am-u-sm-6 am-u-md-6 am-u-lg-6 color-default">
+				<i class="am-icon-fw am-icon-map-marker"></i>&nbsp;发货地点
+			</div>
+			<div class="am-u-sm-6 am-u-md-6 am-u-lg-6 color-light text-right">
+				{{info.destination|html}}
+			</div>
+		</div>
+	</li>
+	<li>
+		<div class="am-g doc-am-g">
+			<div class="am-u-sm-6 am-u-md-6 am-u-lg-6 color-default">
+				<i class="am-icon-fw am-icon-user"></i>&nbsp;客服老师
+			</div>
+			<div class="am-u-sm-6 am-u-md-6 am-u-lg-6 color-light text-right">
+				<span style="float:right;">
+					{{salerName}}<img ms-attr-src="{{salerAvatar}}" alt="" class="faceunit" style="width:1.5em;height:1.5em; margin:0;display:inline-block;">
+				</span>
+			</div>
+		</div>
+	</li>
+	<li>
+		<div class="am-g doc-am-g">
+			<div class="am-u-sm-6 am-u-md-6 am-u-lg-6 color-default">
+				<i class="am-icon-fw am-icon-mobile"></i>&nbsp;手机微信
+			</div>
+			<div class="am-u-sm-6 am-u-md-6 am-u-lg-6 color-light text-right">
+				<a ms-attr-href="tel:{{salerPhone}}" class="color-light">{{salerPhone}}</a>
+			</div>
+		</div>
+	</li>
+</ul>
+<!--/实物产品信息-->
+
+<!--/信息列表-->
+
+<!--人数列表 只在活动产品中显示-->
+<ul id="user-list" class="am-list am-list-static am-list-border color-default" ms-if="tourType!=3">
+	<li>
+		累计{{adultNum}}个成人，{{childNum}}个儿童报名
+		<div class="facepanel" style="display:block">
+			<img ms-attr-src="{{unit.profession}}" alt="" class="faceunit" ms-repeat-unit="userList" ms-attr-data-am-popover="{theme: 'primary', content: '{{unit.guestName}}' }" data-repeat-rendered="userRendered">
+			<div class="clear"></div>
+		</div>
+	</li>
+</ul>
+<!--/人数列表-->
+
+<ul id="expand-detail" class="am-list am-list-static am-list-border">
+	<li onclick="$('#info-section').show(); $('#expand-detail').hide();">
+		点击查看详情
+		<i class="am-icon-chevron-down am-align-right"></i>
+	</li>
+</ul>
+<!--主要内容区-->
+<style>
+	#info-section {
+		background-color: #FFF;
+		box-sizing: border-box;
+		padding: 0 1em;
+		width: 100%;
+		padding-top: 3em;
+		border: 1px solid #DEDEDE;
+		display: none;
+	}
+
+	.detail-line {
+		color: #7F7F7F;
+		line-height: 200%;
+	}
+
+	.detail-line img {
+		width: 100%;
+		display: block;
+	}
+
+	.detail-line img.line-pic {
+		padding-bottom: 2em;
+	}
+</style>
+
+<div id="info-section">
+	<!--{{info.productdescribe|html}}-->
+	<!--<div class="detail-line">-->
+	<!--<img src="./images/detail-line1.png" class="line-pic" alt="">-->
+	<!--<img src="http://www.htyou.com//pic/photo/29eeb04d53afd13c6b7e3e41dbbfe1f1-10.jpg" alt="">-->
+	<!--长沙/岘港 BL150（当地时间 21:00起飞-22:30抵达）航班号及航班时刻以最终民航局批复为准-->
+	<!--团队于指定时间(22:30分左右)集合于长沙黄花机场国际出发厅，搭乘越南航空公司航班飞往越南有“东方夏威夷”之称的海滨城市岘港！抵达后乘坐观光巴士前往酒店入住，抵达酒店。-->
+	<!--</div>-->
+	<!--<div class="detail-line">-->
+	<!--<img src="./images/detail-line2.png" class="line-pic" alt="">-->
+	<!--<img src="http://www.htyou.com/pic/photo/2aafb616c5183c0acd6782a0e9467592-3.jpg" alt="">-->
+	<!--早餐后于指定时间在酒店大厅集合前往前住【海云岭】（不少于60分钟），一路欣赏如画美景，海云岭是越南中部南北交通要冲，终年白云缭绕，与蓝天沧海浑然一体，壮观的景色让游人震撼！到达后先在平台处观景，这里被越南人称为“人间天堂”，然后行车至海云岭北侧沿海公路，游览【灵姑湾】，继续行车至灵姑内湾，一览湖光美景；，享受午餐后前往【越南乳胶店】（不超过60分钟），后前往联合国世界文化遗产——【会安古城】。参观会安古城（不少于2小时），然后客人可以自由闲逛及购物。会安是一个世界历史文化遗产，古城古韵吸引大量的西方游客，在这里满街都是来休闲度假的西方人。会安还是越南华人的聚居地,有中国的丽江之称。这里中国元素随处可见。在这里你还可以量身定做越南的国服“奥岱”，既便宜又交货快捷，远近闻名，是游客最爱消费之一。结束后返回酒店-->
+	<!--</div>-->
+	<!--<div class="detail-line">-->
+	<!--<img src="./images/detail-line3.png" class="line-pic" alt="">-->
+	<!--<img src="http://www.htyou.com/pic/photo/af940846df4a017dda9fc0cfc1cdadf1-2.jpg" alt="">-->
+	<!--早餐后退房，于指定时间在酒店大厅集合前住游览【山茶半岛】（不少于45分钟）。让自己融入当地生活了解越南中部独一无二文化的不二选择&#45;&#45;山茶半岛是最合适的地方，参观68米高的东南亚最高立式观音像，也是观赏整个岘港市区及海湾景色的绝佳地点。之后前往【美溪沙滩】（不少于30分钟），美溪海滩被福布斯杂志评为世界六大最美丽的海滩之一，沙质细腻，更难得的是这么美的沙滩完全没有嘈杂和喧闹，安静而祥和，让人流连往返!【越南土特产店】（不超过60分钟），尽情选购越南鼎鼎大名的腰果，咖啡，沉香等手信，晚餐后，集合前往机场，结束愉快的旅程！-->
+	<!--</div>-->
+</div>
+<!--/主要内容区-->
+<!--底部工具栏-->
+<style>
+	#footer {
+		/*background-color: #fe8568;*/
+		border-top: 1px solid #DEDEDE;
+	}
+
+	#footer .am-navbar-nav,
+	#footer .am-navbar-nav > div {
+		padding: 0;
+	}
+
+	#footer .am-navbar-nav #submitbtn {
+		background-color: #F0C30D;
+		line-height: 33px;
+		height: 55px;
+		border: 0;
+	}
+
+	.am-navbar-default .am-navbar-nav {
+		background-color: #F0C30D !important;
+	}
+</style>
+<div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default" id="footer" ms-if="info.teamcount>0">
+	<div class="am-navbar-nav am-cf am-g doc-am-g">
+		<div class="am-u-sm-4 am-u-md-4 am-u-lg-4" style="background-color: #FFF;">
+			<a href="tel:4007770731" class="" style="color: #666;">
+				<span class="am-icon-phone" style="display:inline !important;"></span>
+				<span class="am-navbar-label" style="display:inline; font-size:1em;">电话</span>
+			</a>
+		</div>
+		<!--<div class="am-u-sm-2 am-u-md-2 am-u-lg-2" style="background-color: #FFF;">-->
+		<!--<a href="http://amazeui.org/getting-started" class="" style="color: #FE8568;">-->
+		<!--<span class="am-icon-share-alt"></span>-->
+		<!--<span class="am-navbar-label">分享</span>-->
+		<!--</a>-->
+		<!--</div>-->
+		<div class="am-u-sm-8 am-u-md-8 am-u-lg-8">
+			<a id="submitbtn" ms-attr-href="http://www.xiaolvyou.com.cn/weixin/thirdWebPageLogin.action?page_url={{(encodeURIComponent('selectdate2.html?lineid='+info.lineid+'&sellerid='+sellerid)).replace(/%/g,'!')}}" class="am-btn am-btn-primary am-btn-block">立即报名</a>
+		</div>
+	</div>
+</div>
+<script>
+	$('#blockbooking').attr('href', 'blockbooking.html?lineid=' + getParameterValue(window.location.href, 'lineid'));
+	//$('#submitbtn').height($('#footer .doc-am-g').height());
+
+	//转发积分记录函数 20161110
+	function addIntegral() {
+		$.getJSON(server_addr + '/user/htuser_addTransmitScore.action?userid=' + window.localStorage.getItem('XLY_USERID'), function (result) {
+			var _msg = '';
+			if (parseInt(result.count) == 1) {
+				_msg = '感谢你的分享 ,信用分+1！';
+			} else {
+				_msg = '感谢您的分享！';
+			}
+			alert(_msg);
+			console.log('增加积分结果:', result.count);
+		});
+	}
+
+	//微信分享功能
+	//console.log('http://www.xiaolvyou.com.cn/weixin/getJsConfig.action?jsoncallback=?&page_url=' + window.location.href);
+	$.getJSON(server_addr + '/weixin/getJsConfig.action?jsoncallback=?&page_url=' + window.location.href, function (result) {
+		var debugMode = false;
+		if (window.location.href.indexOf('debug=on') > -1) {
+			alert('weixin ready!');
+			alert(
+				'appId:' + result.appId + '\n' +
+				'timestamp:' + result.timestamp + '\n' +
+				'nonceStr:' + result.noncestr + '\n' +
+				'signature:' + result.signature + '\n'
+			);
+			debugMode = true;
+		}
+		//配置权限
+		wx.config({
+			debug:     debugMode, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+			appId:     result.appId, // 必填，公众号的唯一标识
+			timestamp: result.timestamp, // 必填，生成签名的时间戳
+			nonceStr:  result.noncestr, // 必填，生成签名的随机串
+			signature: result.signature,// 必填，签名，见附录1
+			jsApiList: [
+				'checkJsApi',
+				'onMenuShareTimeline',
+				'onMenuShareAppMessage',
+				'onMenuShareQQ',
+				'onMenuShareWeibo',
+				'onMenuShareQZone',
+				'hideMenuItems',
+				'showMenuItems',
+				'hideAllNonBaseMenuItem',
+				'showAllNonBaseMenuItem',
+				'translateVoice',
+				'startRecord',
+				'stopRecord',
+				'onVoiceRecordEnd',
+				'playVoice',
+				'onVoicePlayEnd',
+				'pauseVoice',
+				'stopVoice',
+				'uploadVoice',
+				'downloadVoice',
+				'chooseImage',
+				'previewImage',
+				'uploadImage',
+				'downloadImage',
+				'getNetworkType',
+				'openLocation',
+				'getLocation',
+				'hideOptionMenu',
+				'showOptionMenu',
+				'closeWindow',
+				'scanQRCode',
+				'chooseWXPay',
+				'openProductSpecificView',
+				'addCard',
+				'chooseCard',
+				'openCard'
+			] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+		});
+
+		//配置好权限以后会触发wx.ready
+		wx.ready(function () {
+			var _userid   = window.localStorage.getItem('XLY_USERID') || 0;
+			var _username = window.localStorage.getItem('XLY_USERNAME') || '';
+
+			var title  = $('#main-section .title').text();
+			var desc   = $('#main-section .desc').text();
+			var link   = window.location.href;
+			var imgUrl = $('body img').eq(0).attr('src');
+
+			//如果有销售人员姓名记录在案
+			if (_username != '') {
+				title = _username + '向您推荐:' + $('#main-section .title').text();
+			}
+
+			if (link.indexOf('?')) {
+				link = link + '&sellerid=' + (window.localStorage.getItem('XLY_USERID') || 0);
+			} else {
+				link = link + '?sellerid=' + (window.localStorage.getItem('XLY_USERID') || 0);
+			}
+
+			if (window.location.href.indexOf('debug=on') > -1) {
+				alert(title + '\n' + desc + '\n' + link + '\n' + imgUrl + '\n' + _userid + '\n' + _username);
+			}
+
+			//分享到朋友圈
+			wx.onMenuShareTimeline({
+				title:   title,
+				link:    link,
+				imgUrl:  imgUrl,
+				success: function () {
+					addIntegral();
+				},
+				cancel:  function () {
+					alert('欢迎您下次再进行分享');
+				}
+			});
+			//分享给朋友
+			wx.onMenuShareAppMessage({
+				title:   title,	// 分享标题
+				desc:    desc,		// 分享描述
+				link:    link,		// 分享链接
+				imgUrl:  imgUrl,	// 分享图标
+				type:    'link',	// 分享类型,music、video或link，不填默认为link
+				dataUrl: '',	// 如果type是music或video，则要提供数据链接，默认为空
+				success: function () {
+					addIntegral();
+				},
+				cancel:  function () {
+					alert('欢迎您下次再进行分享');
+				}
+			});
+		});
+	});
+
+
+</script>
+<!--/底部工具栏-->
+</body>
+</html>

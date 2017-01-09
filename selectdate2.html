@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
+	<title>选择时间</title>
+	<!--<link rel="icon" type="image/png" href="jslib/amazeui/i/favicon.png">-->
+	<link rel="stylesheet" href="jslib/amazeui/css/amazeui.min.css">
+	<link rel="stylesheet" href="jslib/amazeui/css/app.css">
+	<script src="jslib/amazeui/js/jquery.min.js"></script>
+	<script src="jslib/amazeui/js/amazeui.min.js"></script>
+	<!--<script src="jslib/avalon1.5/avalon.js"></script>-->
+
+	<script src="jslib/moment-with-locales.js" charset="utf-8"></script>
+	<script src="jslib/underscore.js" charset="utf-8"></script>
+	<script src="jslib/clndr.js" charset="utf-8"></script>
+
+	<link rel="stylesheet" href="common.css">
+	<script src="common.js?20160706a"></script>
+
+	<script>
+		//http://www.96hn.com/mobile/ipad_getTourTeam.action?jsoncallback=?&lineid=12429
+	</script>
+</head>
+<body>
+<!--顶部Header-->
+<style>
+	header.am-header {
+		box-shadow: 0 1px 3px #C2C2C2;
+		display:none;
+	}
+
+	.am-header > .am-header-left > a {
+		color: #4EC585;
+	}
+
+	.am-header > .am-header-right > a {
+		color: #FF9179;
+	}
+
+	.am-header > .am-header-title > a {
+		color: #000;
+	}
+
+	.am-header-default {
+		background-color: #FFF;
+	}
+</style>
+<header data-am-widget="header"
+		class="am-header am-header-default">
+	<div class="am-header-left am-header-nav">
+		<a href="#left-link" class="">
+			<i class="am-header-icon am-icon-angle-left"></i>
+		</a>
+	</div>
+
+	<h1 class="am-header-title">
+		<a href="#title-link" class="">
+			选择出行时间
+		</a>
+	</h1>
+
+</header>
+<!--/顶部Header-->
+
+<!--主要内容区-->
+<style>
+	#main-section {
+		background-color: #FFF;
+		box-sizing: border-box;
+		padding: 0;
+		width: 100%;
+		display:none;
+	}
+
+	.header-day {
+		width: 14.2857%;
+		float: left;
+		text-align: center;
+		box-sizing: border-box;
+	}
+
+	.day {
+		width: 14.2857%;
+		height: 3.5em;
+		line-height: 100%;
+		box-sizing: border-box;
+		float: left;
+		border: 1px solid #EEE;
+		border-bottom: 0;
+		border-right: 0;
+		background-color: #FFF;
+		font-size: 1em;
+		position: relative;
+		padding: 2px;
+	}
+
+	.day .day-info {
+		position: absolute;
+		right: 2px;
+		bottom: 2px;
+		color: #EB6561;
+		text-align: right;
+
+	}
+
+	.day .day-info span {
+		color: #30A866;
+		display: block;
+	}
+
+	.month {
+		text-align: center;
+		background-color: #93D7B2;
+		color: #FFF;
+		font-size: 1.2em;
+		line-height: 200%;
+	}
+
+	#calendar2 {
+		margin-top: 2em;
+	}
+
+	#calendar1,
+	#calendar2 {
+		border-bottom: 1px solid #EEE;
+		border-right: 1px solid #EEE;
+	}
+
+	.clearfix {
+		clear: both;
+	}
+</style>
+
+<div id="main-section">
+	<script type="text/template" id="full-clndr-template">
+		<div class="clndr-controls">
+			<!--<div class="clndr-previous-button">‹</div>-->
+			<div class="month"><%= month %></div>
+			<!--<div class="clndr-next-button">›</div>-->
+		</div>
+		<div class="clndr-grid">
+			<div class="days-of-the-week clearfix">
+				<% _.each(daysOfTheWeek, function(day) { %>
+				<div class="header-day"><%= day %></div>
+				<% }); %>
+			</div>
+			<div class="days clearfix">
+				<% _.each(days, function(day) { %>
+				<div class="<%= day.classes %>" id="<%= day.id %>"><span class="day-number"><%= day.day %></span></div>
+				<% }); %>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+		<div class="clearfix"></div>
+	</script>
+	<div id="calendar1"></div>
+	<div id="calendar2"></div>
+	<script>
+		var lineid = getParameterValue(window.location.href, 'lineid');
+		console.log(server_addr + '/mobile/ipad_queryTourTeam.action?jsoncallback=?&lineid=' + lineid);
+		$.getJSON(server_addr + '/mobile/ipad_queryTourTeam.action?jsoncallback=?&lineid=' + lineid, function (result) {
+			//20170109 加入判断，如果返回的value1==3，表明这是实物产品，需要直接跳转不用选择日期
+			//如果不是3，则显示本页的header.am-header和#main-section
+			console.log('tourType:'+result.value1);
+			if (result.value1=='3'){
+				//首先获得cteamcode
+				var _cteamcode = getParameterValue(window.location.href, 'cteamcode');
+				if (_cteamcode!=''){
+					//有则直接跳转到下一步
+					window.location.href = 'selectnumber.html?jzluid=' + _cteamcode + '&sellerid=' + (getParameterValue(window.location.href, 'sellerid') || 0);
+				}else{
+					//没有报错并回到首页
+					window.location.href = '/index.html';
+				}
+				return false; //程序到此停止处理
+			}else{
+				$('header.am-header, #main-section').show();
+			}
+
+			if (result.status == 1) {
+				var dateList = [];
+				for (var i in result.value) {
+					dateList.push({
+						date:   result.value[i].tourdate,
+						status: result.value[i].status,
+						price:  result.value[i].leastprice + '元',
+						jzluid: result.value[i].jzluid
+					});
+				}
+				moment.locale('zh-CN');
+				$('#calendar1').clndr({
+					startWithMonth: moment(),
+					classes:        {
+						past:          "my-past",
+						today:         "my-today",
+						event:         "my-event",
+						inactive:      "my-inactive",
+						lastMonth:     "my-last-month",
+						nextMonth:     "my-next-month",
+						adjacentMonth: "my-adjacent-month"
+					},
+					events:         dateList,
+					template:       $('#full-clndr-template').html(),
+					//daysOfTheWeek:['日', '一', '二', '三', '四', '五', '六'],
+					doneRendering:  function () {
+						console.log('render!');
+						//循环日程列表
+						for (var i in dateList) {
+							$('#calendar1 [class*=' + dateList[i].date + ']').find('span.day-number').append('<div class="day-info"><span>' + dateList[i].status + '</span>' + dateList[i].price + '</div>');
+						}
+					},
+					clickEvents:    {
+						click: function (targetDOM) {
+							console.log(targetDOM.events[0].date, targetDOM.events[0].status, targetDOM.events[0].price, targetDOM.events[0].jzluid);
+							window.location.href = 'selectnumber.html?jzluid=' + targetDOM.events[0].jzluid + '&sellerid=' + (getParameterValue(window.location.href, 'sellerid') || 0);
+						}
+					}
+				});
+				$('#calendar2').clndr({
+					classes:        {
+						past:          "my-past",
+						today:         "my-today",
+						event:         "my-event",
+						inactive:      "my-inactive",
+						lastMonth:     "my-last-month",
+						nextMonth:     "my-next-month",
+						adjacentMonth: "my-adjacent-month"
+					},
+					startWithMonth: moment().add(1, 'M'),
+					events:         dateList,
+					template:       $('#full-clndr-template').html(),
+					doneRendering:  function () {
+						console.log('render!');
+						//循环日程列表
+						for (var i in dateList) {
+							$('#calendar2 [class*=' + dateList[i].date + ']').find('span.day-number').append('<div class="day-info"><span>' + dateList[i].status + '</span>' + dateList[i].price + '</div>');
+						}
+					},
+					clickEvents:    {
+						click: function (targetDOM) {
+							console.log(targetDOM.events[0].date, targetDOM.events[0].status, targetDOM.events[0].price, targetDOM.events[0].jzluid);
+							window.location.href = 'selectnumber.html?jzluid=' + targetDOM.events[0].jzluid + '&sellerid=' + (getParameterValue(window.location.href, 'sellerid') || 0);
+						}
+					}
+				});
+			} else {
+				var errMsg = '';
+				if (result.status == 103)
+					errMsg = '无效的线路ID';
+				alert(errMsg);
+			}
+		});
+
+	</script>
+</div>
+<!--/主要内容区-->
+
+</body>
+</html>

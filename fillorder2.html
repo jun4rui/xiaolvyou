@@ -50,7 +50,7 @@
 						alert('请填写好 送货地址');
 						return false;
 					}
-					//console.log(server_addr+'/mobile/tourorder_addTourOrder.action?jsoncallback=?&tourOrderVO.contact_name='+contact_name+'&tourOrderVO.contact_phone='+contact_phone+'&tourOrderVO.contact_note='+contact_note+'&tourOrderVO.order_source='+order_source+'&tourOrderVO.pay_type='+pay_type+'&userid='+userid+'&tourOrderVO.jzl_order_id='+jzl_order_id);
+					console.log(server_addr + '/mobile/tourorder_addTourOrder.action?jsoncallback=?&tourOrderVO.contact_name=' + contact_name + '&tourOrderVO.contact_phone=' + contact_phone + '&tourOrderVO.contact_note=' + contact_note + '&tourOrderVO.order_source=' + order_source + '&tourOrderVO.pay_type=' + pay_type + '&userid=' + userid + '&tourOrderVO.jzl_order_id=' + jzl_order_id);
 					$.getJSON(server_addr + '/mobile/tourorder_addTourOrder.action?jsoncallback=?&tourOrderVO.contact_name=' + contact_name + '&tourOrderVO.contact_phone=' + contact_phone + '&tourOrderVO.contact_note=' + contact_note + '&tourOrderVO.order_source=' + order_source + '&tourOrderVO.pay_type=' + pay_type + '&userid=' + userid + '&tourOrderVO.jzl_order_id=' + jzl_order_id, function (result) {
 						/*
 						 1、成功

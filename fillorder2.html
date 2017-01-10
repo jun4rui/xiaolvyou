@@ -41,6 +41,10 @@
 						alert('请填写好 联系人名称、联系人电话后再提交');
 						return false;
 					}
+					//20170109 如果是实物产品，就把地址栏数据复制给contact_note
+					if ($('#tourtype').val()=='3'){
+						contact_note = $('.contact_note_as_address').val();
+					}
 					//20170109 加入实物产品需要填写送货地址的检测
 					if ($('#tourtype').val()=='3' && $('.contact_note_as_address').val().length<5){
 						alert('请填写好 送货地址');

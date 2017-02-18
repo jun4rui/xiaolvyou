@@ -10,6 +10,10 @@ jquery@^3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.1.1.tgz#347c1c21c7e004115e0a4da32cece041fad3c8a3"
 
+require-css@^0.1.8:
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/require-css/-/require-css-0.1.8.tgz#f2e867bb8f1f4da1b7fee71b819bfa3c26b904ef"
+
 requirejs@^2.3.2:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/requirejs/-/requirejs-2.3.2.tgz#0eaa870d4c7db3b15dd1322e6b65b0388fc4b2c6"
